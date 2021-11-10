@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.5.6</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.restaurant</groupId>
+	<artifactId>backend</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>backend</name>
+	<description>Backend server for NVT KTS project by Team 404</description>
+	<properties>
+		<java.version>11</java.version>
+		<rest-assured.version>4.4.0</rest-assured.version>
+	</properties>
+	<dependencies>
+		<!--
+			Bread-and-butter of our backend application.
+			This is going to be used for creating the RESTful application.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!--
+			Enables us to use spring data with hibernate.
+			This is what we use when creating POJO classes that
+			are persisted in a database.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!--
+			Dependency required for having authentication and
+			authorization on our backend RESTful application.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!--
+			This is used for validating java beans during runtime
+			using the decorator annotation.
+
+			Example usage of this library can be found here:
+			https://www.baeldung.com/spring-boot-bean-validation
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<!--
+			Primarily used for quickly restarting the server
+			during development without waiting for the
+			spring application to reboot completely.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!--
+			In-Memory database used for local development & testing.
+			This DB is cleared on server shutdown.
+
+			There are no examples of this library. All that needs to be done
+			is to properly configure it in their resources/application.properties file
+		-->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!--
+			Dependency for writing JUnit tests
+		
+			Example usage of this library can be found here:
+			https://medium.com/javarevisited/writing-a-unit-test-using-spring-boot-part-2-b16847484cb9
+		 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		<!--
+			This is the library that will be used for writing the body
+			of unit tests when testing the backend endpoints.
+
+			This might change to a different library depending on the needs
+			of the faculty that is reviewing the project.
+		-->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!--
+			Needed for testing endpoints that require authorization and/or authentication
+
+			Exmaple usage of this library can be found here:
+			https://medium.com/javarevisited/securing-your-rest-api-with-springsecurity-8ba440fe7b58
+		-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!--
+			This is for JWT tokens that are used during authentication.
+			Each request (other than login) will contain this JWT token when
+			sending requests to endpoints that require authorization and/or
+			authentication.
+
+			Example usage of this library can be found here:
+			https://medium.com/swlh/spring-boot-security-jwt-hello-world-example-b479e457664c
+		-->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+
+		<!--
+			This dependency allows us to omit writting many of the getters, setters,
+			and constructors typically required in a java project.
+		-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
