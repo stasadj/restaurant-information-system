@@ -1,7 +1,6 @@
 package com.restaurant.backend.domain;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -9,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @SuperBuilder
 @NoArgsConstructor
-@DiscriminatorValue("admin")
-public class Admin extends PasswordUser  {
+@DiscriminatorValue("cook")
+public class Cook extends Staff {
 
 }

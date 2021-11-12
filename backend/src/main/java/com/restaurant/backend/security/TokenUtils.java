@@ -35,6 +35,9 @@ public class TokenUtils {
 
     private static final String AUDIENCE_WEB = "web";
 
+    public static final String USER_TYPE_PASSWORD = "password_user";
+    public static final String USER_TYPE_PIN = "pin_user";
+
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     public String generateToken(String username) {
@@ -46,31 +49,24 @@ public class TokenUtils {
         return new Date(new Date().getTime() + EXPIRES_IN);
     }
 
-    public String refreshToken(String token) {
-        String refreshedToken;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            claims.setIssuedAt(new Date());
-            refreshedToken = Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
-                    .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
-        } catch (Exception e) {
-            refreshedToken = null;
-        }
-        return refreshedToken;
-    }
-
-    public boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-        final Date created = this.getIssuedAtDateFromToken(token);
-        return (!this.isCreatedBeforeLastPasswordReset(created, lastPasswordReset) && !this.isTokenExpired(token));
-    }
-
     public Boolean validateToken(String token, UserDetails userDetails) {
         User user = (User) userDetails;
-        final String username = getUsernameFromToken(token);
-        final Date created = getIssuedAtDateFromToken(token);
+        final String userType = getUserTypeFromToken(token);
 
-        return (username != null && username.equals(userDetails.getUsername())
-                && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+        if (userType.equals(USER_TYPE_PASSWORD)) {
+            final String username = getUsernameFromToken(token);
+            final Date created = getIssuedAtDateFromToken(token);
+
+            return (username != null && username.equals(userDetails.getUsername())
+                    && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+        } else if (userType.equals(USER_TYPE_PIN)) {
+            // TODO: Get pin from token
+            // TODO: Find Staff user with pin
+            // TODO: Validate user is not null
+            return true;
+        }
+
+        return false;
     }
 
     public String getUsernameFromToken(String token) {
@@ -82,6 +78,17 @@ public class TokenUtils {
             username = null;
         }
         return username;
+    }
+
+    public String getUserTypeFromToken(String token) {
+        String userType;
+        try {
+            final Claims claims = this.getAllClaimsFromToken(token);
+            userType = claims.get("userType").toString();
+        } catch (Exception e) {
+            userType = null;
+        }
+        return userType;
     }
 
     public Date getIssuedAtDateFromToken(String token) {

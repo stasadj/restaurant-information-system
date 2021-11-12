@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Data
 @Entity
 @SuperBuilder
 @NoArgsConstructor
@@ -24,6 +23,7 @@ import java.util.Collection;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
+@Data
 public abstract class User implements UserDetails {
 
     @Id
@@ -38,12 +38,6 @@ public abstract class User implements UserDetails {
 
     @Column(name = "email", nullable = false)
     protected String email;
-
-    @Column(name = "username", nullable = false)
-    protected String username;
-
-    @Column(name = "password", nullable = false, length = 60)
-    protected String password;
 
     @Column(name = "phone_number", nullable = false)
     protected String phoneNumber;

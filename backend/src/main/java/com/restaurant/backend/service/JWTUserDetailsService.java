@@ -8,14 +8,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import com.restaurant.backend.domain.PasswordUser;
 import com.restaurant.backend.domain.User;
-import com.restaurant.backend.repository.UserRepository;
+import com.restaurant.backend.repository.PasswordUserRepository;
 
 @Service
 public class JWTUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private PasswordUserRepository passwordUserRepository;
 
     private User user;
 
@@ -28,12 +29,25 @@ public class JWTUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> maybeUser = userRepository.findByUsername(username);
+        Optional<PasswordUser> maybeUser = passwordUserRepository.findByUsername(username);
         if (maybeUser.isPresent()) {
             return maybeUser.get();
         } else {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         }
+    }
+
+    public UserDetails loadUserByPin(int pin) {
+        // TODO: Implement staffRepository and use it here instead of
+        // passwordUserRepository
+        /*
+         * Optional<PasswordUser> maybeUser =
+         * passwordUserRepository.findByUsername(pin); if (maybeUser.isPresent()) {
+         * return maybeUser.get(); } else { throw new
+         * UsernameNotFoundException(String.format("No user found with pin '%s'.",
+         * pin)); }
+         */
+        return null;
     }
 
     public boolean isEnabled() {
