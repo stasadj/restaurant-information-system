@@ -30,4 +30,8 @@ public class Notification {
 
     @Column(name = "deleted", nullable = false)
     protected Boolean deleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    protected Order order;
 }

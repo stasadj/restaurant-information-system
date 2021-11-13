@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order")
+@Table(name = "restaurant_order")
 @Data
 public class Order {
 
@@ -40,6 +40,9 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "waiter_id")
     protected Waiter waiter;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    protected List<Notification> notifications;
 
     protected BigDecimal getTotal() {
         return orderItems.stream()
