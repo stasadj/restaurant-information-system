@@ -15,16 +15,17 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public abstract class Staff extends User {
+
     @Digits(integer = 12, fraction = 2)
     @Column(name = "monthly_wage")
     protected @Getter @Setter BigDecimal monthlyWage;
 
     @Column(name = "pin")
-    protected @Getter @Setter int pin;
+    protected @Getter @Setter Integer pin;
 
     @Override
     public String getUsername() {
-        return String.valueOf(getPin());
+        return pin.toString();
     }
 
     @Override
