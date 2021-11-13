@@ -1,24 +1,19 @@
 package com.restaurant.backend.controller;
 
+import com.restaurant.backend.domain.PasswordUser;
+import com.restaurant.backend.domain.Staff;
+import com.restaurant.backend.repository.PasswordUserRepository;
+import com.restaurant.backend.repository.StaffRepository;
+import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import lombok.AllArgsConstructor;
-
 import java.util.Optional;
-
-import com.restaurant.backend.domain.PasswordUser;
-import com.restaurant.backend.domain.Staff;
-import com.restaurant.backend.domain.User;
-import com.restaurant.backend.repository.PasswordUserRepository;
-import com.restaurant.backend.repository.StaffRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller
 @AllArgsConstructor
@@ -33,8 +28,7 @@ public class HelloWorldController {
     @GetMapping("/")
     public String index() {
         LOG.info("Client requested the index method.");
-        String res = "Hello world";
-        return res;
+        return "Hello world";
     }
 
     @ResponseBody
@@ -43,10 +37,8 @@ public class HelloWorldController {
         LOG.info("Client requested the adminTest method.");
         Optional<PasswordUser> user = passwordUserRepository.findByUsername("jeff.goldblum");
         StringBuilder sb = new StringBuilder();
-        sb.append("User jeff.goldblum was" + (user.isPresent() ? " " : " not ") + "found.");
-        if (user.isPresent()) {
-            sb.append(" Here is his phone number: " + user.get().getPhoneNumber());
-        }
+        sb.append("User jeff.goldblum was").append(user.isPresent() ? " " : " not ").append("found.");
+        user.ifPresent(passwordUser -> sb.append(" Here is his phone number: ").append(passwordUser.getPhoneNumber()));
         return sb.toString();
     }
 
@@ -56,10 +48,8 @@ public class HelloWorldController {
         LOG.info("Client requested the waiterTest method.");
         Optional<Staff> user = staffRepository.findByPin(1234);
         StringBuilder sb = new StringBuilder();
-        sb.append("User 1234 was" + (user.isPresent() ? " " : " not ") + "found.");
-        if (user.isPresent()) {
-            sb.append(" Here is his monthly wage: " + user.get().getMonthlyWage());
-        }
+        sb.append("User 1234 was").append(user.isPresent() ? " " : " not ").append("found.");
+        user.ifPresent(staff -> sb.append(" Here is his monthly wage: ").append(staff.getMonthlyWage()));
         return sb.toString();
     }
 

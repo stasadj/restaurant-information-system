@@ -1,17 +1,18 @@
 package com.restaurant.backend.domain;
 
-import java.util.List;
-
-import javax.persistence.*;
-
+import com.restaurant.backend.domain.enums.ItemType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "items")
+@Table(name = "item")
 @Data
 public class Item {
 
@@ -19,13 +20,12 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     protected String name;
 
-    // TODO: Implement Category
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "category_id")
-    // protected Category category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    protected Category category;
 
     @Column(name = "description")
     protected String description;
@@ -33,13 +33,20 @@ public class Item {
     @Column(name = "image_url")
     protected String imageURL;
 
-    @Column(name = "in_menu")
+    @ManyToMany(fetch = FetchType.EAGER)
+    protected List<Tag> tags;
+
+    @Column(name = "in_menu", nullable = false)
     protected Boolean inMenu;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     protected List<ItemValue> itemValues;
 
-    // TODO: Implement type
-    // @Column(name = "type")
-    // protected EItemType itemType;
+    @Column(name = "type", nullable = false)
+    protected ItemType itemType;
+
+    protected ItemValue getItemValueAt(LocalDateTime dateTime) {
+        // TODO
+        return new ItemValue();
+    }
 }
