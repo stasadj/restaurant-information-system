@@ -14,4 +14,15 @@ INSERT INTO item (name, category_id, description, image_url, in_menu, type) VALU
   ('Mushroom risotto', 2, 'Rice dish cooked with three kinds of mushroom, butter, white wine, onion and cheese', NULL, false, 0),
   ('Peach ice tea', 4, 'Cold ice tea sweetened with honey', NULL, true, 1);
 
+INSERT INTO restaurant_order (created_at, note, table_id, barman_id, waiter_id) VALUES
+  ('2021-11-14', 'note 1', 1, null, 2),
+  ('2021-11-14', 'note 2', 2, null, 2);
+
+INSERT INTO order_item (amount, status, cook_id, item_id, order_id) VALUES
+  (1, 0, null, 1, 1),
+  (2, 0, null, 2, 1),
+  (1, 0, null, 3, 1),
+  (3, 0, null, 4, 2);
+
+
 
