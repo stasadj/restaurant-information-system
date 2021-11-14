@@ -1,16 +1,18 @@
 package com.restaurant.backend.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "category")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "category")
-@Data
+@Getter
+@Setter
 public class Category {
 
     @Id

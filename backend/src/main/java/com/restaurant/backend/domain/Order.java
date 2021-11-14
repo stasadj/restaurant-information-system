@@ -6,15 +6,17 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Table(name = "restaurant_order")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "restaurant_order")
-@Data
+@Getter
+@Setter
 public class Order {
 
     @Id

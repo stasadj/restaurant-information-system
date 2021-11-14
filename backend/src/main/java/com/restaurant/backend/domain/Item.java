@@ -1,19 +1,22 @@
 package com.restaurant.backend.domain;
 
 import com.restaurant.backend.domain.enums.ItemType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "item")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "item")
-@Data
+@Getter
+@Setter
 public class Item {
 
     @Id

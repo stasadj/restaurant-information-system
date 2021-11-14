@@ -4,12 +4,13 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@SuperBuilder
-@NoArgsConstructor
 @DiscriminatorValue("admin")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Admin extends PasswordUser  {
-
 }

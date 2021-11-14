@@ -5,15 +5,17 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Table(name = "item_values")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "item_values")
-@Data
+@Getter
+@Setter
 public class ItemValue {
 
     @Id

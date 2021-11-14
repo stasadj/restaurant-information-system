@@ -2,19 +2,19 @@ package com.restaurant.backend.domain;
 
 import javax.persistence.*;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
 @Entity
-@SuperBuilder
-@NoArgsConstructor
 @DiscriminatorValue("waiter")
-@EqualsAndHashCode(callSuper = true)
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Waiter extends Staff {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "waiter")
