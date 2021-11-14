@@ -1,18 +1,21 @@
 package com.restaurant.backend.domain;
 
 import com.restaurant.backend.domain.enums.NotificationType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "notification")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "notification")
-@Data
+@Getter
+@Setter
 public class Notification {
 
     @Id

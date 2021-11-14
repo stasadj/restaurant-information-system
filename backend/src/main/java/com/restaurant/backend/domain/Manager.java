@@ -5,19 +5,17 @@ import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@SuperBuilder
+@DiscriminatorValue("manager")
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("manager")
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 public class Manager extends PasswordUser {
 
     @Digits(integer = 9, fraction = 2)

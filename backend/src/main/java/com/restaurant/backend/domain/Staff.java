@@ -6,22 +6,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Digits;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Entity
-@SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public abstract class Staff extends User {
 
     @Digits(integer = 12, fraction = 2)
     @Column(name = "monthly_wage")
-    protected @Getter @Setter BigDecimal monthlyWage;
+    protected BigDecimal monthlyWage;
 
     @Column(name = "pin")
-    protected @Getter @Setter Integer pin;
+    protected Integer pin;
 
     @Override
     public String getUsername() {

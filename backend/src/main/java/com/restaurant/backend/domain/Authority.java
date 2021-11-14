@@ -2,13 +2,15 @@ package com.restaurant.backend.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Authority implements GrantedAuthority {
 
     private static final long serialVersionUID = 1L;
@@ -19,5 +21,4 @@ public class Authority implements GrantedAuthority {
     public String getAuthority() {
         return name;
     }
-
 }

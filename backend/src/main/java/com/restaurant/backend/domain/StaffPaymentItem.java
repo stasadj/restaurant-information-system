@@ -1,18 +1,20 @@
 package com.restaurant.backend.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "staff_payment")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "staff_payment")
-@Data
+@Getter
+@Setter
 public class StaffPaymentItem {
 
     @Id

@@ -3,15 +3,18 @@ package com.restaurant.backend.domain;
 import javax.persistence.*;
 
 import com.restaurant.backend.domain.enums.OrderStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Table(name = "order_item")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order_item")
-@Data
+@Getter
+@Setter
 public class OrderItem {
 
     @Id

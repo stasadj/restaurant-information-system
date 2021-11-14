@@ -1,12 +1,13 @@
 package com.restaurant.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -14,13 +15,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public abstract class User implements UserDetails {
 
     @Id
