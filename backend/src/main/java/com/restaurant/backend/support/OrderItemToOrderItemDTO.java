@@ -14,7 +14,7 @@ public class OrderItemToOrderItemDTO implements Converter<OrderItem, OrderItemDT
     public OrderItemDTO convert(OrderItem source) {
         return new OrderItemDTO(source.getId(), source.getAmount(), source.getOrder().getId(),
                 source.getOrderStatus(), source.getItem().getId(),
-                source.getCook().getId());
+                source.getCook() == null ? null : source.getCook().getId());
     }
 
     public List<OrderItemDTO> convert(List<OrderItem> orderItemList) {

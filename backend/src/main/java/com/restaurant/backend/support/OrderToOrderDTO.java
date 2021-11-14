@@ -27,7 +27,7 @@ public class OrderToOrderDTO implements Converter<Order, OrderDTO> {
     public OrderDTO convert(Order source) {
         return new OrderDTO(source.getId(), source.getCreatedAt(),
                 source.getNote(), source.getTableId(), convertItems(orderService.getOrderItems(source.getId())),
-                source.getBarman().getId(), source.getWaiter().getId());
+                source.getBarman() == null ? null : source.getBarman().getId(), source.getWaiter().getId());
     }
 
     public List<OrderDTO> convert(List<Order> orderList) {

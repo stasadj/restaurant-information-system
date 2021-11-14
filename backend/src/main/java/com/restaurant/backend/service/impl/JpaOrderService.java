@@ -7,11 +7,12 @@ import com.restaurant.backend.repository.OrderRepository;
 import com.restaurant.backend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class JpaOrderService implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -23,11 +24,13 @@ public class JpaOrderService implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Order> findAll() {
         return orderRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Order findOne(Long id) {
         return orderRepository.findById(id).orElse(null);
     }
@@ -38,7 +41,8 @@ public class JpaOrderService implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderItem> getOrderItems(Long id) {
-        return new ArrayList<OrderItem>();
+        return orderItemRepository.findByOrder_IdEquals(id);
     }
 }
