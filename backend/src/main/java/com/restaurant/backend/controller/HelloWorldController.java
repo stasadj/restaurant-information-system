@@ -1,27 +1,30 @@
 package com.restaurant.backend.controller;
 
+import java.util.Optional;
+
 import com.restaurant.backend.domain.PasswordUser;
 import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.repository.PasswordUserRepository;
 import com.restaurant.backend.repository.StaffRepository;
-import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Optional;
-
 @Controller
-@AllArgsConstructor
 @RequestMapping(value = "/api/helloworld", produces = MediaType.APPLICATION_JSON_VALUE)
 public class HelloWorldController {
     private static final Logger LOG = LoggerFactory.getLogger(HelloWorldController.class);
 
+    @Autowired
     private PasswordUserRepository passwordUserRepository;
+    
+    @Autowired
     private StaffRepository staffRepository;
 
     @ResponseBody
