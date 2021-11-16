@@ -18,5 +18,5 @@ import java.util.Set;
 public class Barman extends Staff {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "barman")
-    protected Set<Order> currentOrders;
+    protected Set<OrderItem> currentOrderItems;
 }

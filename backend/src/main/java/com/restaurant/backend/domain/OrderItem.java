@@ -38,4 +38,8 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cook_id")
     protected Cook cook;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "barman_id")
+    protected Barman barman;
 }

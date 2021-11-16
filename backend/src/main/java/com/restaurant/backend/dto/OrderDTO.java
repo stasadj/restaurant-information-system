@@ -19,6 +19,5 @@ public class OrderDTO {
     private String note;
     private Integer tableId;
     private List<OrderItemDTO> orderItems;
-    private Long barmanId;
     private Long waiterId;
 }

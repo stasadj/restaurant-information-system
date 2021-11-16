@@ -36,10 +36,6 @@ public class Order {
     protected List<OrderItem> orderItems;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barman_id")
-    protected Barman barman;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "waiter_id")
     protected Waiter waiter;
 
