@@ -23,6 +23,7 @@ public class ItemService {
     private EntityManager entityManager;
 
     public List<Item> getAll() {
+        //Retrieves undeleted items
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedItemFilter");
         filter.setParameter("isDeleted", false);
@@ -33,11 +34,13 @@ public class ItemService {
     }
 
     public List<Item> getAllPlusDeleted() {
+        //Retrieves all items, deleted included
         return itemRepository.findAll();
 
     }
 
     public List<Item> getAllMenuItems() {
+        //Retrieves all undeleted items in the menu 
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedItemFilter");
         filter.setParameter("isDeleted", false);
