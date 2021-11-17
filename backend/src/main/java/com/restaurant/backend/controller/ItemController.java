@@ -4,7 +4,6 @@ package com.restaurant.backend.controller;
 import java.util.List;
 import java.util.Optional;
 
-
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.service.ItemService;
 
@@ -14,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +50,7 @@ public class ItemController {
 
     @ResponseBody
     @GetMapping("/in-menu")
-    //@PreAuthorize("hasRole('MANAGER')")
+    //@PreAuthorize("hasRole('MANAGER', 'WAITER', 'BARMAN')")
     public ResponseEntity<List<Item>> getAllMenuItems() {
         LOG.info("Client requested to get all menu items.");
         return new ResponseEntity<>(itemService.getAllMenuItems(), HttpStatus.OK);
@@ -70,6 +70,15 @@ public class ItemController {
     public ResponseEntity<Item> removeFromMenu(@RequestParam Long id) {
         LOG.info("Client requested the remove item from menu.");
         return new ResponseEntity<>(itemService.removeFromMenu(id), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{id}")
+    //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        LOG.info("Client requested to delete item.");
+        itemService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

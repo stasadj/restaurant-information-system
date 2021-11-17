@@ -8,11 +8,11 @@ INSERT INTO category (name) VALUES
   ('dessert'),
   ('drink');
 
-INSERT INTO item (name, category_id, description, image_url, in_menu, type) VALUES
-  ('Spaghetti carbonara', 2, 'Traditional Italian dish served with garlic, olive oil and parsley', NULL, true, 0),
-  ('Chicken tikka masala', 2, 'Roasted marinated chicken in spiced curry sauce', NULL, true, 0),
-  ('Mushroom risotto', 2, 'Rice dish cooked with three kinds of mushroom, butter, white wine, onion and cheese', NULL, false, 0),
-  ('Peach ice tea', 4, 'Cold ice tea sweetened with honey', NULL, true, 1);
+INSERT INTO item (name, category_id, description, image_url, in_menu, type, deleted) VALUES
+  ('Spaghetti carbonara', 2, 'Traditional Italian dish served with garlic, olive oil and parsley', NULL, true, 0, false),
+  ('Chicken tikka masala', 2, 'Roasted marinated chicken in spiced curry sauce', NULL, true, 0, false),
+  ('Mushroom risotto', 2, 'Rice dish cooked with three kinds of mushroom, butter, white wine, onion and cheese', NULL, false, 0, false),
+  ('Peach ice tea', 4, 'Cold ice tea sweetened with honey', NULL, true, 1, false);
 
 INSERT INTO restaurant_order (created_at, note, table_id, barman_id, waiter_id) VALUES
   ('2021-11-14', 'note 1', 1, null, 2),
