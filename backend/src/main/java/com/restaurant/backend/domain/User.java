@@ -54,6 +54,21 @@ public abstract class User implements UserDetails {
         if (this instanceof Admin) {
             authorities.add(new Authority("ROLE_ADMIN"));
         }
+        if (this instanceof Manager) {
+            authorities.add(new Authority("ROLE_MANAGER"));
+        }
+        if (this instanceof Staff) {
+            authorities.add(new Authority("ROLE_STAFF"));
+        }
+        if (this instanceof Waiter) {
+            authorities.add(new Authority("ROLE_WAITER"));
+        }
+        if (this instanceof Barman) {
+            authorities.add(new Authority("ROLE_BARMAN"));
+        }
+        if (this instanceof Cook) {
+            authorities.add(new Authority("ROLE_COOK"));
+        }
 
         return authorities;
     }
