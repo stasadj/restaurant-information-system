@@ -4,7 +4,6 @@ package com.restaurant.backend.controller;
 import java.util.List;
 import java.util.Optional;
 
-
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.service.ItemService;
 
@@ -14,9 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
@@ -32,26 +33,52 @@ public class ItemController {
     private ItemService itemService;
 
     @ResponseBody
-    @GetMapping("/all")
-    //@PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<Item>> getAll() {
-        LOG.info("Client requested the get all items method.");
-        List<Item> items = itemService.getAll();
-        //StringBuilder sb = new StringBuilder();
-        //items.forEach(item -> sb.append(item.getName() + "\n"));
-        //return sb.toString();
-        return new ResponseEntity<>(items, HttpStatus.OK);
-    }
-
-    @ResponseBody
     @GetMapping("/{id}")
     //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Optional<Item>> getById(@PathVariable Long id) {
         LOG.info("Client requested the get item by id method.");
-        Optional<Item> item = itemService.getById(id);
-        //StringBuilder sb = new StringBuilder();
-        //item.ifPresent(i -> sb.append(i.getName()));
-        return new ResponseEntity<>(item, HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getById(id), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/all")
+    //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<Item>> getAll() {
+        LOG.info("Client requested the get all items method.");
+        return new ResponseEntity<>(itemService.getAll(), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/in-menu")
+    //@PreAuthorize("hasRole('MANAGER', 'WAITER', 'BARMAN')")
+    public ResponseEntity<List<Item>> getAllMenuItems() {
+        LOG.info("Client requested to get all menu items.");
+        return new ResponseEntity<>(itemService.getAllMenuItems(), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/add-to-menu")
+    //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Item> addToMenu(@RequestParam Long id) {
+        LOG.info("Client requested the add item to menu.");
+        return new ResponseEntity<>(itemService.addToMenu(id), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/remove-from-menu")
+    //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Item> removeFromMenu(@RequestParam Long id) {
+        LOG.info("Client requested the remove item from menu.");
+        return new ResponseEntity<>(itemService.removeFromMenu(id), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{id}")
+    //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        LOG.info("Client requested to delete item.");
+        itemService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
