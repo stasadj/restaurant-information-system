@@ -33,21 +33,28 @@ public class ItemController {
     private ItemService itemService;
 
     @ResponseBody
-    @GetMapping("/all")
-    //@PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<Item>> getAll() {
-        LOG.info("Client requested the get all items method.");
-        List<Item> items = itemService.getAll();
-        return new ResponseEntity<>(items, HttpStatus.OK);
-    }
-
-    @ResponseBody
     @GetMapping("/{id}")
     //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Optional<Item>> getById(@PathVariable Long id) {
         LOG.info("Client requested the get item by id method.");
         Optional<Item> item = itemService.getById(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/all")
+    //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<Item>> getAll() {
+        LOG.info("Client requested the get all items method.");
+        return new ResponseEntity<>(itemService.getAll(), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/in-menu")
+    //@PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<Item>> getAllMenuItems() {
+        LOG.info("Client requested to get all menu items.");
+        return new ResponseEntity<>(itemService.getAllMenuItems(), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -67,4 +74,6 @@ public class ItemController {
         Item item = itemService.removeFromMenu(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
+
+
 }

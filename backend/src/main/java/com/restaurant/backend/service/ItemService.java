@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.repository.ItemRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +18,10 @@ public class ItemService {
 
     public List<Item> getAll(){
         return itemRepository.findAll();
+    }
+
+    public List<Item> getAllMenuItems() {
+        return itemRepository.findByInMenuTrue();
     }
 
     public Optional<Item> getById(long id){
@@ -50,4 +53,6 @@ public class ItemService {
         return null; //todo throw not found ex?
 
     }
+
+
 }
