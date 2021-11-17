@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.restaurant.backend.domain.User;
 import com.restaurant.backend.dto.CredentialsDTO;
+import com.restaurant.backend.dto.UserDTO;
 import com.restaurant.backend.service.AuthenticationService;
 import com.restaurant.backend.support.UserMapper;
 
@@ -28,6 +29,8 @@ public class AuthenticationController {
 
     private AuthenticationService authenticationService;
 
+    private UserMapper userMapper;
+
     @PostMapping("/login")
     public void login(@RequestBody CredentialsDTO credentials, HttpServletResponse response) {
         LOG.debug("Received request for login");
@@ -45,5 +48,11 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public void logout(HttpServletResponse response) {
         authenticationService.logout(response);
+    }
+
+    @GetMapping("/whoami")
+    @PreAuthorize("hasRole('USER')")
+    public UserDTO whoami(@AuthenticationPrincipal User user) {
+        return userMapper.convertToDto(user);
     }
 }
