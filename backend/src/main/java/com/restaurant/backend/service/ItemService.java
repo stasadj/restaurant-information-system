@@ -9,10 +9,12 @@ import com.restaurant.backend.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class ItemService {
     
-    @Autowired
     private ItemRepository itemRepository;
 
     public List<Item> getAll(){
