@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
 
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class ItemService {
             itemRepository.save(item);
             return item;
         };
-        return null; //todo throw not found ex?
+        throw new NotFoundException("Attemped to add unexisting item to menu");
 
     }
 
@@ -50,7 +51,7 @@ public class ItemService {
             itemRepository.save(item);
             return item;
         };
-        return null; //todo throw not found ex?
+        throw new NotFoundException("Attemped to remove unexisting item from menu");
 
     }
 

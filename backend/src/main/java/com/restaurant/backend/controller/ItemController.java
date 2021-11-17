@@ -37,8 +37,7 @@ public class ItemController {
     //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Optional<Item>> getById(@PathVariable Long id) {
         LOG.info("Client requested the get item by id method.");
-        Optional<Item> item = itemService.getById(id);
-        return new ResponseEntity<>(item, HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getById(id), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -62,8 +61,7 @@ public class ItemController {
     //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Item> addToMenu(@RequestParam Long id) {
         LOG.info("Client requested the add item to menu.");
-        Item item = itemService.addToMenu(id);
-        return new ResponseEntity<>(item, HttpStatus.OK);
+        return new ResponseEntity<>(itemService.addToMenu(id), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -71,8 +69,7 @@ public class ItemController {
     //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Item> removeFromMenu(@RequestParam Long id) {
         LOG.info("Client requested the remove item from menu.");
-        Item item = itemService.removeFromMenu(id);
-        return new ResponseEntity<>(item, HttpStatus.OK);
+        return new ResponseEntity<>(itemService.removeFromMenu(id), HttpStatus.OK);
     }
 
 
