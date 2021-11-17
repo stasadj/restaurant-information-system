@@ -6,22 +6,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import lombok.NoArgsConstructor;
+
 import java.util.Optional;
 
 import com.restaurant.backend.domain.PasswordUser;
+import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.domain.User;
 import com.restaurant.backend.repository.PasswordUserRepository;
+import com.restaurant.backend.repository.StaffRepository;
 
 @Service
+@NoArgsConstructor
 public class JWTUserDetailsService implements UserDetailsService {
 
     @Autowired
     private PasswordUserRepository passwordUserRepository;
 
-    private User user;
+    @Autowired
+    private StaffRepository staffRepository;
 
-    public JWTUserDetailsService() {
-    }
+    private User user;
 
     public JWTUserDetailsService(User user) {
         this.user = user;
@@ -37,17 +42,13 @@ public class JWTUserDetailsService implements UserDetailsService {
         }
     }
 
-    public UserDetails loadUserByPin(int pin) {
-        // TODO: Implement staffRepository and use it here instead of
-        // passwordUserRepository
-        /*
-         * Optional<PasswordUser> maybeUser =
-         * passwordUserRepository.findByUsername(pin); if (maybeUser.isPresent()) {
-         * return maybeUser.get(); } else { throw new
-         * UsernameNotFoundException(String.format("No user found with pin '%s'.",
-         * pin)); }
-         */
-        return null;
+    public UserDetails loadUserByPin(int pin) throws UsernameNotFoundException {
+        Optional<Staff> maybeUser = staffRepository.findByPin(pin);
+        if (maybeUser.isPresent()) {
+            return maybeUser.get();
+        } else {
+            throw new UsernameNotFoundException(String.format("No user found with pin '%s'.", pin));
+        }
     }
 
     public boolean isEnabled() {

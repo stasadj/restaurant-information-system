@@ -12,7 +12,6 @@ import com.restaurant.backend.service.JWTUserDetailsService;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import lombok.AllArgsConstructor;
@@ -37,18 +36,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             if (username != null) {
                 UserDetails userDetails = null;
                 String userType = tokenUtils.getUserTypeFromToken(authToken);
-                switch (userType) {
-                case TokenUtils.USER_TYPE_PASSWORD:
-                    userDetails = userDetailsService.loadUserByUsername(username);
-                    break;
-                case TokenUtils.USER_TYPE_PIN:
-                    try {
-                        int pin = Integer.parseInt(username);
-                        userDetails = userDetailsService.loadUserByPin(pin);
-                    } catch (NumberFormatException e) {
+                if (userType != null)
+                    switch (userType) {
+                    case TokenUtils.USER_TYPE_PASSWORD:
+                        userDetails = userDetailsService.loadUserByUsername(username);
+                        break;
+                    case TokenUtils.USER_TYPE_PIN:
+                        try {
+                            int pin = Integer.parseInt(username);
+                            userDetails = userDetailsService.loadUserByPin(pin);
+                        } catch (NumberFormatException e) {
+                        }
+                        break;
                     }
-                    break;
-                }
 
                 if (userDetails != null && tokenUtils.validateToken(authToken, userDetails)) {
                     TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
