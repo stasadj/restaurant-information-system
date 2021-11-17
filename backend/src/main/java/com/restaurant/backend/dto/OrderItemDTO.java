@@ -17,4 +17,5 @@ public class OrderItemDTO {
     private OrderStatus orderStatus;
     private Long itemId;
     private Long cookId;
+    private Long barmanId;
 }
