@@ -60,9 +60,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // No session will be created or used by spring security
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and().authorizeRequests()
                 // Keep authentication and helloworld open but close all other requests.
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/api/authentication/**").permitAll().antMatchers("/api/helloworld/**").permitAll().antMatchers("/api/item/**").permitAll()
-                .anyRequest().authenticated().and().cors().and()
+                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/helloworld/**").permitAll().anyRequest()
+                .authenticated().and().cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
                         BasicAuthenticationFilter.class)
                 .addFilterBefore(new FrontendRedirectFilter(), TokenAuthenticationFilter.class);
