@@ -22,4 +22,30 @@ public class ItemService {
     public Optional<Item> getById(long id){
         return itemRepository.findById(id);
     }
+
+    public Item addToMenu(Long id) {
+        Optional<Item> optionalItem = itemRepository.findById(id);
+        if (optionalItem.isPresent())
+        {
+            Item item = optionalItem.get();
+            item.setInMenu(true);
+            itemRepository.save(item);
+            return item;
+        };
+        return null; //todo throw not found ex?
+
+    }
+
+    public Item removeFromMenu(Long id) {
+        Optional<Item> optionalItem = itemRepository.findById(id);
+        if (optionalItem.isPresent())
+        {
+            Item item = optionalItem.get();
+            item.setInMenu(false);
+            itemRepository.save(item);
+            return item;
+        };
+        return null; //todo throw not found ex?
+
+    }
 }
