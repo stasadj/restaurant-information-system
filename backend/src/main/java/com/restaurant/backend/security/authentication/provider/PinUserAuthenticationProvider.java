@@ -1,6 +1,5 @@
 package com.restaurant.backend.security.authentication.provider;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import com.restaurant.backend.domain.Staff;
