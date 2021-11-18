@@ -1,12 +1,11 @@
 package com.restaurant.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ import com.restaurant.backend.repository.PasswordUserRepository;
 import com.restaurant.backend.repository.StaffRepository;
 
 @Service
-@NoArgsConstructor
+@AllArgsConstructor
 public class JWTUserDetailsService implements UserDetailsService {
 
     @Autowired
