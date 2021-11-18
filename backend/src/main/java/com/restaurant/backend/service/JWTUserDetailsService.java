@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import com.restaurant.backend.domain.PasswordUser;
 import com.restaurant.backend.domain.Staff;
-import com.restaurant.backend.domain.User;
 import com.restaurant.backend.repository.PasswordUserRepository;
 import com.restaurant.backend.repository.StaffRepository;
 
@@ -19,17 +18,8 @@ import com.restaurant.backend.repository.StaffRepository;
 @AllArgsConstructor
 public class JWTUserDetailsService implements UserDetailsService {
 
-    @Autowired
     private PasswordUserRepository passwordUserRepository;
-
-    @Autowired
     private StaffRepository staffRepository;
-
-    private User user;
-
-    public JWTUserDetailsService(User user) {
-        this.user = user;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,10 +38,6 @@ public class JWTUserDetailsService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException(String.format("No user found with pin '%s'.", pin));
         }
-    }
-
-    public boolean isEnabled() {
-        return user.isEnabled();
     }
 
 }
