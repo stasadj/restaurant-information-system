@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 
 @Component
 public class TokenUtils {
@@ -40,9 +41,19 @@ public class TokenUtils {
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
+    private JwtBuilder getBaseJWTTokenBuilder(String subject) {
+        return Jwts.builder().setIssuer(APP_NAME).setSubject(subject).setAudience(AUDIENCE_WEB).setIssuedAt(new Date())
+                .setExpiration(generateExpirationDate());
+    }
+
     public String generateToken(String username) {
-        return Jwts.builder().setIssuer(APP_NAME).setSubject(username).setAudience(AUDIENCE_WEB).setIssuedAt(new Date())
-                .setExpiration(generateExpirationDate()).signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+        return getBaseJWTTokenBuilder(username).claim("userType", USER_TYPE_PASSWORD)
+                .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+    }
+
+    public String generatePinToken(String pin) {
+        return getBaseJWTTokenBuilder(pin).claim("userType", USER_TYPE_PIN).signWith(SIGNATURE_ALGORITHM, SECRET)
+                .compact();
     }
 
     private Date generateExpirationDate() {
@@ -51,22 +62,13 @@ public class TokenUtils {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         User user = (User) userDetails;
-        final String userType = getUserTypeFromToken(token);
+        // Username can either be a username or a string representation of the pin
+        // In this case, we don't need to discriminate based upon the token type
+        final String username = getUsernameFromToken(token);
+        final Date created = getIssuedAtDateFromToken(token);
 
-        if (userType.equals(USER_TYPE_PASSWORD)) {
-            final String username = getUsernameFromToken(token);
-            final Date created = getIssuedAtDateFromToken(token);
-
-            return (username != null && username.equals(userDetails.getUsername())
-                    && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
-        } else if (userType.equals(USER_TYPE_PIN)) {
-            // TODO: Get pin from token
-            // TODO: Find Staff user with pin
-            // TODO: Validate user is not null
-            return true;
-        }
-
-        return false;
+        return (username != null && username.equals(userDetails.getUsername())
+                && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
     }
 
     public String getUsernameFromToken(String token) {

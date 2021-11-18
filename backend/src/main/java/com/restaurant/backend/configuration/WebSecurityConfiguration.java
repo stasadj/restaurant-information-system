@@ -3,6 +3,7 @@ package com.restaurant.backend.configuration;
 import com.restaurant.backend.security.TokenUtils;
 import com.restaurant.backend.security.authentication.RestAuthenticationEntryPoint;
 import com.restaurant.backend.security.authentication.TokenAuthenticationFilter;
+import com.restaurant.backend.security.authentication.provider.PinUserAuthenticationProvider;
 import com.restaurant.backend.service.JWTUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import lombok.AllArgsConstructor;
+
 @Configuration
+@AllArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -29,10 +33,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Autowired
+    private TokenUtils tokenUtils;
+
     private JWTUserDetailsService jwtUserDetailsService;
 
-    @Autowired
+    private PinUserAuthenticationProvider pinUserAuthenticationProvider;
+
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Bean
@@ -43,11 +49,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(pinUserAuthenticationProvider);
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
-
-    @Autowired
-    private TokenUtils tokenUtils;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -56,9 +60,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // No session will be created or used by spring security
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and().authorizeRequests()
                 // Keep authentication and helloworld open but close all other requests.
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/api/authentication/**").permitAll().antMatchers("/api/helloworld/**").permitAll().antMatchers("/api/item/**").permitAll()
-                .anyRequest().authenticated().and().cors().and()
+                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/helloworld/**").permitAll().anyRequest()
+                .authenticated().and().cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
                         BasicAuthenticationFilter.class)
                 .addFilterBefore(new FrontendRedirectFilter(), TokenAuthenticationFilter.class);
