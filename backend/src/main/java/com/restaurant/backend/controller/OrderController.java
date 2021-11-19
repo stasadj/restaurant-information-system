@@ -7,9 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,10 @@ public class OrderController {
     @GetMapping("/all")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.findAll()), HttpStatus.OK);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO order) {
+        return new ResponseEntity<>(toOrderDTO.convert(orderService.create(order)), HttpStatus.OK);
     }
 }

@@ -1,6 +1,5 @@
 package com.restaurant.backend.dto;
 
-import com.restaurant.backend.domain.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

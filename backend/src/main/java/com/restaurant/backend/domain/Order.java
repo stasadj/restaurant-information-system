@@ -2,6 +2,7 @@ package com.restaurant.backend.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
 
 @Entity
 @Table(name = "restaurant_order")
@@ -46,5 +48,13 @@ public class Order {
         return orderItems.stream()
                 .map(orderItem -> orderItem.getItem().getItemValueAt(LocalDateTime.now()).getSellingPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public Order(LocalDateTime createdAt, String note, Integer tableId, Waiter waiter) {
+        this.createdAt = createdAt;
+        this.note = note;
+        this.tableId = tableId;
+        this.waiter = waiter;
+        this.orderItems = new ArrayList<>();
     }
 }

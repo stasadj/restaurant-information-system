@@ -42,4 +42,11 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "barman_id")
     protected Barman barman;
+
+    public OrderItem(Integer amount, Order order, OrderStatus orderStatus, Item item) {
+        this.amount = amount;
+        this.order = order;
+        this.orderStatus = orderStatus;
+        this.item = item;
+    }
 }
