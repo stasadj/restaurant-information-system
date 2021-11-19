@@ -27,7 +27,7 @@ public class OrderController {
 
     @PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
     @PostMapping("/create")
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO order) {
+    public ResponseEntity<List<OrderDTO>> createOrder(@RequestBody OrderDTO order) {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.create(order)), HttpStatus.OK);
     }
 }

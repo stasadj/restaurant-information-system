@@ -41,7 +41,7 @@ public class OrderService implements GenericService<Order> {
         return orderRepository.save(entity);
     }
 
-    public Order create(OrderDTO order) {
+    public List<Order> create(OrderDTO order) {
         Staff waiter = staffRepository.findById(order.getWaiterId()).orElse(null);
         Order newOrder = save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
 
@@ -52,6 +52,6 @@ public class OrderService implements GenericService<Order> {
             orderItemRepository.save(newOrderItem);
         }
 
-        return newOrder;
+        return findAll();
     }
 }
