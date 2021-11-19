@@ -1,6 +1,7 @@
 INSERT INTO user (first_name, last_name, email, username, password, phone_number, role, monthly_wage, pin) VALUES
   ('Jeff', 'Goldblum', 'jeffgoldbloom@somedomain.blum', 'jeff.goldblum','$2y$10$t4NZP3qGGdzGakospEzFHOPQngmjvi7dZeZSiwfiNz.1rv/smO0Ce', '123goldblum456', 'admin', NULL, NULL),
-  ('Will', 'Smith', 'will@somedomain.smith', NULL, NULL, '12345678', 'waiter', 340, 1234);
+  ('Will', 'Smith', 'will@somedomain.smith', NULL, NULL, '12345678', 'waiter', 340, 1234),
+  ('Morgan', 'Freeman', 'morgan@somedomain.freeman', 'morgan', '$2y$10$t4NZP3qGGdzGakospEzFHOPQngmjvi7dZeZSiwfiNz.1rv/smO0Ce', '12345678', 'manager', 1340, NULL);
 
 INSERT INTO category (name) VALUES
   ('appetizer'),
