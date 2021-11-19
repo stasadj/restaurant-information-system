@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.service.ItemService;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,6 +80,16 @@ public class ItemController {
         LOG.info("Client requested to delete item.");
         itemService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/create")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<ItemDTO> create(@RequestBody ItemDTO itemDTO) {
+        LOG.info("Client requested to create new item.");
+        
+        itemService.create(ItemDTO.toObject(itemDTO));
+        return new ResponseEntity<>(itemDTO, HttpStatus.OK);
     }
 
 }

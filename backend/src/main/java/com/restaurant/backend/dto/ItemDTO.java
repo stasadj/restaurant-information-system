@@ -1,7 +1,10 @@
 package com.restaurant.backend.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.domain.enums.ItemType;
 
 import lombok.AllArgsConstructor;
@@ -29,9 +32,28 @@ public class ItemDTO {
 
     protected Boolean inMenu;
 
-    protected List<ItemValueDTO> itemValues;
+    protected ItemValueDTO currentItemValue;
 
     protected ItemType itemType;
 
     protected Boolean deleted;
+
+    public static Item toObject(ItemDTO dto) {
+
+        Item item = new Item();
+        item.setId(dto.getId());
+        item.setDescription(dto.getDescription());
+        item.setImageURL(dto.getImageURL());
+        item.setInMenu(dto.getInMenu());
+        item.setItemType(dto.getItemType());
+        item.setDeleted(dto.getDeleted());
+
+        item.setCategory(CategoryDTO.toObject(dto.getCategory()));
+
+        item.setTags(new ArrayList<Tag>());
+        dto.getTags().forEach(tag -> item.getTags().add(TagDTO.toObject(tag)));
+
+        return item;
+
+    }
 }
