@@ -43,6 +43,8 @@ public class OrderService implements GenericService<Order> {
         return orderRepository.save(entity);
     }
 
+    public List<Order> findAllForWaiter(Long id) { return orderRepository.findAllByWaiter_Id(id); }
+
     public List<Order> create(OrderDTO order) {
         Staff waiter = staffRepository.findById(order.getWaiterId()).orElse(null);
         Order newOrder = save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
@@ -54,11 +56,12 @@ public class OrderService implements GenericService<Order> {
             orderItemRepository.save(newOrderItem);
         }
 
-        return findAll();
+        return findAllForWaiter(order.getWaiterId());
     }
 
     public List<Order> cancelOrderItem(Long id) {
         OrderItem item = orderItemRepository.findById(id).orElse(null);
+        Long waiterId = item.getOrder().getWaiter().getId();
 
         if (item == null) {
             throw new NotFoundException("Order item does not exist.");
@@ -70,7 +73,7 @@ public class OrderService implements GenericService<Order> {
 
         orderItemRepository.deleteById(id);
 
-        return findAll();
+        return findAllForWaiter(waiterId);
     }
 
     public List<Order> editOrderItems(OrderDTO order) {
@@ -90,6 +93,6 @@ public class OrderService implements GenericService<Order> {
             }
         }
 
-        return findAll();
+        return findAllForWaiter(order.getWaiterId());
     }
 }

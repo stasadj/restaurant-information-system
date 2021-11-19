@@ -25,19 +25,25 @@ public class OrderController {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.findAll()), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
+    @PreAuthorize("hasRole('WAITER')")
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<OrderDTO>> getAllOrdersForWaiter(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(toOrderDTO.convert(orderService.findAllForWaiter(id)), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('WAITER')")
     @PostMapping("/create")
     public ResponseEntity<List<OrderDTO>> createOrder(@RequestBody OrderDTO order) {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.create(order)), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
+    @PreAuthorize("hasRole('WAITER')")
     @PutMapping("/edit")
     public ResponseEntity<List<OrderDTO>> editOrderItems(@RequestBody OrderDTO order) {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.editOrderItems(order)), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
+    @PreAuthorize("hasRole('WAITER')")
     @DeleteMapping("/cancel-item/{id}")
     public ResponseEntity<List<OrderDTO>> cancelOrderItem(@PathVariable("id") Long id) {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.cancelOrderItem(id)), HttpStatus.OK);
