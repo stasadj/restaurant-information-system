@@ -4,6 +4,8 @@ import com.restaurant.backend.domain.*;
 import com.restaurant.backend.domain.enums.OrderStatus;
 import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.dto.OrderItemDTO;
+import com.restaurant.backend.exception.BadRequestException;
+import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
 import com.restaurant.backend.repository.OrderItemRepository;
 import com.restaurant.backend.repository.OrderRepository;
@@ -51,6 +53,22 @@ public class OrderService implements GenericService<Order> {
             newOrder.getOrderItems().add(newOrderItem);
             orderItemRepository.save(newOrderItem);
         }
+
+        return findAll();
+    }
+
+    public List<Order> cancelOrderItem(Long id) {
+        OrderItem item = orderItemRepository.findById(id).orElse(null);
+
+        if (item == null) {
+            throw new NotFoundException("Order item does not exist.");
+        }
+
+        if (item.getOrderStatus() != OrderStatus.PENDING) {
+            throw new BadRequestException("You can't cancel order item that is already in the making.");
+        }
+
+        orderItemRepository.deleteById(id);
 
         return findAll();
     }
