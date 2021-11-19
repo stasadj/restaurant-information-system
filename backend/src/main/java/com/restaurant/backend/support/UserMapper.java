@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper implements ObjectMapper<User, UserDTO> {
+public class UserMapper extends GenericObjectMapper<User, UserDTO> {
     @Autowired
     private ModelMapper modelMapper;
 
