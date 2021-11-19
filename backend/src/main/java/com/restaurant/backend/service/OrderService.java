@@ -72,4 +72,24 @@ public class OrderService implements GenericService<Order> {
 
         return findAll();
     }
+
+    public List<Order> editOrderItems(OrderDTO order) {
+        Order editedOrder = findOne(order.getId());
+
+        for (OrderItemDTO orderItem : order.getOrderItems()) {
+
+            if (orderItem.getId() == null) {
+                Item item = itemRepository.findById(orderItem.getItemId()).orElse(null);
+                OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
+                editedOrder.getOrderItems().add(newOrderItem);
+                orderItemRepository.save(newOrderItem);
+            }
+
+            else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
+                orderItemRepository.updateAmount(orderItem.getItemId(), orderItem.getAmount());
+            }
+        }
+
+        return findAll();
+    }
 }

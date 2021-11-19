@@ -31,9 +31,15 @@ public class OrderController {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.create(order)), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('WAITER')")
+    @PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
+    @PutMapping("/edit")
+    public ResponseEntity<List<OrderDTO>> editOrderItems(@RequestBody OrderDTO order) {
+        return new ResponseEntity<>(toOrderDTO.convert(orderService.editOrderItems(order)), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
     @DeleteMapping("/cancel-item/{id}")
-    public ResponseEntity<List<OrderDTO>> cancelItem(@PathVariable("id") Long id) {
+    public ResponseEntity<List<OrderDTO>> cancelOrderItem(@PathVariable("id") Long id) {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.cancelOrderItem(id)), HttpStatus.OK);
     }
 }
