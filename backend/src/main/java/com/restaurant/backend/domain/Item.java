@@ -1,6 +1,6 @@
 package com.restaurant.backend.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -72,8 +72,13 @@ public class Item {
     @Column(name = "deleted", nullable = false)
     protected Boolean deleted;
 
-    protected ItemValue getItemValueAt(LocalDateTime dateTime) {
-        // TODO
-        return new ItemValue();
+    public ItemValue getItemValueAt(LocalDate date) {
+        ItemValue itemValueAt = null;
+        for (ItemValue itemValue : itemValues)
+            if (itemValue.getFromDate().isBefore(date)) {
+                if (itemValueAt == null) itemValueAt = itemValue;
+                else if (itemValueAt.getFromDate().isBefore(itemValue.getFromDate())) itemValueAt = itemValue;
+            }
+        return itemValueAt;
     }
 }
