@@ -90,9 +90,8 @@ public class ItemController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@Valid @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
-        
         Item item = itemService.create(ItemDTO.toObject(itemDTO));
-        return new ResponseEntity<>(itemDTO, HttpStatus.OK); //todo change to new dto based on obj
+        return new ResponseEntity<>(new ItemDTO(item), HttpStatus.OK); 
     }
 
 }

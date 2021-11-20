@@ -70,4 +70,19 @@ public class ItemDTO {
         return item;
 
     }
+
+    public ItemDTO(Item item) {
+        this.id = item.getId();
+        this.name = item.getName();
+        this.description = item.getDescription();
+        this.imageURL = item.getImageURL();
+        this.inMenu = item.getInMenu();
+        this.itemType = item.getItemType();
+        this.deleted = item.getDeleted();
+
+        this.category = new CategoryDTO(item.getCategory());
+        this.tags = new ArrayList<>();
+        item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
+
+    }
 }

@@ -24,4 +24,9 @@ public class CategoryDTO {
         return category;
 
     }
+
+    public CategoryDTO(Category category) {
+        this.id = category.getId();
+        this.name = category.getName();
+    }
 }

@@ -24,4 +24,9 @@ public class TagDTO {
         return tag;
 
     }
+
+    public TagDTO(Tag tag) {
+        this.id = tag.getId();
+        this.name = tag.getName();
+    }
 }
