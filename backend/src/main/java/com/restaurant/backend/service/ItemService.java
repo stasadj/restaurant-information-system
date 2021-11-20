@@ -96,7 +96,8 @@ public class ItemService {
     }
 
     public Item create(Item item) throws NotFoundException {
-        item.setDeleted(false);
+        item.setDeleted(false); //initially false
+
         item.setCategory(categoryRepository.findById(item.getCategory().getId()).orElseThrow(
             () -> new NotFoundException(String.format("No category with id %d has been found", item.getCategory().getId())))); //TODO place this throw in CategoryService somehow?
         
@@ -106,8 +107,8 @@ public class ItemService {
         item.setTags(tags);
         Item savedItem = itemRepository.save(item);
         
-        ItemValue initialItemValue = item.getItemValues().get(0);
-        initialItemValue.setFromDate(LocalDate.now());
+        ItemValue initialItemValue = item.getItemValues().get(0); //getting the only item value
+        initialItemValue.setFromDate(LocalDate.now()); //current date as from date
         initialItemValue.setItem(savedItem);
         itemValueRepository.save(initialItemValue);
 

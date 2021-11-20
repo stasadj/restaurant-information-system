@@ -49,7 +49,7 @@ public class ItemDTO {
     protected Boolean deleted;
 
     public static Item toObject(ItemDTO dto) {
-
+        //TODO ObjectMapper
         Item item = new Item();
         item.setId(dto.getId());
         item.setName(dto.getName());
@@ -72,6 +72,7 @@ public class ItemDTO {
     }
 
     public ItemDTO(Item item) {
+        //TODO ObjectMapper
         this.id = item.getId();
         this.name = item.getName();
         this.description = item.getDescription();
