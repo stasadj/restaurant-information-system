@@ -1,17 +1,16 @@
 package com.restaurant.backend.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.*;
-
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.tomcat.jni.Local;
 
 @Entity
 @Table(name = "restaurant_order")
@@ -46,7 +45,7 @@ public class Order {
 
     protected BigDecimal getTotal() {
         return orderItems.stream()
-                .map(orderItem -> orderItem.getItem().getItemValueAt(LocalDateTime.now()).getSellingPrice())
+                .map(orderItem -> orderItem.getItem().getItemValueAt(LocalDate.now()).getSellingPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

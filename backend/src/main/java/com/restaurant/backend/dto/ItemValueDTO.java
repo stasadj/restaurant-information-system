@@ -41,6 +41,12 @@ public class ItemValueDTO {
         itemValue.setSellingPrice(dto.getSellingPrice());
         itemValue.setFromDate(dto.getFromDate());
         return itemValue;
+    }
 
+    public ItemValueDTO(ItemValue itemValue) {
+        id = itemValue.getId();
+        purchasePrice = itemValue.getPurchasePrice();
+        sellingPrice = itemValue.getSellingPrice();
+        fromDate = itemValue.getFromDate();
     }
 }
