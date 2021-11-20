@@ -23,8 +23,8 @@ import java.util.List;
 public class OrderService implements GenericService<Order> {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final StaffRepository staffRepository;
-    private final ItemRepository itemRepository;
+    private final StaffService staffService;
+    private final ItemService itemService;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,7 +35,8 @@ public class OrderService implements GenericService<Order> {
     @Override
     @Transactional(readOnly = true)
     public Order findOne(Long id) {
-        return orderRepository.findById(id).orElse(null);
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("No order with id %d has been found", id)));
     }
 
     @Override
@@ -46,11 +47,11 @@ public class OrderService implements GenericService<Order> {
     public List<Order> findAllForWaiter(Long id) { return orderRepository.findAllByWaiter_Id(id); }
 
     public List<Order> create(OrderDTO order) {
-        Staff waiter = staffRepository.findById(order.getWaiterId()).orElse(null);
+        Staff waiter = staffService.GetById(order.getWaiterId());
         Order newOrder = save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
 
         for (OrderItemDTO orderItem : order.getOrderItems()){
-            Item item = itemRepository.findById(orderItem.getItemId()).orElse(null);
+            Item item = itemService.getById(orderItem.getItemId());
             OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.PENDING, item);
             newOrder.getOrderItems().add(newOrderItem);
             orderItemRepository.save(newOrderItem);
@@ -59,30 +60,13 @@ public class OrderService implements GenericService<Order> {
         return findAllForWaiter(order.getWaiterId());
     }
 
-    public List<Order> cancelOrderItem(Long id) {
-        OrderItem item = orderItemRepository.findById(id).orElse(null);
-        Long waiterId = item.getOrder().getWaiter().getId();
-
-        if (item == null) {
-            throw new NotFoundException("Order item does not exist.");
-        }
-
-        if (item.getOrderStatus() != OrderStatus.PENDING) {
-            throw new BadRequestException("You can't cancel order item that is already in the making.");
-        }
-
-        orderItemRepository.deleteById(id);
-
-        return findAllForWaiter(waiterId);
-    }
-
     public List<Order> editOrderItems(OrderDTO order) {
         Order editedOrder = findOne(order.getId());
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
 
             if (orderItem.getId() == null) {
-                Item item = itemRepository.findById(orderItem.getItemId()).orElse(null);
+                Item item = itemService.getById(orderItem.getItemId());
                 OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
                 editedOrder.getOrderItems().add(newOrderItem);
                 orderItemRepository.save(newOrderItem);

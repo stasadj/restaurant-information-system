@@ -43,9 +43,4 @@ public class OrderController {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.editOrderItems(order)), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('WAITER')")
-    @DeleteMapping("/cancel-item/{id}")
-    public ResponseEntity<List<OrderDTO>> cancelOrderItem(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(toOrderDTO.convert(orderService.cancelOrderItem(id)), HttpStatus.OK);
-    }
 }
