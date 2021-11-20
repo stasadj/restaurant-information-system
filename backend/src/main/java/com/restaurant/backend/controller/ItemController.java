@@ -3,6 +3,8 @@ package com.restaurant.backend.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.service.ItemService;
@@ -86,7 +88,7 @@ public class ItemController {
     @ResponseBody
     @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ItemDTO> create(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<ItemDTO> create(@Valid @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
         
         Item item = itemService.create(ItemDTO.toObject(itemDTO));
