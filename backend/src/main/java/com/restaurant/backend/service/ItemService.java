@@ -1,5 +1,6 @@
 package com.restaurant.backend.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.CategoryRepository;
 import com.restaurant.backend.repository.ItemRepository;
+import com.restaurant.backend.repository.ItemValueRepository;
 import com.restaurant.backend.repository.TagRepository;
 
 import org.hibernate.Filter;
@@ -27,6 +29,7 @@ public class ItemService {
     private ItemRepository itemRepository;
     private TagRepository tagRepository;
     private CategoryRepository categoryRepository;
+    private ItemValueRepository itemValueRepository;
     private EntityManager entityManager;
 
     public List<Item> getAll() {
@@ -96,17 +99,18 @@ public class ItemService {
         item.setDeleted(false);
         item.setCategory(categoryRepository.findById(item.getCategory().getId()).orElseThrow(
             () -> new NotFoundException(String.format("No category with id %d has been found", item.getCategory().getId())))); //TODO place this throw in CategoryService somehow?
+        
         List<Tag> tags = new ArrayList<>();
         item.getTags().forEach(tag -> tags.add(tagRepository.findById(tag.getId()).orElseThrow(
             () -> new NotFoundException(String.format("No tag with id %d has been found", tag.getId()))))); //TODO place this throw in TagService somehow?
         item.setTags(tags);
+        Item savedItem = itemRepository.save(item);
+        
+        ItemValue initialItemValue = item.getItemValues().get(0);
+        initialItemValue.setFromDate(LocalDate.now());
+        initialItemValue.setItem(savedItem);
+        itemValueRepository.save(initialItemValue);
 
-        //List<ItemValue> values = new ArrayList<>();
-        //values.add(item.getC)
-
-
-        //item.setItemValue
-        //itemRepository.save(item);
         return item;
     }
 
