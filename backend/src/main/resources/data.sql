@@ -9,6 +9,12 @@ INSERT INTO category (name) VALUES
   ('dessert'),
   ('drink');
 
+INSERT INTO tag (name) VALUES
+  ('vegan'),
+  ('vegetarian'),
+  ('gluten free'),
+  ('dairy free');
+
 INSERT INTO item (name, category_id, description, image_url, in_menu, type, deleted) VALUES
   ('Spaghetti carbonara', 2, 'Traditional Italian dish served with garlic, olive oil and parsley', NULL, true, 0, false),
   ('Chicken tikka masala', 2, 'Roasted marinated chicken in spiced curry sauce', NULL, true, 0, false),

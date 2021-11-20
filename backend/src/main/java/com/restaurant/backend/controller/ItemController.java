@@ -1,9 +1,12 @@
 package com.restaurant.backend.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.service.ItemService;
 
 import org.slf4j.Logger;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,41 +39,43 @@ public class ItemController {
     @ResponseBody
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Optional<Item>> getById(@PathVariable Long id) {
+    public ResponseEntity<ItemDTO> getById(@PathVariable Long id) {
         LOG.info("Client requested the get item by id method.");
-        return new ResponseEntity<>(itemService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.getById(id)), HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/all")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<Item>> getAll() {
+    public ResponseEntity<List<ItemDTO>> getAll() {
         LOG.info("Client requested the get all items method.");
-        return new ResponseEntity<>(itemService.getAll(), HttpStatus.OK);
+        var dtos = itemService.getAll().stream().map(item -> new ItemDTO(item)).collect(Collectors.toList());
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/in-menu")
     @PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'BARMAN')")
-    public ResponseEntity<List<Item>> getAllMenuItems() {
+    public ResponseEntity<List<ItemDTO>> getAllMenuItems() {
         LOG.info("Client requested to get all menu items.");
-        return new ResponseEntity<>(itemService.getAllMenuItems(), HttpStatus.OK);
+        var dtos = itemService.getAllMenuItems().stream().map(item -> new ItemDTO(item)).collect(Collectors.toList());
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/add-to-menu")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Item> addToMenu(@RequestParam Long id) {
+    public ResponseEntity<ItemDTO> addToMenu(@RequestParam Long id) {
         LOG.info("Client requested the add item to menu.");
-        return new ResponseEntity<>(itemService.addToMenu(id), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.addToMenu(id)), HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/remove-from-menu")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Item> removeFromMenu(@RequestParam Long id) {
+    public ResponseEntity<ItemDTO> removeFromMenu(@RequestParam Long id) {
         LOG.info("Client requested the remove item from menu.");
-        return new ResponseEntity<>(itemService.removeFromMenu(id), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.removeFromMenu(id)), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -78,6 +85,15 @@ public class ItemController {
         LOG.info("Client requested to delete item.");
         itemService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<ItemDTO> create(@Valid @RequestBody ItemDTO itemDTO) {
+        LOG.info("Client requested to create new item.");
+        return new ResponseEntity<>(new ItemDTO(itemService.create(ItemDTO.toObject(itemDTO))),
+         HttpStatus.OK); 
     }
 
 }
