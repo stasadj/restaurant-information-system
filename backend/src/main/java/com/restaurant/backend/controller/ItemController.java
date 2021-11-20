@@ -1,7 +1,7 @@
 package com.restaurant.backend.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -39,41 +39,43 @@ public class ItemController {
     @ResponseBody
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Optional<Item>> getById(@PathVariable Long id) {
+    public ResponseEntity<ItemDTO> getById(@PathVariable Long id) {
         LOG.info("Client requested the get item by id method.");
-        return new ResponseEntity<>(itemService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.getById(id)), HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/all")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<Item>> getAll() {
+    public ResponseEntity<List<ItemDTO>> getAll() {
         LOG.info("Client requested the get all items method.");
-        return new ResponseEntity<>(itemService.getAll(), HttpStatus.OK);
+        var dtos = itemService.getAll().stream().map(item -> new ItemDTO(item)).collect(Collectors.toList());
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/in-menu")
     @PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'BARMAN')")
-    public ResponseEntity<List<Item>> getAllMenuItems() {
+    public ResponseEntity<List<ItemDTO>> getAllMenuItems() {
         LOG.info("Client requested to get all menu items.");
-        return new ResponseEntity<>(itemService.getAllMenuItems(), HttpStatus.OK);
+        var dtos = itemService.getAllMenuItems().stream().map(item -> new ItemDTO(item)).collect(Collectors.toList());
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/add-to-menu")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Item> addToMenu(@RequestParam Long id) {
+    public ResponseEntity<ItemDTO> addToMenu(@RequestParam Long id) {
         LOG.info("Client requested the add item to menu.");
-        return new ResponseEntity<>(itemService.addToMenu(id), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.addToMenu(id)), HttpStatus.OK);
     }
 
     @ResponseBody
     @GetMapping("/remove-from-menu")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Item> removeFromMenu(@RequestParam Long id) {
+    public ResponseEntity<ItemDTO> removeFromMenu(@RequestParam Long id) {
         LOG.info("Client requested the remove item from menu.");
-        return new ResponseEntity<>(itemService.removeFromMenu(id), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.removeFromMenu(id)), HttpStatus.OK);
     }
 
     @ResponseBody

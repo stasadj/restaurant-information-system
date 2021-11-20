@@ -59,11 +59,13 @@ public class ItemService {
         return items;
     }
 
-    public Optional<Item> getById(long id) {
-        return itemRepository.findById(id);
+    public Item getById(long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("No item with id %d has been found", id)));
+
     }
 
-    public Item addToMenu(Long id)  throws NotFoundException{
+    public Item addToMenu(Long id) throws NotFoundException {
         Optional<Item> optionalItem = itemRepository.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
@@ -89,26 +91,41 @@ public class ItemService {
     }
 
     public void delete(Long id) throws NotFoundException {
-        Optional<Item> optionalItem = itemRepository.findById(id);
-        optionalItem.ifPresentOrElse(item -> itemRepository.delete(item),
-                () -> new NotFoundException("Attempted to delete unexisting item"));
+        Item item = this.getById(id);
+        itemRepository.delete(item);
+        // Optional<Item> optionalItem = itemRepository.findById(id);
+        // optionalItem.ifPresentOrElse(item -> itemRepository.delete(item),
+        // () -> new NotFoundException("Attempted to delete unexisting item"));
 
     }
 
     public Item create(Item item) throws NotFoundException {
-        item.setDeleted(false); //initially false
+        item.setDeleted(false); // initially false
 
-        item.setCategory(categoryRepository.findById(item.getCategory().getId()).orElseThrow(
-            () -> new NotFoundException(String.format("No category with id %d has been found", item.getCategory().getId())))); //TODO place this throw in CategoryService somehow?
-        
+        item.setCategory(
+                categoryRepository.findById(item.getCategory().getId()).orElseThrow(() -> new NotFoundException(
+                        String.format("No category with id %d has been found", item.getCategory().getId())))); // TODO
+                                                                                                               // place
+                                                                                                               // this
+                                                                                                               // throw
+                                                                                                               // in
+                                                                                                               // CategoryService
+                                                                                                               // somehow?
+
         List<Tag> tags = new ArrayList<>();
         item.getTags().forEach(tag -> tags.add(tagRepository.findById(tag.getId()).orElseThrow(
-            () -> new NotFoundException(String.format("No tag with id %d has been found", tag.getId()))))); //TODO place this throw in TagService somehow?
+                () -> new NotFoundException(String.format("No tag with id %d has been found", tag.getId()))))); // TODO
+                                                                                                                // place
+                                                                                                                // this
+                                                                                                                // throw
+                                                                                                                // in
+                                                                                                                // TagService
+                                                                                                                // somehow?
         item.setTags(tags);
         Item savedItem = itemRepository.save(item);
-        
-        ItemValue initialItemValue = item.getItemValues().get(0); //getting the only item value
-        initialItemValue.setFromDate(LocalDate.now()); //current date as from date
+
+        ItemValue initialItemValue = item.getItemValues().get(0); // getting the only item value
+        initialItemValue.setFromDate(LocalDate.now()); // current date as from date
         initialItemValue.setItem(savedItem);
         itemValueRepository.save(initialItemValue);
 
