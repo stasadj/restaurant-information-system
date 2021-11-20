@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,13 +84,13 @@ public class ItemController {
     }
 
     @ResponseBody
-    @DeleteMapping("/create")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
         
-        itemService.create(ItemDTO.toObject(itemDTO));
-        return new ResponseEntity<>(itemDTO, HttpStatus.OK);
+        //Item item = itemService.create(ItemDTO.toObject(itemDTO));
+        return new ResponseEntity<>(itemDTO, HttpStatus.OK); //todo change to new dto based on obj
     }
 
 }

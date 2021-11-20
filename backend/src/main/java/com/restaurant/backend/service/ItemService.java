@@ -85,7 +85,13 @@ public class ItemService {
 
     }
 
-    public void create(Item item) {
+    public Item create(Item item) {
+        item.setDeleted(false);
+        //item.setCategory(categoryRepository.getById);
+        //item.setTags
+        //item.setItemValue
+        //itemRepository.save(item);
+        return item;
     }
 
 }

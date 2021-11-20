@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.restaurant.backend.domain.Item;
-import com.restaurant.backend.domain.Tag;
+import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +42,7 @@ public class ItemDTO {
 
         Item item = new Item();
         item.setId(dto.getId());
+        item.setName(dto.getName());
         item.setDescription(dto.getDescription());
         item.setImageURL(dto.getImageURL());
         item.setInMenu(dto.getInMenu());
@@ -50,8 +51,11 @@ public class ItemDTO {
 
         item.setCategory(CategoryDTO.toObject(dto.getCategory()));
 
-        item.setTags(new ArrayList<Tag>());
+        item.setTags(new ArrayList<>());
         dto.getTags().forEach(tag -> item.getTags().add(TagDTO.toObject(tag)));
+
+        item.setItemValues(new ArrayList<>());
+        item.getItemValues().add(ItemValueDTO.toObject(dto.getCurrentItemValue()));
 
         return item;
 
