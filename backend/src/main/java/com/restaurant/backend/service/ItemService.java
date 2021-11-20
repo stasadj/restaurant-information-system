@@ -1,16 +1,21 @@
 package com.restaurant.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
 import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.domain.ItemValue;
+import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.exception.NotFoundException;
+import com.restaurant.backend.repository.CategoryRepository;
 import com.restaurant.backend.repository.ItemRepository;
+import com.restaurant.backend.repository.TagRepository;
 
-import org.hibernate.Session;
 import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -20,10 +25,12 @@ import lombok.AllArgsConstructor;
 public class ItemService {
 
     private ItemRepository itemRepository;
+    private TagRepository tagRepository;
+    private CategoryRepository categoryRepository;
     private EntityManager entityManager;
 
     public List<Item> getAll() {
-        //Retrieves undeleted items
+        // Retrieves undeleted items
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedItemFilter");
         filter.setParameter("isDeleted", false);
@@ -34,13 +41,13 @@ public class ItemService {
     }
 
     public List<Item> getAllPlusDeleted() {
-        //Retrieves all items, deleted included
+        // Retrieves all items, deleted included
         return itemRepository.findAll();
 
     }
 
     public List<Item> getAllMenuItems() {
-        //Retrieves all undeleted items in the menu 
+        // Retrieves all undeleted items in the menu
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedItemFilter");
         filter.setParameter("isDeleted", false);
@@ -87,8 +94,17 @@ public class ItemService {
 
     public Item create(Item item) {
         item.setDeleted(false);
-        //item.setCategory(categoryRepository.getById);
-        //item.setTags
+        item.setCategory(categoryRepository.findById(item.getCategory().getId()).orElseThrow(
+            () -> new NotFoundException(String.format("No category with id %d has been found", item.getCategory().getId())))); //TODO place this throw in CategoryService somehow?
+        List<Tag> tags = new ArrayList<>();
+        item.getTags().forEach(tag -> tags.add(tagRepository.findById(tag.getId()).orElseThrow(
+            () -> new NotFoundException(String.format("No tag with id %d has been found", tag.getId()))))); //TODO place this throw in TagService somehow?
+        item.setTags(tags);
+
+        //List<ItemValue> values = new ArrayList<>();
+        //values.add(item.getC)
+
+
         //item.setItemValue
         //itemRepository.save(item);
         return item;

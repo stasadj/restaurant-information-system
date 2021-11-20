@@ -89,7 +89,7 @@ public class ItemController {
     public ResponseEntity<ItemDTO> create(@RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
         
-        //Item item = itemService.create(ItemDTO.toObject(itemDTO));
+        Item item = itemService.create(ItemDTO.toObject(itemDTO));
         return new ResponseEntity<>(itemDTO, HttpStatus.OK); //todo change to new dto based on obj
     }
 
