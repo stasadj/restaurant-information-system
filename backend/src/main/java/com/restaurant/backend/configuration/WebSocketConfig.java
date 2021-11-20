@@ -12,12 +12,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic"); // Server sends messages on routes that are defined here.
-        config.setApplicationDestinationPrefixes("/app"); // Clients use this prefix when they send message to server.
+        config.enableSimpleBroker("/topic/", "/queue/"); // Server sends messages on routes that are defined here.
+        config.setApplicationDestinationPrefixes("/api/app"); // Clients use this prefix when they send message to server.
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket").withSockJS();
+        registry.addEndpoint("/api/websocket").withSockJS();
     }
 }
