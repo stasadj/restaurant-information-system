@@ -63,7 +63,7 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
-    public Item addToMenu(Long id) {
+    public Item addToMenu(Long id)  throws NotFoundException{
         Optional<Item> optionalItem = itemRepository.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
@@ -76,7 +76,7 @@ public class ItemService {
 
     }
 
-    public Item removeFromMenu(Long id) {
+    public Item removeFromMenu(Long id) throws NotFoundException {
         Optional<Item> optionalItem = itemRepository.findById(id);
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
@@ -88,14 +88,14 @@ public class ItemService {
 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws NotFoundException {
         Optional<Item> optionalItem = itemRepository.findById(id);
         optionalItem.ifPresentOrElse(item -> itemRepository.delete(item),
                 () -> new NotFoundException("Attempted to delete unexisting item"));
 
     }
 
-    public Item create(Item item) {
+    public Item create(Item item) throws NotFoundException {
         item.setDeleted(false);
         item.setCategory(categoryRepository.findById(item.getCategory().getId()).orElseThrow(
             () -> new NotFoundException(String.format("No category with id %d has been found", item.getCategory().getId())))); //TODO place this throw in CategoryService somehow?
