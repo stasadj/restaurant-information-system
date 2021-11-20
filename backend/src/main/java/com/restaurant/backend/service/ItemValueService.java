@@ -6,10 +6,12 @@ import com.restaurant.backend.dto.ChangePriceDTO;
 import com.restaurant.backend.repository.ItemValueRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class ItemValueService {
     private ItemValueRepository repository;

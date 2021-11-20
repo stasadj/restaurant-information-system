@@ -1,6 +1,5 @@
 package com.restaurant.backend.controller;
 
-import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.dto.ChangePriceDTO;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.ItemValueDTO;
