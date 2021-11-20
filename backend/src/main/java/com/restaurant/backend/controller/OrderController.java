@@ -43,4 +43,9 @@ public class OrderController {
         return new ResponseEntity<>(toOrderDTO.convert(orderService.editOrderItems(order)), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('WAITER')")
+    @PostMapping("/finalize/{id}")
+    public ResponseEntity<OrderDTO> finalizeOrder(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(toOrderDTO.convert(orderService.finalizeOrder(id)), HttpStatus.OK);
+    }
 }
