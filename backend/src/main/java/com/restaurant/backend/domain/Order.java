@@ -30,7 +30,7 @@ public class Order {
     @Column(name = "note")
     protected String note;
 
-    @Column(name = "table_id", nullable = false)
+    @Column(name = "table_id", nullable = true)
     protected Integer tableId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
