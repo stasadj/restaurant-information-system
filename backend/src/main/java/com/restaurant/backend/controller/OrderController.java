@@ -44,8 +44,8 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('WAITER')")
-    @DeleteMapping("/cancel-item/{id}")
-    public ResponseEntity<List<OrderDTO>> cancelOrderItem(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(toOrderDTO.convert(orderService.cancelOrderItem(id)), HttpStatus.OK);
+    @PostMapping("/finalize/{id}")
+    public ResponseEntity<OrderDTO> finalizeOrder(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(toOrderDTO.convert(orderService.finalizeOrder(id)), HttpStatus.OK);
     }
 }

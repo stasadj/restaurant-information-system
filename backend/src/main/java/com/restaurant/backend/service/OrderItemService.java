@@ -4,6 +4,8 @@ import com.restaurant.backend.domain.*;
 import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.domain.enums.OrderStatus;
 import com.restaurant.backend.dto.DataWithMessage;
+import com.restaurant.backend.exception.BadRequestException;
+import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.OrderItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -120,5 +122,25 @@ public class OrderItemService {
         }
         String message = messageBuilder.toString();
         return new DataWithMessage<>(preparedItems, message);
+    }
+
+    public DataWithMessage<List<Long>> cancelOrderItems(List<Long> ids) {
+        List<Long> deletedItemIds = new ArrayList<>();
+        StringBuilder messageBuilder = new StringBuilder();
+        for (Long id : ids) {
+            Optional<OrderItem> maybeOrderItem = orderItemRepository.findById(id);
+            if (maybeOrderItem.isEmpty()) {
+                messageBuilder.append("Order item #").append(id).append(" not found.\n");
+                continue;
+            }
+            OrderItem orderItem = maybeOrderItem.get();
+            if (orderItem.getOrderStatus() != OrderStatus.PENDING && orderItem.getOrderStatus() != OrderStatus.DECLINED) {
+                messageBuilder.append("Order item #").append(id).append(" cannot be cancelled.\n");
+                continue;
+            }
+            orderItemRepository.deleteById(id);
+            deletedItemIds.add(id);
+        }
+        return new DataWithMessage<>(deletedItemIds, messageBuilder.toString());
     }
 }
