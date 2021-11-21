@@ -91,11 +91,11 @@ public class ReportService {
         datapoint.addIncome(itemValue.getSellingPrice());
     }
 
-    private Boolean insertItemIntoDatapoints(List<AbstractDateReportResultItemDTO> datapoints, OrderItem item) {
+    private void insertItemIntoDatapoints(List<AbstractDateReportResultItemDTO> datapoints, OrderItem item) {
         LocalDate createdAt = item.getOrder().getCreatedAt().toLocalDate();
         ItemValue itemValue = item.getItem().getItemValueAt(createdAt);
         if (itemValue == null) {
-            return false;
+            return;
         }
 
         for (int i = datapoints.size() - 1; i >= 0; i--) {
@@ -103,10 +103,9 @@ public class ReportService {
 
             if (datapoint.getApproximateDate().isBefore(createdAt)) {
                 insertItemValueIntoDatapoint(itemValue, datapoint);
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     public ReportResultsDTO getResults(ReportQueryDTO query) {
