@@ -75,9 +75,11 @@ public class Item {
     public ItemValue getItemValueAt(LocalDate date) {
         ItemValue itemValueAt = null;
         for (ItemValue itemValue : itemValues)
-            if (itemValue.getFromDate().isBefore(date)) {
-                if (itemValueAt == null) itemValueAt = itemValue;
-                else if (itemValueAt.getFromDate().isBefore(itemValue.getFromDate())) itemValueAt = itemValue;
+            if (itemValue.getFromDate().isBefore(date) || itemValue.getFromDate().isEqual(date)) {
+                if (itemValueAt == null)
+                    itemValueAt = itemValue;
+                else if (itemValueAt.getFromDate().isBefore(itemValue.getFromDate()))
+                    itemValueAt = itemValue;
             }
         return itemValueAt;
     }

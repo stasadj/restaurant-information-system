@@ -87,7 +87,8 @@ public class ItemDTO {
         this.tags = new ArrayList<>();
         item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
 
-        ItemValue currentValue = item.getItemValueAt(LocalDate.now()); // todo CHECK if this is right with team member
+        ItemValue currentValue = item.getItemValueAt(LocalDate.now()); //last value is current? todo CHECK if this is right with team
+        // ItemValue currentValue = item.getItemValues().get(item.getItemValues().size()-1); //last value is current? todo CHECK if this is right with team
         this.currentItemValue = new ItemValueDTO(currentValue);
 
 
