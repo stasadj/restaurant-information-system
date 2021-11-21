@@ -3,6 +3,7 @@ package com.restaurant.backend.controller;
 import com.restaurant.backend.domain.OrderItem;
 import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.dto.DataWithMessage;
+import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.dto.OrderItemDTO;
 import com.restaurant.backend.dto.OrderItemIds;
 import com.restaurant.backend.service.OrderItemService;
@@ -13,10 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,5 +50,11 @@ public class OrderItemController {
         DataWithMessage<List<OrderItem>> preparedItems = orderItemService.prepareOrderItems(staff, orderItemIds.ids);
         return new ResponseEntity<>(new DataWithMessage<>(toOrderItemDTO.convert(preparedItems.getData()), preparedItems.getMessage()),
                 HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('WAITER')")
+    @DeleteMapping("/cancel")
+    public ResponseEntity<DataWithMessage<List<Long>>> cancelOrderItem(@RequestBody OrderItemIds orderItemIds) {
+        return new ResponseEntity<>(orderItemService.cancelOrderItems(orderItemIds.ids), HttpStatus.OK);
     }
 }

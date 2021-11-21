@@ -6,16 +6,16 @@ import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.dto.OrderItemDTO;
 import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.NotFoundException;
-import com.restaurant.backend.repository.ItemRepository;
+import com.restaurant.backend.repository.NotificationRepository;
 import com.restaurant.backend.repository.OrderItemRepository;
 import com.restaurant.backend.repository.OrderRepository;
-import com.restaurant.backend.repository.StaffRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -23,8 +23,9 @@ import java.util.List;
 public class OrderService implements GenericService<Order> {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final StaffRepository staffRepository;
-    private final ItemRepository itemRepository;
+    private final NotificationRepository notificationRepository;
+    private final StaffService staffService;
+    private final ItemService itemService;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,7 +36,8 @@ public class OrderService implements GenericService<Order> {
     @Override
     @Transactional(readOnly = true)
     public Order findOne(Long id) {
-        return orderRepository.findById(id).orElse(null);
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("No order with id %d has been found", id)));
     }
 
     @Override
@@ -43,52 +45,37 @@ public class OrderService implements GenericService<Order> {
         return orderRepository.save(entity);
     }
 
-    public List<Order> findAllForWaiter(Long id) { return orderRepository.findAllByWaiter_Id(id); }
-
-    public List<Order> create(OrderDTO order) {
-        Staff waiter = staffRepository.findById(order.getWaiterId()).orElse(null);
-        Order newOrder = save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
-
-        for (OrderItemDTO orderItem : order.getOrderItems()){
-            Item item = itemRepository.findById(orderItem.getItemId()).orElse(null);
-            OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.PENDING, item);
-            newOrder.getOrderItems().add(newOrderItem);
-            orderItemRepository.save(newOrderItem);
-        }
-
-        return findAllForWaiter(order.getWaiterId());
+    public List<Order> findAllForWaiter(Long id) {
+        return orderRepository.findAllByWaiter_Id(id);
     }
 
-    public List<Order> cancelOrderItem(Long id) {
-        OrderItem item = orderItemRepository.findById(id).orElse(null);
-        Long waiterId = item.getOrder().getWaiter().getId();
+    public List<Order> create(OrderDTO order) {
+        Staff waiter = staffService.GetById(order.getWaiterId());
+        Optional<Order> maybeOrder = orderRepository.findByTableId(order.getTableId());
+        if (maybeOrder.isPresent())
+            throw new BadRequestException(String.format("Table #%d already has an order.", order.getTableId()));
 
-        if (item == null) {
-            throw new NotFoundException("Order item does not exist.");
+        Order newOrder = save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
+
+        for (OrderItemDTO orderItem : order.getOrderItems()) {
+            Item item = itemService.getById(orderItem.getItemId());
+            newOrder.getOrderItems().add(new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.PENDING, item));
         }
+        orderItemRepository.saveAll(newOrder.getOrderItems());
 
-        if (item.getOrderStatus() != OrderStatus.PENDING) {
-            throw new BadRequestException("You can't cancel order item that is already in the making.");
-        }
-
-        orderItemRepository.deleteById(id);
-
-        return findAllForWaiter(waiterId);
+        return findAllForWaiter(order.getWaiterId());
     }
 
     public List<Order> editOrderItems(OrderDTO order) {
         Order editedOrder = findOne(order.getId());
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
-
             if (orderItem.getId() == null) {
-                Item item = itemRepository.findById(orderItem.getItemId()).orElse(null);
+                Item item = itemService.getById(orderItem.getItemId());
                 OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
                 editedOrder.getOrderItems().add(newOrderItem);
                 orderItemRepository.save(newOrderItem);
-            }
-
-            else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
+            } else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
                 orderItemRepository.updateAmount(orderItem.getItemId(), orderItem.getAmount());
             }
         }
@@ -98,5 +85,24 @@ public class OrderService implements GenericService<Order> {
 
     public Boolean getHasTablesTaken() {
         return orderRepository.findAllByTableIdIsNotNull().isEmpty() == false;
+    }
+
+    public Order finalizeOrder(Long id) {
+        Order order = findOne(id);
+
+        if (order.getOrderItems().stream().anyMatch(orderItem -> orderItem.getOrderStatus() != OrderStatus.READY))
+            throw new BadRequestException("Order cannot be finalized, not all order items are ready.");
+
+        order.setTableId(null);
+        order.setWaiter(null);
+        for (OrderItem orderItem : order.getOrderItems()) {
+            orderItem.setCook(null);
+            orderItem.setBarman(null);
+        }
+        save(order);
+        orderItemRepository.saveAll(order.getOrderItems());
+        notificationRepository.deleteAll(order.getNotifications()); // replace with service method
+
+        return order;
     }
 }
