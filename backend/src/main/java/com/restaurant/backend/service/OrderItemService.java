@@ -19,6 +19,14 @@ import java.util.Optional;
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
 
+    public List<OrderItem> getAllByItemId(Long itemId) {
+        return orderItemRepository.findAllByItemId(itemId);
+    }
+
+    public List<OrderItem> getAll() {
+        return orderItemRepository.findAll();
+    }
+
     public DataWithMessage<List<OrderItem>> acceptOrderItems(Staff staff, List<Long> ids) {
         boolean isCook = staff instanceof Cook;
         List<OrderItem> acceptedItems = new ArrayList<>();
@@ -36,13 +44,15 @@ public class OrderItemService {
             }
             ItemType type = orderItem.getItem().getItemType();
             if (type == ItemType.DRINK && isCook || type == ItemType.FOOD && !isCook) {
-                messageBuilder.append(type).append(" order item #").append(id)
-                        .append(" cannot be accepted by ").append(isCook ? "cook" : "barman").append(".\n");
+                messageBuilder.append(type).append(" order item #").append(id).append(" cannot be accepted by ")
+                        .append(isCook ? "cook" : "barman").append(".\n");
                 continue;
             }
             orderItem.setOrderStatus(OrderStatus.IN_PROGRESS);
-            if (isCook) orderItem.setCook((Cook) staff);
-            else orderItem.setBarman((Barman) staff);
+            if (isCook)
+                orderItem.setCook((Cook) staff);
+            else
+                orderItem.setBarman((Barman) staff);
             orderItemRepository.save(orderItem);
             acceptedItems.add(orderItem);
         }
@@ -67,15 +77,15 @@ public class OrderItemService {
             }
             ItemType type = orderItem.getItem().getItemType();
             if (type == ItemType.DRINK && isCook || type == ItemType.FOOD && !isCook) {
-                messageBuilder.append(type).append(" order item #").append(id)
-                        .append(" cannot be declined by ").append(isCook ? "cook" : "barman").append(".\n");
+                messageBuilder.append(type).append(" order item #").append(id).append(" cannot be declined by ")
+                        .append(isCook ? "cook" : "barman").append(".\n");
                 continue;
             }
             orderItem.setOrderStatus(OrderStatus.DECLINED);
             orderItemRepository.setStatusForOrderItem(OrderStatus.DECLINED.ordinal(), id);
             declinedItems.add(orderItem);
 
-            orderItem.getOrder().getNotifications().add(new Notification(/*TODO*/));
+            orderItem.getOrder().getNotifications().add(new Notification(/* TODO */));
         }
         String message = messageBuilder.toString();
         return new DataWithMessage<>(declinedItems, message);
@@ -98,15 +108,15 @@ public class OrderItemService {
             }
             ItemType type = orderItem.getItem().getItemType();
             if (type == ItemType.DRINK && isCook || type == ItemType.FOOD && !isCook) {
-                messageBuilder.append(type).append(" order item #").append(id)
-                        .append(" cannot be prepared by ").append(isCook ? "cook" : "barman").append(".\n");
+                messageBuilder.append(type).append(" order item #").append(id).append(" cannot be prepared by ")
+                        .append(isCook ? "cook" : "barman").append(".\n");
                 continue;
             }
             orderItem.setOrderStatus(OrderStatus.READY);
             orderItemRepository.setStatusForOrderItem(OrderStatus.READY.ordinal(), id);
             preparedItems.add(orderItem);
 
-            orderItem.getOrder().getNotifications().add(new Notification(/*TODO*/));
+            orderItem.getOrder().getNotifications().add(new Notification(/* TODO */));
         }
         String message = messageBuilder.toString();
         return new DataWithMessage<>(preparedItems, message);
