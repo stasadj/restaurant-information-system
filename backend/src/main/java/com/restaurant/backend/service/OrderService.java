@@ -95,4 +95,8 @@ public class OrderService implements GenericService<Order> {
 
         return findAllForWaiter(order.getWaiterId());
     }
+
+    public Boolean getHasTablesTaken() {
+        return orderRepository.findAllByTableIdIsNotNull().isEmpty() == false;
+    }
 }

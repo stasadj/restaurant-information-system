@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByWaiter_Id(Long id);
+
+    List<Order> findAllByTableIdIsNotNull();
 }
