@@ -1,5 +1,6 @@
 package com.restaurant.backend.dto;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,6 @@ public class ItemDTO {
 
     public ItemDTO(Item item) {
         //TODO ObjectMapper
-        //TODO ADD CURRENT PRICE TO DTO OBJECT!!
         this.id = item.getId();
         this.name = item.getName();
         this.description = item.getDescription();
@@ -87,7 +87,7 @@ public class ItemDTO {
         this.tags = new ArrayList<>();
         item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
 
-        ItemValue currentValue = item.getItemValues().get(item.getItemValues().size()-1); //last value is current? todo CHECK if this is right with team member
+        ItemValue currentValue = item.getItemValueAt(LocalDate.now()); // todo CHECK if this is right with team member
         this.currentItemValue = new ItemValueDTO(currentValue);
 
 
