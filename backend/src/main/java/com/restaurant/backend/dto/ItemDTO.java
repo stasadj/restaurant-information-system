@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
 
 import lombok.AllArgsConstructor;
@@ -85,8 +86,10 @@ public class ItemDTO {
         this.category = new CategoryDTO(item.getCategory());
         this.tags = new ArrayList<>();
         item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
-        System.out.println(item.getTags().size() + "------");
-        System.out.println(this.getTags().size() + "------");
+
+        ItemValue currentValue = item.getItemValues().get(item.getItemValues().size()-1); //last value is current? todo CHECK if this is right with team member
+        this.currentItemValue = new ItemValueDTO(currentValue);
+
 
     }
 }
