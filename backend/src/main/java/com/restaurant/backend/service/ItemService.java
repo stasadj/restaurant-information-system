@@ -132,4 +132,23 @@ public class ItemService {
         return item;
     }
 
+    public Item editItem(Item changedItem) {
+        Item item = this.getById(changedItem.getId());
+
+        item.setName(changedItem.getName());
+        item.setDescription(changedItem.getDescription());
+        item.setImageURL(changedItem.getImageURL());
+        item.setItemType(changedItem.getItemType());
+        item.setInMenu(changedItem.getInMenu());
+        item.setDeleted(changedItem.getDeleted());
+
+        item.setCategory(categoryRepository.getById(changedItem.getCategory().getId()));
+
+        List<Tag> tags = new ArrayList<>();
+        changedItem.getTags().forEach(tag -> tags.add(tagRepository.getById(tag.getId())));
+        item.setTags(tags);
+
+        return itemRepository.save(item);
+    }
+
 }

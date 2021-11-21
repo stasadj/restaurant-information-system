@@ -19,8 +19,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ItemDTO {
+public class EditItemDTO {
 
+    @NotNull(message = "Item ID is missing.")
     protected Long id;
 
     @NotBlank(message = "Item name must not be blank.")
@@ -48,7 +49,7 @@ public class ItemDTO {
 
     protected Boolean deleted;
 
-    public static Item toObject(ItemDTO dto) {
+    public static Item toObject(EditItemDTO dto) {
         //TODO ObjectMapper
         Item item = new Item();
         item.setId(dto.getId());
@@ -71,7 +72,7 @@ public class ItemDTO {
 
     }
 
-    public ItemDTO(Item item) {
+    public EditItemDTO(Item item) {
         //TODO ObjectMapper
         //TODO ADD CURRENT PRICE TO DTO OBJECT!!
         this.id = item.getId();
@@ -85,8 +86,6 @@ public class ItemDTO {
         this.category = new CategoryDTO(item.getCategory());
         this.tags = new ArrayList<>();
         item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
-        System.out.println(item.getTags().size() + "------");
-        System.out.println(this.getTags().size() + "------");
 
     }
 }
