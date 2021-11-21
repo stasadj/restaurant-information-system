@@ -132,7 +132,7 @@ public class ItemService {
         return item;
     }
 
-    public Item editItem(Item changedItem) {
+    public Item editItem(Item changedItem) throws NotFoundException {
         Item item = this.getById(changedItem.getId());
 
         item.setName(changedItem.getName());
@@ -142,7 +142,9 @@ public class ItemService {
         item.setInMenu(changedItem.getInMenu());
         item.setDeleted(changedItem.getDeleted());
 
-        item.setCategory(categoryRepository.getById(changedItem.getCategory().getId()));
+        item.setCategory(
+                categoryRepository.findById(changedItem.getCategory().getId()).orElseThrow(() -> new NotFoundException(
+                        String.format("No category with id %d has been found", changedItem.getCategory().getId()))));
 
         List<Tag> tags = new ArrayList<>();
         changedItem.getTags().forEach(tag -> tags.add(tagRepository.getById(tag.getId())));
