@@ -1,6 +1,5 @@
 package com.restaurant.backend.dto;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.restaurant.backend.domain.Item;
-import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
 
 import lombok.AllArgsConstructor;
@@ -21,8 +19,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ItemDTO {
+public class EditItemDTO {
 
+    @NotNull(message = "Item ID is missing.")
     protected Long id;
 
     @NotBlank(message = "Item name must not be blank.")
@@ -50,7 +49,7 @@ public class ItemDTO {
 
     protected Boolean deleted;
 
-    public static Item toObject(ItemDTO dto) {
+    public static Item toObject(EditItemDTO dto) {
         //TODO ObjectMapper
         Item item = new Item();
         item.setId(dto.getId());
@@ -73,23 +72,4 @@ public class ItemDTO {
 
     }
 
-    public ItemDTO(Item item) {
-        //TODO ObjectMapper
-        this.id = item.getId();
-        this.name = item.getName();
-        this.description = item.getDescription();
-        this.imageURL = item.getImageURL();
-        this.inMenu = item.getInMenu();
-        this.itemType = item.getItemType();
-        this.deleted = item.getDeleted();
-
-        this.category = new CategoryDTO(item.getCategory());
-        this.tags = new ArrayList<>();
-        item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
-
-        ItemValue currentValue = item.getItemValueAt(LocalDate.now()); //bug if price is changed twice in same day, shows earlier price
-        this.currentItemValue = new ItemValueDTO(currentValue);
-
-
-    }
 }
