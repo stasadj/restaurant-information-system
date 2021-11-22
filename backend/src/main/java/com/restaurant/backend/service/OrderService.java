@@ -87,7 +87,7 @@ public class OrderService implements GenericService<Order> {
     }
 
     public boolean getHasTablesTaken() {
-        return !orderRepository.findAllByTableIdIsNotNull().isEmpty();
+        return orderRepository.count() > 0;
     }
 
     public List<OrderRecord> finalizeOrder(Long id) {

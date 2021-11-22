@@ -34,8 +34,6 @@ public class TableService {
             FileWriter writer = new FileWriter(PATH_TO_STATIC_FILE);
             writer.write(json);
             writer.close();
-        } catch (JsonProcessingException e) {
-            return false;
         } catch (IOException e) {
             return false;
         }
