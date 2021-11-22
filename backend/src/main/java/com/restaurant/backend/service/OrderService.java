@@ -8,12 +8,14 @@ import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.NotificationRepository;
 import com.restaurant.backend.repository.OrderItemRepository;
+import com.restaurant.backend.repository.OrderRecordRepository;
 import com.restaurant.backend.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class OrderService implements GenericService<Order> {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderRecordRepository orderRecordRepository;
     private final NotificationRepository notificationRepository;
     private final StaffService staffService;
     private final ItemService itemService;
@@ -83,26 +86,31 @@ public class OrderService implements GenericService<Order> {
         return findAllForWaiter(order.getWaiterId());
     }
 
-    public Boolean getHasTablesTaken() {
-        return orderRepository.findAllByTableIdIsNotNull().isEmpty() == false;
+    public boolean getHasTablesTaken() {
+        return !orderRepository.findAllByTableIdIsNotNull().isEmpty();
     }
 
-    public Order finalizeOrder(Long id) {
+    public List<OrderRecord> finalizeOrder(Long id) {
         Order order = findOne(id);
 
         if (order.getOrderItems().stream().anyMatch(orderItem -> orderItem.getOrderStatus() != OrderStatus.READY))
             throw new BadRequestException("Order cannot be finalized, not all order items are ready.");
 
-        order.setTableId(null);
-        order.setWaiter(null);
-        for (OrderItem orderItem : order.getOrderItems()) {
-            orderItem.setCook(null);
-            orderItem.setBarman(null);
-        }
-        save(order);
-        orderItemRepository.saveAll(order.getOrderItems());
-        notificationRepository.deleteAll(order.getNotifications()); // replace with service method
+        List<OrderRecord> records = new ArrayList<>();
 
-        return order;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            OrderRecord record = new OrderRecord();
+            record.setCreatedAt(order.getCreatedAt());
+            record.setAmount(orderItem.getAmount());
+            record.setItemValue(orderItem.getItem().getItemValueAt(order.getCreatedAt()));
+            records.add(record);
+        }
+        orderRecordRepository.saveAll(records);
+
+        orderItemRepository.deleteAll(order.getOrderItems());
+        notificationRepository.deleteAll(order.getNotifications()); // replace with service method
+        orderRepository.delete(order);
+
+        return records;
     }
 }

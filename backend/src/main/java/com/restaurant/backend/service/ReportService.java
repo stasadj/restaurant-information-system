@@ -1,8 +1,17 @@
 package com.restaurant.backend.service;
 
+import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.domain.ItemValue;
+import com.restaurant.backend.domain.OrderRecord;
+import com.restaurant.backend.dto.enums.QuarterOfYear;
+import com.restaurant.backend.dto.reports.*;
+import com.restaurant.backend.exception.BadRequestException;
+import com.restaurant.backend.repository.OrderRecordRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.Year;
 import java.time.temporal.WeekFields;
@@ -11,53 +20,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import com.restaurant.backend.domain.Item;
-import com.restaurant.backend.domain.ItemValue;
-import com.restaurant.backend.domain.OrderItem;
-import com.restaurant.backend.dto.enums.QuarterOfYear;
-import com.restaurant.backend.dto.reports.AbstractDateReportResultItemDTO;
-import com.restaurant.backend.dto.reports.DailyReportResultItemDTO;
-import com.restaurant.backend.dto.reports.ItemReportResultItemDTO;
-import com.restaurant.backend.dto.reports.MonthlyReportResultItemDTO;
-import com.restaurant.backend.dto.reports.QuarterlyReportResultItemDTO;
-import com.restaurant.backend.dto.reports.ReportQueryDTO;
-import com.restaurant.backend.dto.reports.ReportResultsDTO;
-import com.restaurant.backend.dto.reports.WeeklyReportResultItemDTO;
-import com.restaurant.backend.dto.reports.YearlyReportResultItemDTO;
-import com.restaurant.backend.exception.BadRequestException;
-import com.restaurant.backend.support.DateHelper;
-
-import org.springframework.stereotype.Service;
-
-import lombok.AllArgsConstructor;
-
 @Service
 @AllArgsConstructor
 public class ReportService {
-    private ItemService itemService;
-    private OrderItemService orderItemService;
+    private final ItemService itemService;
+    private final OrderRecordRepository orderRecordRepository;
 
     private ItemReportResultItemDTO getItemSales(Item item, LocalDate fromDate, LocalDate toDate) {
         ItemReportResultItemDTO result = new ItemReportResultItemDTO(item.getName());
+        List<OrderRecord> records = orderRecordRepository.getAllOrderRecordsBetweenDatesForItem(item.getId(), fromDate, toDate);
 
-        List<OrderItem> orders = orderItemService.getAllByItemId(item.getId());
-        for (OrderItem orderItem : orders) {
+        for (OrderRecord record : records) {
+            Integer amount = record.getAmount();
+            ItemValue value = record.getItemValue();
+            BigDecimal quantity = new BigDecimal(amount);
+            BigDecimal expense = value.getPurchasePrice().multiply(quantity);
+            BigDecimal income = value.getSellingPrice().multiply(quantity);
 
-            LocalDateTime dateTime = orderItem.getOrder().getCreatedAt();
-            if (DateHelper.isDateBetween(dateTime, fromDate, toDate)) {
-                ItemValue value = item.getItemValueAt(dateTime);
-                if (value == null) {
-                    continue;
-                }
-                Integer amount = orderItem.getAmount();
-                BigDecimal quantity = new BigDecimal(amount);
-                BigDecimal expense = value.getPurchasePrice().multiply(quantity);
-                BigDecimal income = value.getSellingPrice().multiply(quantity);
-
-                result.addQuantity(amount);
-                result.addExpense(expense);
-                result.addIncome(income);
-            }
+            result.addQuantity(amount);
+            result.addExpense(expense);
+            result.addIncome(income);
         }
         return result;
     }
@@ -93,18 +75,11 @@ public class ReportService {
         datapoint.addIncome(itemValue.getSellingPrice());
     }
 
-    private void insertItemIntoDataPoints(List<AbstractDateReportResultItemDTO> dataPoints, OrderItem item) {
-        LocalDateTime createdAt = item.getOrder().getCreatedAt();
-        ItemValue itemValue = item.getItem().getItemValueAt(createdAt);
-        if (itemValue == null) {
-            return;
-        }
-
+    private void insertItemIntoDataPoints(List<AbstractDateReportResultItemDTO> dataPoints, OrderRecord orderRecord) {
         for (int i = dataPoints.size() - 1; i >= 0; i--) {
             AbstractDateReportResultItemDTO datapoint = dataPoints.get(i);
-
-            if (datapoint.getApproximateDate().atStartOfDay().isBefore(createdAt)) {
-                insertItemValueIntoDatapoint(itemValue, datapoint);
+            if (datapoint.getApproximateDate().atStartOfDay().isBefore(orderRecord.getCreatedAt())) {
+                insertItemValueIntoDatapoint(orderRecord.getItemValue(), datapoint);
                 return;
             }
         }
@@ -116,44 +91,38 @@ public class ReportService {
         Long itemId = query.getItemId();
 
         switch (query.getReportType()) {
-        case PROFIT:
-            List<Item> allItems;
-            if (itemId == null) {
-                allItems = itemService.getAll();
-            } else {
-                allItems = new ArrayList<>();
-                allItems.add(itemService.getById(itemId));
-            }
+            case PROFIT:
+                List<Item> allItems = (itemId == null) ? itemService.getAll() : new ArrayList<>() {{
+                    add(itemService.getById(itemId));
+                }};
 
-            for (Item item : allItems) {
-                ItemReportResultItemDTO result = getItemSales(item, query.getFromDate(), query.getToDate());
-                if (result.getQuantity() > 0) {
-                    individualItems.add(result);
+                for (Item item : allItems) {
+                    ItemReportResultItemDTO result = getItemSales(item, query.getFromDate(), query.getToDate());
+                    if (result.getQuantity() > 0)
+                        individualItems.add(result);
                 }
-            }
 
-            (itemId == null ? orderItemService.getAll() : orderItemService.getAllByItemId(itemId)).stream()
-                    .filter(orderItem -> DateHelper.isDateBetween(orderItem.getOrder().getCreatedAt(),
-                            query.getFromDate(), query.getToDate()))
-                    .forEach(item -> insertItemIntoDataPoints(dataPoints, item));
-            break;
-        case PRICE_HISTORY:
-            if (itemId == null) {
+                (itemId == null
+                        ? orderRecordRepository.getAllOrderRecordsBetweenDates(query.getFromDate(), query.getToDate())
+                        : orderRecordRepository.getAllOrderRecordsBetweenDatesForItem(itemId, query.getFromDate(), query.getToDate()))
+                        .forEach(record -> insertItemIntoDataPoints(dataPoints, record));
+                break;
+
+            case PRICE_HISTORY:
+                if (itemId == null)
+                    throw new BadRequestException("Bad query.");
+
+                Item item = itemService.getById(itemId);
+                individualItems.add(getItemSales(item, query.getFromDate(), query.getToDate()));
+
+                for (AbstractDateReportResultItemDTO datapoint : dataPoints) {
+                    ItemValue itemValue = item.getItemValueAt(datapoint.getApproximateDate().atStartOfDay());
+                    if (itemValue != null)
+                        insertItemValueIntoDatapoint(itemValue, datapoint);
+                }
+                break;
+            default:
                 throw new BadRequestException("Bad query.");
-            }
-
-            Item item = itemService.getById(itemId);
-            individualItems.add(getItemSales(item, query.getFromDate(), query.getToDate()));
-
-            for (AbstractDateReportResultItemDTO datapoint : dataPoints) {
-                ItemValue itemValue = item.getItemValueAt(datapoint.getApproximateDate().atStartOfDay());
-                if (itemValue != null) {
-                    insertItemValueIntoDatapoint(itemValue, datapoint);
-                }
-            }
-            break;
-        default:
-            throw new BadRequestException("Bad query.");
         }
 
         return new ReportResultsDTO(dataPoints, individualItems);
