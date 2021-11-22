@@ -6,7 +6,6 @@ import com.restaurant.backend.domain.OrderRecord;
 import com.restaurant.backend.dto.enums.QuarterOfYear;
 import com.restaurant.backend.dto.reports.*;
 import com.restaurant.backend.exception.BadRequestException;
-import com.restaurant.backend.repository.OrderRecordRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +23,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ReportService {
     private final ItemService itemService;
-    private final OrderRecordRepository orderRecordRepository;
+    private final OrderRecordService orderRecordService;
 
     private ItemReportResultItemDTO getItemSales(Item item, LocalDate fromDate, LocalDate toDate) {
         ItemReportResultItemDTO result = new ItemReportResultItemDTO(item.getName());
-        List<OrderRecord> records = orderRecordRepository.getAllOrderRecordsBetweenDatesForItem(item.getId(), fromDate, toDate);
+        List<OrderRecord> records = orderRecordService.getAllOrderRecordsBetweenDatesForItem(item.getId(), fromDate, toDate);
 
         for (OrderRecord record : records) {
             Integer amount = record.getAmount();
@@ -93,7 +92,7 @@ public class ReportService {
         switch (query.getReportType()) {
             case PROFIT:
                 List<Item> allItems = (itemId == null) ? itemService.getAll() : new ArrayList<>() {{
-                    add(itemService.getById(itemId));
+                    add(itemService.findOne(itemId));
                 }};
 
                 for (Item item : allItems) {
@@ -103,8 +102,8 @@ public class ReportService {
                 }
 
                 (itemId == null
-                        ? orderRecordRepository.getAllOrderRecordsBetweenDates(query.getFromDate(), query.getToDate())
-                        : orderRecordRepository.getAllOrderRecordsBetweenDatesForItem(itemId, query.getFromDate(), query.getToDate()))
+                        ? orderRecordService.getAllOrderRecordsBetweenDates(query.getFromDate(), query.getToDate())
+                        : orderRecordService.getAllOrderRecordsBetweenDatesForItem(itemId, query.getFromDate(), query.getToDate()))
                         .forEach(record -> insertItemIntoDataPoints(dataPoints, record));
                 break;
 
@@ -112,7 +111,7 @@ public class ReportService {
                 if (itemId == null)
                     throw new BadRequestException("Bad query.");
 
-                Item item = itemService.getById(itemId);
+                Item item = itemService.findOne(itemId);
                 individualItems.add(getItemSales(item, query.getFromDate(), query.getToDate()));
 
                 for (AbstractDateReportResultItemDTO datapoint : dataPoints) {

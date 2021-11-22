@@ -17,19 +17,19 @@ import lombok.AllArgsConstructor;
 @Transactional
 @AllArgsConstructor
 public class StaffService {
-    private StaffRepository staffRepository;
+    private final StaffRepository staffRepository;
 
-    public List<Staff> GetAll() {
+    public List<Staff> getAll() {
         return staffRepository.findAll();
     }
 
-    public Staff GetById(Long id) throws NotFoundException {
+    public Staff getById(Long id) throws NotFoundException {
         return staffRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("No staff member with id %d has been found", id)));
     }
 
-    public Staff SetSalary(SetSalaryDTO dto) throws NotFoundException {
-        Staff staff = GetById(dto.getStaffId());
+    public Staff changeSalary(SetSalaryDTO dto) throws NotFoundException {
+        Staff staff = getById(dto.getStaffId());
         staff.setMonthlyWage(dto.getMonthlyWage());
         return staffRepository.save(staff);
     }

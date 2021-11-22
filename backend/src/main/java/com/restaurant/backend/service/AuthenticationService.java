@@ -20,9 +20,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
-    private AuthenticationManager authenticationManager;
-
-    private TokenUtils tokenUtils;
+    private final AuthenticationManager authenticationManager;
+    private final TokenUtils tokenUtils;
 
     public void login(CredentialsDTO credentials, HttpServletResponse response) throws Unauthorized {
         Authentication authentication = authenticationManager.authenticate(

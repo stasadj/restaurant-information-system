@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 @Transactional
 @AllArgsConstructor
 public class ItemValueService {
-    private ItemValueRepository repository;
+    private final ItemValueRepository itemValueRepository;
 
-    private ItemService itemService;
+    private final ItemService itemService;
 
     public ItemValue changeItemPrice(ChangePriceDTO dto) {
-        Item item = itemService.getById(dto.getItemId());
+        Item item = itemService.findOne(dto.getItemId());
         ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
 
         ItemValue newValue = new ItemValue();
@@ -28,6 +28,6 @@ public class ItemValueService {
         newValue.setPurchasePrice(dto.getPurchasePrice() == null ? currentValue.getPurchasePrice() : dto.getPurchasePrice());
         newValue.setSellingPrice(dto.getSellingPrice() == null ? currentValue.getSellingPrice() : dto.getSellingPrice());
 
-        return repository.save(newValue);
+        return itemValueRepository.save(newValue);
     }
 }

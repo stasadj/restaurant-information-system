@@ -35,18 +35,17 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @RequestMapping(value = "/api/item", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ItemController {
-
     private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 
-    private ItemService itemService;
-    private ItemValueService itemValueService;
+    private final ItemService itemService;
+    private final ItemValueService itemValueService;
 
     @ResponseBody
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> getById(@PathVariable Long id) {
         LOG.info("Client requested the get item by id method.");
-        return new ResponseEntity<>(new ItemDTO(itemService.getById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.findOne(id)), HttpStatus.OK);
     }
 
     @ResponseBody

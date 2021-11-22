@@ -18,8 +18,8 @@ import com.restaurant.backend.repository.StaffRepository;
 @AllArgsConstructor
 public class JWTUserDetailsService implements UserDetailsService {
 
-    private PasswordUserRepository passwordUserRepository;
-    private StaffRepository staffRepository;
+    private final PasswordUserRepository passwordUserRepository;
+    private final StaffRepository staffRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

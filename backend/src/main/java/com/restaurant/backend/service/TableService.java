@@ -21,7 +21,7 @@ public class TableService {
     // TODO: Check how to make this value cross platform for Linux
     private final String PATH_TO_STATIC_FILE = "C:/files/static/tables.json";
 
-    private OrderService orderService;
+    private final OrderService orderService;
 
     public Boolean setNewTableOrganization(TableOrganizationDTO dto) {
         if (orderService.getHasTablesTaken()) {

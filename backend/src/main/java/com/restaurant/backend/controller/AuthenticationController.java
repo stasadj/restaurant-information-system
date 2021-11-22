@@ -27,9 +27,9 @@ import lombok.AllArgsConstructor;
 public class AuthenticationController {
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationController.class);
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @PostMapping("/login")
     public void login(@RequestBody CredentialsDTO credentials, HttpServletResponse response) {

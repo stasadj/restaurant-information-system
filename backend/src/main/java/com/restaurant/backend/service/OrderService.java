@@ -6,9 +6,6 @@ import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.dto.OrderItemDTO;
 import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.NotFoundException;
-import com.restaurant.backend.repository.NotificationRepository;
-import com.restaurant.backend.repository.OrderItemRepository;
-import com.restaurant.backend.repository.OrderRecordRepository;
 import com.restaurant.backend.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,9 +21,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderService implements GenericService<Order> {
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final OrderRecordRepository orderRecordRepository;
-    private final NotificationRepository notificationRepository;
+    private final OrderItemService orderItemService;
+    private final OrderRecordService orderRecordService;
+    private final NotificationService notificationService;
     private final StaffService staffService;
     private final ItemService itemService;
 
@@ -53,7 +50,7 @@ public class OrderService implements GenericService<Order> {
     }
 
     public List<Order> create(OrderDTO order) {
-        Staff waiter = staffService.GetById(order.getWaiterId());
+        Staff waiter = staffService.getById(order.getWaiterId());
         Optional<Order> maybeOrder = orderRepository.findByTableId(order.getTableId());
         if (maybeOrder.isPresent())
             throw new BadRequestException(String.format("Table #%d already has an order.", order.getTableId()));
@@ -61,10 +58,10 @@ public class OrderService implements GenericService<Order> {
         Order newOrder = save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
-            Item item = itemService.getById(orderItem.getItemId());
+            Item item = itemService.findOne(orderItem.getItemId());
             newOrder.getOrderItems().add(new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.PENDING, item));
         }
-        orderItemRepository.saveAll(newOrder.getOrderItems());
+        orderItemService.saveAll(newOrder.getOrderItems());
 
         return findAllForWaiter(order.getWaiterId());
     }
@@ -74,12 +71,12 @@ public class OrderService implements GenericService<Order> {
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
             if (orderItem.getId() == null) {
-                Item item = itemService.getById(orderItem.getItemId());
+                Item item = itemService.findOne(orderItem.getItemId());
                 OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
                 editedOrder.getOrderItems().add(newOrderItem);
-                orderItemRepository.save(newOrderItem);
+                orderItemService.save(newOrderItem);
             } else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
-                orderItemRepository.updateAmount(orderItem.getItemId(), orderItem.getAmount());
+                orderItemService.updateAmount(orderItem.getItemId(), orderItem.getAmount());
             }
         }
 
@@ -105,10 +102,10 @@ public class OrderService implements GenericService<Order> {
             record.setItemValue(orderItem.getItem().getItemValueAt(order.getCreatedAt()));
             records.add(record);
         }
-        orderRecordRepository.saveAll(records);
+        orderRecordService.saveAll(records);
 
-        orderItemRepository.deleteAll(order.getOrderItems());
-        notificationRepository.deleteAll(order.getNotifications()); // replace with service method
+        orderItemService.deleteAll(order.getOrderItems());
+        notificationService.deleteAll(order.getNotifications());
         orderRepository.delete(order);
 
         return records;
