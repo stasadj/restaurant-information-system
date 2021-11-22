@@ -1,12 +1,5 @@
 package com.restaurant.backend.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.Tag;
@@ -15,12 +8,16 @@ import com.restaurant.backend.repository.CategoryRepository;
 import com.restaurant.backend.repository.ItemRepository;
 import com.restaurant.backend.repository.ItemValueRepository;
 import com.restaurant.backend.repository.TagRepository;
-
+import lombok.AllArgsConstructor;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -125,7 +122,7 @@ public class ItemService {
         Item savedItem = itemRepository.save(item);
 
         ItemValue initialItemValue = item.getItemValues().get(0); // getting the only item value
-        initialItemValue.setFromDate(LocalDate.now()); // current date as from date
+        initialItemValue.setFromDate(LocalDateTime.now()); // current date as from date
         initialItemValue.setItem(savedItem);
         itemValueRepository.save(initialItemValue);
 

@@ -1,31 +1,18 @@
 package com.restaurant.backend.domain;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.restaurant.backend.domain.enums.ItemType;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
@@ -72,10 +59,10 @@ public class Item {
     @Column(name = "deleted", nullable = false)
     protected Boolean deleted;
 
-    public ItemValue getItemValueAt(LocalDate date) {
+    public ItemValue getItemValueAt(LocalDateTime dateTime) {
         ItemValue itemValueAt = null;
         for (ItemValue itemValue : itemValues)
-            if (itemValue.getFromDate().isBefore(date) || itemValue.getFromDate().isEqual(date)) {
+            if (itemValue.getFromDate().isBefore(dateTime) || itemValue.getFromDate().isEqual(dateTime)) {
                 if (itemValueAt == null)
                     itemValueAt = itemValue;
                 else if (itemValueAt.getFromDate().isBefore(itemValue.getFromDate()))

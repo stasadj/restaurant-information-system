@@ -2,6 +2,7 @@ package com.restaurant.backend.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.Year;
 import java.time.temporal.WeekFields;
@@ -41,18 +42,19 @@ public class ReportService {
 
         List<OrderItem> orders = orderItemService.getAllByItemId(item.getId());
         for (OrderItem orderItem : orders) {
-            Integer quantity = orderItem.getAmount();
-            LocalDate date = orderItem.getOrder().getCreatedAt().toLocalDate();
-            if (DateHelper.getIsDateBetween(date, fromDate, toDate)) {
-                ItemValue value = item.getItemValueAt(date);
+
+            LocalDateTime dateTime = orderItem.getOrder().getCreatedAt();
+            if (DateHelper.isDateBetween(dateTime, fromDate, toDate)) {
+                ItemValue value = item.getItemValueAt(dateTime);
                 if (value == null) {
                     continue;
                 }
-                BigDecimal quant = new BigDecimal(quantity);
-                BigDecimal expense = value.getPurchasePrice().multiply(quant);
-                BigDecimal income = value.getSellingPrice().multiply(quant);
+                Integer amount = orderItem.getAmount();
+                BigDecimal quantity = new BigDecimal(amount);
+                BigDecimal expense = value.getPurchasePrice().multiply(quantity);
+                BigDecimal income = value.getSellingPrice().multiply(quantity);
 
-                result.addQuantity(quantity);
+                result.addQuantity(amount);
                 result.addExpense(expense);
                 result.addIncome(income);
             }
@@ -60,7 +62,7 @@ public class ReportService {
         return result;
     }
 
-    private List<AbstractDateReportResultItemDTO> generateDatapoints(ReportQueryDTO query) {
+    private List<AbstractDateReportResultItemDTO> generateDataPoints(ReportQueryDTO query) {
         switch (query.getReportGranularity()) {
         case DAILY:
             return query.getFromDate().datesUntil(query.getToDate().plusDays(1L)).map(DailyReportResultItemDTO::new)
@@ -91,17 +93,17 @@ public class ReportService {
         datapoint.addIncome(itemValue.getSellingPrice());
     }
 
-    private void insertItemIntoDatapoints(List<AbstractDateReportResultItemDTO> datapoints, OrderItem item) {
-        LocalDate createdAt = item.getOrder().getCreatedAt().toLocalDate();
+    private void insertItemIntoDataPoints(List<AbstractDateReportResultItemDTO> dataPoints, OrderItem item) {
+        LocalDateTime createdAt = item.getOrder().getCreatedAt();
         ItemValue itemValue = item.getItem().getItemValueAt(createdAt);
         if (itemValue == null) {
             return;
         }
 
-        for (int i = datapoints.size() - 1; i >= 0; i--) {
-            AbstractDateReportResultItemDTO datapoint = datapoints.get(i);
+        for (int i = dataPoints.size() - 1; i >= 0; i--) {
+            AbstractDateReportResultItemDTO datapoint = dataPoints.get(i);
 
-            if (datapoint.getApproximateDate().isBefore(createdAt)) {
+            if (datapoint.getApproximateDate().atStartOfDay().isBefore(createdAt)) {
                 insertItemValueIntoDatapoint(itemValue, datapoint);
                 return;
             }
@@ -109,7 +111,7 @@ public class ReportService {
     }
 
     public ReportResultsDTO getResults(ReportQueryDTO query) {
-        List<AbstractDateReportResultItemDTO> datapoints = generateDatapoints(query);
+        List<AbstractDateReportResultItemDTO> dataPoints = generateDataPoints(query);
         ArrayList<ItemReportResultItemDTO> individualItems = new ArrayList<>();
         Long itemId = query.getItemId();
 
@@ -131,9 +133,9 @@ public class ReportService {
             }
 
             (itemId == null ? orderItemService.getAll() : orderItemService.getAllByItemId(itemId)).stream()
-                    .filter(orderItem -> DateHelper.getIsDateBetween(orderItem.getOrder().getCreatedAt().toLocalDate(),
+                    .filter(orderItem -> DateHelper.isDateBetween(orderItem.getOrder().getCreatedAt(),
                             query.getFromDate(), query.getToDate()))
-                    .forEach(item -> insertItemIntoDatapoints(datapoints, item));
+                    .forEach(item -> insertItemIntoDataPoints(dataPoints, item));
             break;
         case PRICE_HISTORY:
             if (itemId == null) {
@@ -143,8 +145,8 @@ public class ReportService {
             Item item = itemService.getById(itemId);
             individualItems.add(getItemSales(item, query.getFromDate(), query.getToDate()));
 
-            for (AbstractDateReportResultItemDTO datapoint : datapoints) {
-                ItemValue itemValue = item.getItemValueAt(datapoint.getApproximateDate());
+            for (AbstractDateReportResultItemDTO datapoint : dataPoints) {
+                ItemValue itemValue = item.getItemValueAt(datapoint.getApproximateDate().atStartOfDay());
                 if (itemValue != null) {
                     insertItemValueIntoDatapoint(itemValue, datapoint);
                 }
@@ -154,6 +156,6 @@ public class ReportService {
             throw new BadRequestException("Bad query.");
         }
 
-        return new ReportResultsDTO(datapoints, individualItems);
+        return new ReportResultsDTO(dataPoints, individualItems);
     }
 }

@@ -7,7 +7,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class ChangePriceDTO {
@@ -20,7 +20,7 @@ public class ChangePriceDTO {
     private BigDecimal sellingPrice;
 
     @FutureOrPresent
-    private LocalDate fromDate;
+    private LocalDateTime fromDate;
 
     @NotNull(message = "Item id must be provided")
     private Long itemId;

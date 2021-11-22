@@ -1,9 +1,10 @@
 package com.restaurant.backend.support;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public abstract class DateHelper {
-    public static boolean getIsDateBetween(LocalDate date, LocalDate from, LocalDate to) {
-        return (date.equals(from) || date.isAfter(from)) && (date.equals(to) || date.isBefore(to));
+    public static boolean isDateBetween(LocalDateTime dateTime, LocalDate from, LocalDate to) {
+        return dateTime.isAfter(from.atStartOfDay()) && dateTime.isBefore(to.atStartOfDay());
     }
 }

@@ -1,21 +1,19 @@
 package com.restaurant.backend.dto;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -87,7 +85,7 @@ public class ItemDTO {
         this.tags = new ArrayList<>();
         item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
 
-        ItemValue currentValue = item.getItemValueAt(LocalDate.now()); //bug if price is changed twice in same day, shows earlier price
+        ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
         this.currentItemValue = new ItemValueDTO(currentValue);
 
 

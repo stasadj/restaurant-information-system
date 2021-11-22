@@ -2,6 +2,7 @@ package com.restaurant.backend.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -32,7 +33,7 @@ public class ItemValueDTO {
     @NotNull(message = "Item selling price is missing.")
     protected BigDecimal sellingPrice;
 
-    protected LocalDate fromDate;
+    protected LocalDateTime fromDate;
 
     public static ItemValue toObject(ItemValueDTO dto){
         ItemValue itemValue = new ItemValue();
