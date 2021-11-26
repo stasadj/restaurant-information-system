@@ -3,7 +3,7 @@ package com.restaurant.backend.service;
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.OrderRecord;
-import com.restaurant.backend.dto.enums.QuarterOfYear;
+import com.restaurant.backend.dto.reports.enums.QuarterOfYear;
 import com.restaurant.backend.dto.reports.*;
 import com.restaurant.backend.exception.BadRequestException;
 import lombok.AllArgsConstructor;

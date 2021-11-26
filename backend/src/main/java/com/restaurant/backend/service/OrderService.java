@@ -66,8 +66,9 @@ public class OrderService implements GenericService<Order> {
         return findAllForWaiter(order.getWaiterId());
     }
 
-    public List<Order> editOrderItems(OrderDTO order) {
+    public List<Order> editOrder(OrderDTO order) {
         Order editedOrder = findOne(order.getId());
+        editedOrder.setNote(order.getNote());
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
             if (orderItem.getId() == null) {
@@ -79,6 +80,7 @@ public class OrderService implements GenericService<Order> {
                 orderItemService.updateAmount(orderItem.getItemId(), orderItem.getAmount());
             }
         }
+        orderRepository.save(editedOrder);
 
         return findAllForWaiter(order.getWaiterId());
     }

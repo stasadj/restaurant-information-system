@@ -1,19 +1,16 @@
 package com.restaurant.backend.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
 import com.restaurant.backend.domain.ItemValue;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,7 +32,7 @@ public class ItemValueDTO {
 
     protected LocalDateTime fromDate;
 
-    public static ItemValue toObject(ItemValueDTO dto){
+    public static ItemValue toDomain(ItemValueDTO dto){
         ItemValue itemValue = new ItemValue();
         itemValue.setId(dto.getId());
         itemValue.setPurchasePrice(dto.getPurchasePrice());

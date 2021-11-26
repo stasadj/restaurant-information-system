@@ -48,7 +48,7 @@ public class ItemDTO {
 
     protected Boolean deleted;
 
-    public static Item toObject(ItemDTO dto) {
+    public static Item toDomain(ItemDTO dto) {
         //TODO ObjectMapper
         Item item = new Item();
         item.setId(dto.getId());
@@ -59,16 +59,15 @@ public class ItemDTO {
         item.setItemType(dto.getItemType());
         item.setDeleted(dto.getDeleted());
 
-        item.setCategory(CategoryDTO.toObject(dto.getCategory()));
+        item.setCategory(CategoryDTO.toDomain(dto.getCategory()));
 
         item.setTags(new ArrayList<>());
-        dto.getTags().forEach(tag -> item.getTags().add(TagDTO.toObject(tag)));
+        dto.getTags().forEach(tag -> item.getTags().add(TagDTO.toDomain(tag)));
 
         item.setItemValues(new ArrayList<>());
-        item.getItemValues().add(ItemValueDTO.toObject(dto.getCurrentItemValue()));
+        item.getItemValues().add(ItemValueDTO.toDomain(dto.getCurrentItemValue()));
 
         return item;
-
     }
 
     public ItemDTO(Item item) {
@@ -87,7 +86,5 @@ public class ItemDTO {
 
         ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
         this.currentItemValue = new ItemValueDTO(currentValue);
-
-
     }
 }

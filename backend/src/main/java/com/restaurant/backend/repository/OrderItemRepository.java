@@ -8,10 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
-    @Query(value = "UPDATE order_item oi SET oi.status = ?1 WHERE oi.id = ?2", nativeQuery = true)
-    void setStatusForOrderItem(Integer status, Long id);
+    @Modifying
+    @Query(value = "UPDATE order_item oi SET oi.status = :status WHERE oi.id = :id", nativeQuery = true)
+    void setStatusForOrderItem(@Param("status") Integer status, @Param("id") Long id);
 
     @Modifying
-    @Query("update OrderItem o set o.amount = :amount where o.id = :id")
-    void updateAmount(@Param(value = "id") Long id, @Param(value = "amount") Integer amount);
+    @Query(value = "UPDATE order_item oi SET oi.amount = :amount WHERE oi.id = :id", nativeQuery = true)
+    void updateAmount(@Param("id") Long id, @Param("amount") Integer amount);
 }

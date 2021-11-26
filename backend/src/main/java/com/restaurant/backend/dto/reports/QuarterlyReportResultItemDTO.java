@@ -3,7 +3,7 @@ package com.restaurant.backend.dto.reports;
 import java.time.LocalDate;
 import java.time.Year;
 
-import com.restaurant.backend.dto.enums.QuarterOfYear;
+import com.restaurant.backend.dto.reports.enums.QuarterOfYear;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

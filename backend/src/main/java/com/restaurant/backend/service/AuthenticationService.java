@@ -4,7 +4,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.restaurant.backend.domain.User;
-import com.restaurant.backend.dto.CredentialsDTO;
+import com.restaurant.backend.dto.requests.CredentialsDTO;
 import com.restaurant.backend.security.TokenUtils;
 import com.restaurant.backend.security.authentication.PinBasedAuthenticationToken;
 

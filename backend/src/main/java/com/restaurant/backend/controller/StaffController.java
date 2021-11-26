@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.restaurant.backend.domain.Staff;
-import com.restaurant.backend.dto.SetSalaryDTO;
+import com.restaurant.backend.dto.requests.SetSalaryDTO;
 import com.restaurant.backend.dto.StaffDTO;
 import com.restaurant.backend.service.StaffService;
 import com.restaurant.backend.support.StaffMapper;

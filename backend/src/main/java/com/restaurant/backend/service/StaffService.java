@@ -5,7 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import com.restaurant.backend.domain.Staff;
-import com.restaurant.backend.dto.SetSalaryDTO;
+import com.restaurant.backend.dto.requests.SetSalaryDTO;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.StaffRepository;
 

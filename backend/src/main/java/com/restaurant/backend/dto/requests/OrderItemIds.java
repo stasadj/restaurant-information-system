@@ -1,4 +1,4 @@
-package com.restaurant.backend.dto;
+package com.restaurant.backend.dto.requests;
 
 import java.util.List;
 

@@ -18,7 +18,7 @@ public class OrderItemToOrderItemDTO implements Converter<OrderItem, OrderItemDT
                 source.getBarman() == null ? null : source.getBarman().getId());
     }
 
-    public List<OrderItemDTO> convert(List<OrderItem> orderItemList) {
+    public List<OrderItemDTO> convertAll(List<OrderItem> orderItemList) {
         return orderItemList.stream().map(this::convert).collect(Collectors.toList());
     }
 }

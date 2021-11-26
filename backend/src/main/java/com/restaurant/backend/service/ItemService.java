@@ -3,9 +3,9 @@ package com.restaurant.backend.service;
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.Tag;
+import com.restaurant.backend.dto.requests.ChangePriceDTO;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
-import com.restaurant.backend.repository.ItemValueRepository;
 import lombok.AllArgsConstructor;
 import org.hibernate.Filter;
 import org.hibernate.Session;
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final ItemValueRepository itemValueRepository;
+    private final ItemValueService itemValueService;
     private final TagService tagService;
     private final CategoryService categoryService;
     private final EntityManager entityManager;
@@ -50,7 +50,7 @@ public class ItemService {
         return items;
     }
 
-    public Item findOne(long id) {
+    public Item findOne(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No item with id %d has been found", id)));
     }
@@ -73,6 +73,7 @@ public class ItemService {
     }
 
     public Item create(Item item) throws NotFoundException {
+        item.setId(null);
         item.setDeleted(false); // initially false
 
         item.setCategory(categoryService.findOne(item.getCategory().getId()));                                                                                          // somehow?
@@ -86,7 +87,7 @@ public class ItemService {
         ItemValue initialItemValue = item.getItemValues().get(0); // getting the only item value
         initialItemValue.setFromDate(LocalDateTime.now()); // current date as from date
         initialItemValue.setItem(savedItem);
-        itemValueRepository.save(initialItemValue);
+        itemValueService.save(initialItemValue);
 
         return item;
     }
@@ -108,5 +109,18 @@ public class ItemService {
         item.setTags(tags);
 
         return itemRepository.save(item);
+    }
+
+    public ItemValue changeItemPrice(ChangePriceDTO dto) {
+        Item item = findOne(dto.getItemId());
+        ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
+
+        ItemValue newValue = new ItemValue();
+        newValue.setItem(item);
+        newValue.setFromDate(dto.getFromDate() == null ? LocalDateTime.now() : dto.getFromDate());
+        newValue.setPurchasePrice(dto.getPurchasePrice() == null ? currentValue.getPurchasePrice() : dto.getPurchasePrice());
+        newValue.setSellingPrice(dto.getSellingPrice() == null ? currentValue.getSellingPrice() : dto.getSellingPrice());
+
+        return itemValueService.save(newValue);
     }
 }

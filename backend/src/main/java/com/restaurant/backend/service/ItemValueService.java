@@ -1,14 +1,10 @@
 package com.restaurant.backend.service;
 
-import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
-import com.restaurant.backend.dto.ChangePriceDTO;
 import com.restaurant.backend.repository.ItemValueRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -16,18 +12,7 @@ import java.time.LocalDateTime;
 public class ItemValueService {
     private final ItemValueRepository itemValueRepository;
 
-    private final ItemService itemService;
-
-    public ItemValue changeItemPrice(ChangePriceDTO dto) {
-        Item item = itemService.findOne(dto.getItemId());
-        ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
-
-        ItemValue newValue = new ItemValue();
-        newValue.setItem(item);
-        newValue.setFromDate(dto.getFromDate() == null ? LocalDateTime.now() : dto.getFromDate());
-        newValue.setPurchasePrice(dto.getPurchasePrice() == null ? currentValue.getPurchasePrice() : dto.getPurchasePrice());
-        newValue.setSellingPrice(dto.getSellingPrice() == null ? currentValue.getSellingPrice() : dto.getSellingPrice());
-
-        return itemValueRepository.save(newValue);
+    public ItemValue save(ItemValue itemValue) {
+        return itemValueRepository.save(itemValue);
     }
 }

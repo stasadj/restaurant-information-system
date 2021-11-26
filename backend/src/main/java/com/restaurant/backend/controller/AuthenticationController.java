@@ -3,7 +3,7 @@ package com.restaurant.backend.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import com.restaurant.backend.domain.User;
-import com.restaurant.backend.dto.CredentialsDTO;
+import com.restaurant.backend.dto.requests.CredentialsDTO;
 import com.restaurant.backend.dto.UserDTO;
 import com.restaurant.backend.service.AuthenticationService;
 import com.restaurant.backend.support.UserMapper;

@@ -2,10 +2,9 @@ package com.restaurant.backend.controller;
 
 import com.restaurant.backend.domain.OrderItem;
 import com.restaurant.backend.domain.Staff;
-import com.restaurant.backend.dto.DataWithMessage;
-import com.restaurant.backend.dto.OrderDTO;
+import com.restaurant.backend.dto.responses.DataWithMessage;
 import com.restaurant.backend.dto.OrderItemDTO;
-import com.restaurant.backend.dto.OrderItemIds;
+import com.restaurant.backend.dto.requests.OrderItemIds;
 import com.restaurant.backend.service.OrderItemService;
 import com.restaurant.backend.support.OrderItemToOrderItemDTO;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ public class OrderItemController {
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> acceptOrderItems(@AuthenticationPrincipal Staff staff,
                                                                                @RequestBody OrderItemIds orderItemIds) {
         DataWithMessage<List<OrderItem>> acceptedItems = orderItemService.acceptOrderItems(staff, orderItemIds.ids);
-        return new ResponseEntity<>(new DataWithMessage<>(toOrderItemDTO.convert(acceptedItems.getData()), acceptedItems.getMessage()),
+        return new ResponseEntity<>(new DataWithMessage<>(toOrderItemDTO.convertAll(acceptedItems.getData()), acceptedItems.getMessage()),
                 HttpStatus.OK);
     }
 
@@ -39,7 +38,7 @@ public class OrderItemController {
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> declineOrderItems(@AuthenticationPrincipal Staff staff,
                                                                 @RequestBody OrderItemIds orderItemIds) {
         DataWithMessage<List<OrderItem>> declinedItems = orderItemService.declineOrderItems(staff, orderItemIds.ids);
-        return new ResponseEntity<>(new DataWithMessage<>(toOrderItemDTO.convert(declinedItems.getData()), declinedItems.getMessage()),
+        return new ResponseEntity<>(new DataWithMessage<>(toOrderItemDTO.convertAll(declinedItems.getData()), declinedItems.getMessage()),
                 HttpStatus.OK);
     }
 
@@ -48,7 +47,7 @@ public class OrderItemController {
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> markOrderItemsAsPrepared(@AuthenticationPrincipal Staff staff,
                                                                        @RequestBody OrderItemIds orderItemIds) {
         DataWithMessage<List<OrderItem>> preparedItems = orderItemService.prepareOrderItems(staff, orderItemIds.ids);
-        return new ResponseEntity<>(new DataWithMessage<>(toOrderItemDTO.convert(preparedItems.getData()), preparedItems.getMessage()),
+        return new ResponseEntity<>(new DataWithMessage<>(toOrderItemDTO.convertAll(preparedItems.getData()), preparedItems.getMessage()),
                 HttpStatus.OK);
     }
 

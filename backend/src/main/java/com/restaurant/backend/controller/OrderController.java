@@ -23,25 +23,25 @@ public class OrderController {
     @PreAuthorize("hasRole('WAITER')")
     @GetMapping("/all")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        return new ResponseEntity<>(toOrderDTO.convert(orderService.findAll()), HttpStatus.OK);
+        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.findAll()), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")
     @GetMapping("/all/{id}")
     public ResponseEntity<List<OrderDTO>> getAllOrdersForWaiter(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(toOrderDTO.convert(orderService.findAllForWaiter(id)), HttpStatus.OK);
+        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.findAllForWaiter(id)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")
     @PostMapping("/create")
     public ResponseEntity<List<OrderDTO>> createOrder(@RequestBody OrderDTO order) {
-        return new ResponseEntity<>(toOrderDTO.convert(orderService.create(order)), HttpStatus.OK);
+        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.create(order)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")
     @PutMapping("/edit")
     public ResponseEntity<List<OrderDTO>> editOrderItems(@RequestBody OrderDTO order) {
-        return new ResponseEntity<>(toOrderDTO.convert(orderService.editOrderItems(order)), HttpStatus.OK);
+        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.editOrder(order)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")

@@ -1,9 +1,7 @@
 package com.restaurant.backend.support;
 
-import com.restaurant.backend.domain.OrderItem;
-import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.domain.Order;
-import com.restaurant.backend.dto.OrderItemDTO;
+import com.restaurant.backend.dto.OrderDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -19,19 +17,11 @@ public class OrderToOrderDTO implements Converter<Order, OrderDTO> {
     @Override
     public OrderDTO convert(Order source) {
         return new OrderDTO(source.getId(), source.getCreatedAt(),
-                source.getNote(), source.getTableId(), convertItems(source.getOrderItems()),
+                source.getNote(), source.getTableId(), toOrderItemDTO.convertAll(source.getOrderItems()),
                 source.getWaiter() == null ? null : source.getWaiter().getId());
     }
 
-    public List<OrderDTO> convert(List<Order> orderList) {
+    public List<OrderDTO> convertAll(List<Order> orderList) {
         return orderList.stream().map(this::convert).collect(Collectors.toList());
-    }
-
-    private OrderItemDTO convert(OrderItem item) {
-        return toOrderItemDTO.convert(item);
-    }
-
-    private List<OrderItemDTO> convertItems(List<OrderItem> orderItems) {
-        return orderItems.stream().map(this::convert).collect(Collectors.toList());
     }
 }

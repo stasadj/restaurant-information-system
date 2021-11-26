@@ -3,7 +3,7 @@ package com.restaurant.backend.service;
 import com.restaurant.backend.domain.*;
 import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.domain.enums.OrderStatus;
-import com.restaurant.backend.dto.DataWithMessage;
+import com.restaurant.backend.dto.responses.DataWithMessage;
 import com.restaurant.backend.repository.OrderItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

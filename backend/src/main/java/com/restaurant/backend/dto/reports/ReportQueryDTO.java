@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
 
-import com.restaurant.backend.dto.enums.ReportGranularity;
-import com.restaurant.backend.dto.enums.ReportType;
+import com.restaurant.backend.dto.reports.enums.ReportGranularity;
+import com.restaurant.backend.dto.reports.enums.ReportType;
 import com.restaurant.backend.validation.ValueOfEnum;
 
 import lombok.Getter;
