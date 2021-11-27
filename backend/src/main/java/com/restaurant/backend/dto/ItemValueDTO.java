@@ -1,18 +1,16 @@
 package com.restaurant.backend.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
 import com.restaurant.backend.domain.ItemValue;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,9 +30,9 @@ public class ItemValueDTO {
     @NotNull(message = "Item selling price is missing.")
     protected BigDecimal sellingPrice;
 
-    protected LocalDate fromDate;
+    protected LocalDateTime fromDate;
 
-    public static ItemValue toObject(ItemValueDTO dto){
+    public static ItemValue toDomain(ItemValueDTO dto){
         ItemValue itemValue = new ItemValue();
         itemValue.setId(dto.getId());
         itemValue.setPurchasePrice(dto.getPurchasePrice());

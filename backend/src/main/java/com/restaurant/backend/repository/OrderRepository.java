@@ -8,9 +8,5 @@ import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByWaiter_Id(Long id);
-
-    List<Order> findAllByTableIdIsNotNull();
-
     Optional<Order> findByTableId(Integer tableId);
-
 }

@@ -1,17 +1,10 @@
 package com.restaurant.backend.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import com.restaurant.backend.dto.ChangePriceDTO;
-import com.restaurant.backend.dto.EditItemDTO;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.ItemValueDTO;
+import com.restaurant.backend.dto.requests.ChangePriceDTO;
 import com.restaurant.backend.service.ItemService;
-import com.restaurant.backend.service.ItemValueService;
-
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,34 +12,26 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import lombok.AllArgsConstructor;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping(value = "/api/item", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ItemController {
-
     private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 
-    private ItemService itemService;
-    private ItemValueService itemValueService;
+    private final ItemService itemService;
 
     @ResponseBody
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> getById(@PathVariable Long id) {
         LOG.info("Client requested the get item by id method.");
-        return new ResponseEntity<>(new ItemDTO(itemService.getById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.findOne(id)), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -54,8 +39,7 @@ public class ItemController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<List<ItemDTO>> getAll() {
         LOG.info("Client requested the get all items method.");
-        var dtos = itemService.getAll().stream().map(ItemDTO::new).collect(Collectors.toList());
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getAll().stream().map(ItemDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -63,8 +47,7 @@ public class ItemController {
     @PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'BARMAN')")
     public ResponseEntity<List<ItemDTO>> getAllMenuItems() {
         LOG.info("Client requested to get all menu items.");
-        var dtos = itemService.getAllMenuItems().stream().map(ItemDTO::new).collect(Collectors.toList());
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getAllMenuItems().stream().map(ItemDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -97,16 +80,15 @@ public class ItemController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@Valid @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
-        return new ResponseEntity<>(new ItemDTO(itemService.create(ItemDTO.toObject(itemDTO))),
-         HttpStatus.OK); 
+        return new ResponseEntity<>(new ItemDTO(itemService.create(ItemDTO.toDomain(itemDTO))), HttpStatus.OK);
     }
 
     @ResponseBody
     @PutMapping("/edit")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ItemDTO> editItem(@Valid @RequestBody EditItemDTO editItemDTO) {
+    public ResponseEntity<ItemDTO> editItem(@Valid @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to edit item.");
-        return new ResponseEntity<>(new ItemDTO(itemService.editItem(EditItemDTO.toObject(editItemDTO))), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemDTO(itemService.editItem(ItemDTO.toDomain(itemDTO))), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -114,7 +96,7 @@ public class ItemController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemValueDTO> changeItemPrice(@Valid @RequestBody ChangePriceDTO changePriceDTO) {
         LOG.info("Client requested to change item price.");
-        return new ResponseEntity<>(new ItemValueDTO(itemValueService.changeItemPrice(changePriceDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(new ItemValueDTO(itemService.changeItemPrice(changePriceDTO)), HttpStatus.OK);
     }
 
     

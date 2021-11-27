@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping(value = "/api/table", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class TableController {
-    private TableService tableService;
+    private final TableService tableService;
 
     @PostMapping("/")
     public Boolean setNewTableOrganization(@Valid @RequestBody TableOrganizationDTO dto) {

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,14 +17,14 @@ public class TagDTO {
     
     protected Long id;
 
+    @NotBlank(message = "Tag name must not be blank.")
     protected String name;
 
-    public static Tag toObject(TagDTO dto){
+    public static Tag toDomain(TagDTO dto){
         Tag tag = new Tag();
         tag.setId(dto.getId());
         tag.setName(dto.getName());
         return tag;
-
     }
 
     public TagDTO(Tag tag) {

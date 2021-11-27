@@ -3,7 +3,7 @@ package com.restaurant.backend.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import com.restaurant.backend.domain.User;
-import com.restaurant.backend.dto.CredentialsDTO;
+import com.restaurant.backend.dto.requests.CredentialsDTO;
 import com.restaurant.backend.dto.UserDTO;
 import com.restaurant.backend.service.AuthenticationService;
 import com.restaurant.backend.support.UserMapper;
@@ -27,9 +27,9 @@ import lombok.AllArgsConstructor;
 public class AuthenticationController {
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationController.class);
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @PostMapping("/login")
     public void login(@RequestBody CredentialsDTO credentials, HttpServletResponse response) {

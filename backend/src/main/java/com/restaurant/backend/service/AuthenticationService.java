@@ -4,7 +4,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.restaurant.backend.domain.User;
-import com.restaurant.backend.dto.CredentialsDTO;
+import com.restaurant.backend.dto.requests.CredentialsDTO;
 import com.restaurant.backend.security.TokenUtils;
 import com.restaurant.backend.security.authentication.PinBasedAuthenticationToken;
 
@@ -20,9 +20,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
-    private AuthenticationManager authenticationManager;
-
-    private TokenUtils tokenUtils;
+    private final AuthenticationManager authenticationManager;
+    private final TokenUtils tokenUtils;
 
     public void login(CredentialsDTO credentials, HttpServletResponse response) throws Unauthorized {
         Authentication authentication = authenticationManager.authenticate(

@@ -37,5 +37,8 @@ INSERT INTO order_item (amount, status, cook_id, barman_id, item_id, order_id) V
   (1, 0, null, null, 3, 1),
   (3, 0, null, null, 4, 2);
 
-
-
+INSERT INTO order_record (amount, item_value_id, created_at) VALUES
+  (1, 1, '2021-11-21'),
+  (1, 1, '2021-11-16'),
+  (2, 1, '2021-11-17'),
+  (2, 4, '2021-11-18');

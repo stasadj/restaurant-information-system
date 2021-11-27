@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.restaurant.backend.domain.Staff;
-import com.restaurant.backend.dto.SetSalaryDTO;
+import com.restaurant.backend.dto.requests.SetSalaryDTO;
 import com.restaurant.backend.dto.StaffDTO;
 import com.restaurant.backend.service.StaffService;
 import com.restaurant.backend.support.StaffMapper;
@@ -38,18 +38,18 @@ public class StaffController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('MANAGER')")
     public List<StaffDTO> getAll() {
-        return staffMapper.convert(staffService.GetAll());
+        return staffMapper.convert(staffService.getAll());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
     public StaffDTO getById(@PathVariable Long id) {
-        return staffMapper.convertToDto(staffService.GetById(id));
+        return staffMapper.convertToDto(staffService.getById(id));
     }
 
     @PutMapping("/change-salary")
     @PreAuthorize("hasRole('MANAGER')")
     public StaffDTO setSalary(@Valid @RequestBody SetSalaryDTO dto) {
-        return staffMapper.convertToDto(staffService.SetSalary(dto));
+        return staffMapper.convertToDto(staffService.changeSalary(dto));
     }
 }

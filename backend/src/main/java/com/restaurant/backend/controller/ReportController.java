@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping(value = "/api/report", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReportController {
-    private ReportService reportService;
+    private final ReportService reportService;
 
     @PostMapping("/query")
     @PreAuthorize("hasRole('MANAGER')")

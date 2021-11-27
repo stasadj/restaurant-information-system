@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class Order {
     @Column(name = "note")
     protected String note;
 
-    @Column(name = "table_id", nullable = true)
+    @Column(name = "table_id", nullable = false)
     protected Integer tableId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
@@ -45,7 +44,7 @@ public class Order {
 
     protected BigDecimal getTotal() {
         return orderItems.stream()
-                .map(orderItem -> orderItem.getItem().getItemValueAt(LocalDate.now()).getSellingPrice())
+                .map(orderItem -> orderItem.getItem().getItemValueAt(LocalDateTime.now()).getSellingPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

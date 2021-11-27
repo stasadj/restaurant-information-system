@@ -1,4 +1,4 @@
-package com.restaurant.backend.dto.enums;
+package com.restaurant.backend.dto.reports.enums;
 
 import static java.time.temporal.IsoFields.QUARTER_OF_YEAR;
 

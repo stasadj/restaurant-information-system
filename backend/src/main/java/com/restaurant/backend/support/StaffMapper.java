@@ -2,11 +2,9 @@ package com.restaurant.backend.support;
 
 import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.dto.StaffDTO;
-
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
-import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor

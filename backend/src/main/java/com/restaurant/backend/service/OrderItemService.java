@@ -3,9 +3,7 @@ package com.restaurant.backend.service;
 import com.restaurant.backend.domain.*;
 import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.domain.enums.OrderStatus;
-import com.restaurant.backend.dto.DataWithMessage;
-import com.restaurant.backend.exception.BadRequestException;
-import com.restaurant.backend.exception.NotFoundException;
+import com.restaurant.backend.dto.responses.DataWithMessage;
 import com.restaurant.backend.repository.OrderItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,12 +19,24 @@ import java.util.Optional;
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
 
-    public List<OrderItem> getAllByItemId(Long itemId) {
-        return orderItemRepository.findAllByItemId(itemId);
+    public void save(OrderItem orderItem) {
+        orderItemRepository.save(orderItem);
     }
 
-    public List<OrderItem> getAll() {
-        return orderItemRepository.findAll();
+    public void saveAll(List<OrderItem> orderItems) {
+        orderItemRepository.saveAll(orderItems);
+    }
+
+    public void deleteAll(List<OrderItem> orderItems) {
+        orderItemRepository.deleteAll(orderItems);
+    }
+
+    public void updateAmount(Long id, Integer amount) {
+        orderItemRepository.updateAmount(id, amount);
+    }
+
+    public void setStatusForOrderItem(Integer status, Long id) {
+        orderItemRepository.setStatusForOrderItem(status, id);
     }
 
     public DataWithMessage<List<OrderItem>> acceptOrderItems(Staff staff, List<Long> ids) {

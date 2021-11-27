@@ -1,21 +1,19 @@
 package com.restaurant.backend.dto;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -50,7 +48,7 @@ public class ItemDTO {
 
     protected Boolean deleted;
 
-    public static Item toObject(ItemDTO dto) {
+    public static Item toDomain(ItemDTO dto) {
         //TODO ObjectMapper
         Item item = new Item();
         item.setId(dto.getId());
@@ -61,16 +59,15 @@ public class ItemDTO {
         item.setItemType(dto.getItemType());
         item.setDeleted(dto.getDeleted());
 
-        item.setCategory(CategoryDTO.toObject(dto.getCategory()));
+        item.setCategory(CategoryDTO.toDomain(dto.getCategory()));
 
         item.setTags(new ArrayList<>());
-        dto.getTags().forEach(tag -> item.getTags().add(TagDTO.toObject(tag)));
+        dto.getTags().forEach(tag -> item.getTags().add(TagDTO.toDomain(tag)));
 
         item.setItemValues(new ArrayList<>());
-        item.getItemValues().add(ItemValueDTO.toObject(dto.getCurrentItemValue()));
+        item.getItemValues().add(ItemValueDTO.toDomain(dto.getCurrentItemValue()));
 
         return item;
-
     }
 
     public ItemDTO(Item item) {
@@ -87,9 +84,7 @@ public class ItemDTO {
         this.tags = new ArrayList<>();
         item.getTags().forEach(tag -> this.tags.add(new TagDTO(tag)));
 
-        ItemValue currentValue = item.getItemValueAt(LocalDate.now()); //bug if price is changed twice in same day, shows earlier price
+        ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
         this.currentItemValue = new ItemValueDTO(currentValue);
-
-
     }
 }
