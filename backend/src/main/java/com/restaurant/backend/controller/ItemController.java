@@ -44,24 +44,23 @@ public class ItemController {
 
     @ResponseBody
     @GetMapping("/in-menu")
-    @PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'BARMAN')")
     public ResponseEntity<List<ItemDTO>> getAllMenuItems() {
         LOG.info("Client requested to get all menu items.");
         return new ResponseEntity<>(itemService.getAllMenuItems().stream().map(ItemDTO::new).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @ResponseBody
-    @GetMapping("/add-to-menu")
+    @PutMapping("/add-to-menu/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ItemDTO> addToMenu(@RequestParam Long id) {
+    public ResponseEntity<ItemDTO> addToMenu(@PathVariable Long id) {
         LOG.info("Client requested the add item to menu.");
         return new ResponseEntity<>(new ItemDTO(itemService.addToMenu(id)), HttpStatus.OK);
     }
 
     @ResponseBody
-    @GetMapping("/remove-from-menu")
+    @PutMapping("/remove-from-menu/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ItemDTO> removeFromMenu(@RequestParam Long id) {
+    public ResponseEntity<ItemDTO> removeFromMenu(@PathVariable Long id) {
         LOG.info("Client requested the remove item from menu.");
         return new ResponseEntity<>(new ItemDTO(itemService.removeFromMenu(id)), HttpStatus.OK);
     }
@@ -99,5 +98,4 @@ public class ItemController {
         return new ResponseEntity<>(new ItemValueDTO(itemService.changeItemPrice(changePriceDTO)), HttpStatus.OK);
     }
 
-    
 }

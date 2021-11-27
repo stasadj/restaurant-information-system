@@ -35,10 +35,6 @@ public class OrderItemService {
         orderItemRepository.updateAmount(id, amount);
     }
 
-    public void setStatusForOrderItem(Integer status, Long id) {
-        orderItemRepository.setStatusForOrderItem(status, id);
-    }
-
     public DataWithMessage<List<OrderItem>> acceptOrderItems(Staff staff, List<Long> ids) {
         boolean isCook = staff instanceof Cook;
         List<OrderItem> acceptedItems = new ArrayList<>();

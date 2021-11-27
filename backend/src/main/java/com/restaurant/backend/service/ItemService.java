@@ -50,6 +50,10 @@ public class ItemService {
         return items;
     }
 
+    public List<Item> getAllByCategory(Long categoryId) {
+        return itemRepository.findAllByCategory_Id(categoryId);
+    }
+
     public Item findOne(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No item with id %d has been found", id)));
@@ -87,7 +91,7 @@ public class ItemService {
         ItemValue initialItemValue = item.getItemValues().get(0); // getting the only item value
         initialItemValue.setFromDate(LocalDateTime.now()); // current date as from date
         initialItemValue.setItem(savedItem);
-        itemValueService.save(initialItemValue);
+        itemValueService.create(initialItemValue);
 
         return item;
     }
@@ -121,6 +125,6 @@ public class ItemService {
         newValue.setPurchasePrice(dto.getPurchasePrice() == null ? currentValue.getPurchasePrice() : dto.getPurchasePrice());
         newValue.setSellingPrice(dto.getSellingPrice() == null ? currentValue.getSellingPrice() : dto.getSellingPrice());
 
-        return itemValueService.save(newValue);
+        return itemValueService.create(newValue);
     }
 }

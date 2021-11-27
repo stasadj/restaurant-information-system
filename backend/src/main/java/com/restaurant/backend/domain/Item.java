@@ -24,7 +24,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-
 public class Item {
 
     @Id

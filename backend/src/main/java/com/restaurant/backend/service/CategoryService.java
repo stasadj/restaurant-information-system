@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +27,14 @@ public class CategoryService implements GenericService<Category> {
 
     @Override
     public Category save(Category entity) {
-        return categoryRepository.save(entity);
+        Optional<Category> maybeCategory = categoryRepository.findByName(entity.getName());
+        return maybeCategory.orElseGet(() -> categoryRepository.save(entity));
+    }
+
+    public void delete(Long id) {
+        Category category = findOne(id);
+        if (categoryRepository.timesUsed(category.getId()) == 0)
+            categoryRepository.deleteById(id);
+        // else cannot be deleted
     }
 }
