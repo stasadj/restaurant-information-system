@@ -1,5 +1,6 @@
 package com.restaurant.backend.service;
 
+import com.restaurant.backend.domain.Category;
 import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.TagRepository;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +28,11 @@ public class TagService implements GenericService<Tag> {
 
     @Override
     public Tag save(Tag entity) {
-        return tagRepository.save(entity);
+        Optional<Tag> maybeTag = tagRepository.findByName(entity.getName());
+        return maybeTag.orElseGet(() -> tagRepository.save(entity));
+    }
+
+    public void delete(Long id) {
+        tagRepository.deleteById(id);
     }
 }

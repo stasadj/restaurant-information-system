@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ItemValueService {
     private final ItemValueRepository itemValueRepository;
 
-    public ItemValue save(ItemValue itemValue) {
+    public ItemValue create(ItemValue itemValue) {
+        itemValue.setId(null);  // preventing update
         return itemValueRepository.save(itemValue);
     }
 }

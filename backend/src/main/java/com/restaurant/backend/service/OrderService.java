@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @AllArgsConstructor
-public class OrderService implements GenericService<Order> {
+public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemService orderItemService;
     private final OrderRecordService orderRecordService;
@@ -27,24 +27,18 @@ public class OrderService implements GenericService<Order> {
     private final StaffService staffService;
     private final ItemService itemService;
 
-    @Override
     @Transactional(readOnly = true)
     public List<Order> findAll() {
         return orderRepository.findAll();
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Order findOne(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No order with id %d has been found", id)));
     }
 
-    @Override
-    public Order save(Order entity) {
-        return orderRepository.save(entity);
-    }
-
+    @Transactional(readOnly = true)
     public List<Order> findAllForWaiter(Long id) {
         return orderRepository.findAllByWaiter_Id(id);
     }
@@ -55,7 +49,7 @@ public class OrderService implements GenericService<Order> {
         if (maybeOrder.isPresent())
             throw new BadRequestException(String.format("Table #%d already has an order.", order.getTableId()));
 
-        Order newOrder = save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
+        Order newOrder = orderRepository.save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), (Waiter) waiter));
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
             Item item = itemService.findOne(orderItem.getItemId());
@@ -104,7 +98,7 @@ public class OrderService implements GenericService<Order> {
             record.setItemValue(orderItem.getItem().getItemValueAt(order.getCreatedAt()));
             records.add(record);
         }
-        orderRecordService.saveAll(records);
+        records = orderRecordService.saveAll(records);
 
         orderItemService.deleteAll(order.getOrderItems());
         notificationService.deleteAll(order.getNotifications());
