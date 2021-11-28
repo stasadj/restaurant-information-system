@@ -2,6 +2,7 @@ package com.restaurant.backend.service;
 
 import com.restaurant.backend.domain.*;
 import com.restaurant.backend.domain.enums.ItemType;
+import com.restaurant.backend.domain.enums.NotificationType;
 import com.restaurant.backend.domain.enums.OrderStatus;
 import com.restaurant.backend.dto.responses.DataWithMessage;
 import com.restaurant.backend.repository.OrderItemRepository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
+    private final NotificationService notificationService;
 
     public void save(OrderItem orderItem) {
         orderItemRepository.save(orderItem);
@@ -64,6 +66,9 @@ public class OrderItemService {
             orderItemRepository.save(orderItem);
             acceptedItems.add(orderItem);
         }
+
+        // maybe notify everyone so that accepted items disappear from the list
+
         String message = messageBuilder.toString();
         return new DataWithMessage<>(acceptedItems, message);
     }
@@ -93,8 +98,14 @@ public class OrderItemService {
             orderItemRepository.setStatusForOrderItem(OrderStatus.DECLINED.ordinal(), id);
             declinedItems.add(orderItem);
 
-            orderItem.getOrder().getNotifications().add(new Notification(/* TODO */));
+            notificationService.createNotification("Order item #"+id+" is DECLINED.",
+                    type == ItemType.DRINK ? NotificationType.BARMAN_WAITER : NotificationType.COOK_WAITER,
+                    orderItem.getOrder()
+            );
         }
+
+        // maybe notify everyone so that declined items disappear from the list
+
         String message = messageBuilder.toString();
         return new DataWithMessage<>(declinedItems, message);
     }
@@ -124,7 +135,10 @@ public class OrderItemService {
             orderItemRepository.setStatusForOrderItem(OrderStatus.READY.ordinal(), id);
             preparedItems.add(orderItem);
 
-            orderItem.getOrder().getNotifications().add(new Notification(/* TODO */));
+            notificationService.createNotification("Order item #"+id+" is PREPARED.",
+                    type == ItemType.DRINK ? NotificationType.BARMAN_WAITER : NotificationType.COOK_WAITER,
+                    orderItem.getOrder()
+            );
         }
         String message = messageBuilder.toString();
         return new DataWithMessage<>(preparedItems, message);
