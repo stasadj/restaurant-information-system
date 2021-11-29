@@ -1,6 +1,8 @@
 package com.restaurant.backend.service;
 
 import com.restaurant.backend.domain.*;
+import com.restaurant.backend.domain.enums.ItemType;
+import com.restaurant.backend.domain.enums.NotificationType;
 import com.restaurant.backend.domain.enums.OrderStatus;
 import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.dto.OrderItemDTO;
@@ -44,6 +46,7 @@ public class OrderService {
     }
 
     public List<Order> create(OrderDTO order) {
+        boolean isDrink = false, isFood = false;
         Staff waiter = staffService.getById(order.getWaiterId());
         Optional<Order> maybeOrder = orderRepository.findByTableId(order.getTableId());
         if (maybeOrder.isPresent())
@@ -53,9 +56,16 @@ public class OrderService {
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
             Item item = itemService.findOne(orderItem.getItemId());
+            if (item.getItemType() == ItemType.DRINK) isDrink = true;
+            else isFood = true;
             newOrder.getOrderItems().add(new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.PENDING, item));
         }
         orderItemService.saveAll(newOrder.getOrderItems());
+
+        if (isDrink)
+            notificationService.createNotification("NEW ORDER", NotificationType.WAITER_BARMAN, newOrder);
+        if (isFood)
+            notificationService.createNotification("NEW ORDER", NotificationType.WAITER_COOK, newOrder);
 
         return findAllForWaiter(order.getWaiterId());
     }
