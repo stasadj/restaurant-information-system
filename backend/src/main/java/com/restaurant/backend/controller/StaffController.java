@@ -3,6 +3,7 @@ package com.restaurant.backend.controller;
 import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.dto.StaffDTO;
 import com.restaurant.backend.dto.UserDTO;
+import com.restaurant.backend.dto.requests.ChangePinDTO;
 import com.restaurant.backend.dto.requests.SetSalaryDTO;
 import com.restaurant.backend.service.StaffService;
 import com.restaurant.backend.support.StaffMapper;
@@ -72,8 +73,7 @@ public class StaffController {
 
     @PutMapping("/change-pin")
     @PreAuthorize("hasRole('MANAGER')")
-    public StaffDTO changePin() {
-        //TODO
-        return staffMapper.convert(staffService.changePin());
+    public StaffDTO changePin(@Valid @RequestBody ChangePinDTO changePinDTO) {
+        return staffMapper.convert(staffService.changePin(changePinDTO));
     }
 }

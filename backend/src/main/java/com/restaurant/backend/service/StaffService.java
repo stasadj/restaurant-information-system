@@ -3,6 +3,7 @@ package com.restaurant.backend.service;
 import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.domain.User;
 import com.restaurant.backend.dto.UserDTO;
+import com.restaurant.backend.dto.requests.ChangePinDTO;
 import com.restaurant.backend.dto.requests.SetSalaryDTO;
 import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.NotFoundException;
@@ -52,9 +53,17 @@ public class StaffService {
         staffRepository.delete(staff);
     }
 
-    public Staff changePin() throws NotFoundException {
-        // TODO
-        return null;
+    public Staff changePin(ChangePinDTO changePinDTO) throws NotFoundException {
+        Optional<Staff> maybeStaff = staffRepository.findByPin(changePinDTO.getCurrentPin());
+        Optional<Staff> maybeOtherStaff = staffRepository.findByPin(changePinDTO.getNewPin());
+        if (maybeStaff.isEmpty())
+            throw new NotFoundException("Current pin does not exist.");
+        if (maybeOtherStaff.isPresent())
+            throw new BadRequestException("New pin is already in use.");
+        Staff staff = maybeStaff.get();
+        staff.setPin(changePinDTO.getNewPin());
+        staffRepository.setNewPinForStaff(changePinDTO.getNewPin(), changePinDTO.getCurrentPin());
+        return staff;
     }
 
     public Staff changeSalary(SetSalaryDTO dto) throws NotFoundException {
