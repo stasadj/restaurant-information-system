@@ -1,16 +1,20 @@
 package com.restaurant.backend.dto;
 
+import com.restaurant.backend.validation.interfaces.CreateInfo;
+import com.restaurant.backend.validation.interfaces.EditInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+
+    @NotNull(message = "Id cannot be null.", groups = EditInfo.class)
+    @Null(message = "Id should be null.", groups = CreateInfo.class)
     protected Long id;
 
     @NotBlank(message = "First name must not be blank.")
@@ -25,5 +29,6 @@ public class UserDTO {
     @NotBlank(message = "Phone number must not be blank.")
     protected String phoneNumber;
 
+    @Pattern(regexp = "waiter|cook|barman|manager|admin", message = "Nonexistent role!")
     protected String role;
 }

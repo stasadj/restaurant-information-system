@@ -15,11 +15,10 @@ public class StaffMapper extends GenericObjectMapper<Staff, StaffDTO> {
     private ModelMapper modelMapper;
 
     @Override
-    public StaffDTO convertToDto(Staff staff) {
+    public StaffDTO convert(Staff staff) {
         return modelMapper.map(staff, StaffDTO.class);
     }
 
-    @Override
     public Staff convertToDomain(StaffDTO dto) {
         switch (dto.getRole()) {
             case "waiter":

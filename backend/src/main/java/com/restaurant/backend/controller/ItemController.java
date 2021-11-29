@@ -4,6 +4,8 @@ import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.ItemValueDTO;
 import com.restaurant.backend.dto.requests.ChangePriceDTO;
 import com.restaurant.backend.service.ItemService;
+import com.restaurant.backend.validation.interfaces.CreateInfo;
+import com.restaurant.backend.validation.interfaces.EditInfo;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -77,7 +80,7 @@ public class ItemController {
     @ResponseBody
     @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ItemDTO> create(@Valid @RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<ItemDTO> create(@Validated(CreateInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
         return new ResponseEntity<>(new ItemDTO(itemService.create(ItemDTO.toDomain(itemDTO))), HttpStatus.OK);
     }
@@ -85,7 +88,7 @@ public class ItemController {
     @ResponseBody
     @PutMapping("/edit")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<ItemDTO> editItem(@Valid @RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<ItemDTO> editItem(@Validated(EditInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to edit item.");
         return new ResponseEntity<>(new ItemDTO(itemService.editItem(ItemDTO.toDomain(itemDTO))), HttpStatus.OK);
     }

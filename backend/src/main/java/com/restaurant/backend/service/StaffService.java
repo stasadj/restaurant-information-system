@@ -2,6 +2,7 @@ package com.restaurant.backend.service;
 
 import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.domain.User;
+import com.restaurant.backend.dto.UserDTO;
 import com.restaurant.backend.dto.requests.SetSalaryDTO;
 import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.NotFoundException;
@@ -37,12 +38,12 @@ public class StaffService {
         return staffRepository.save(staff);
     }
 
-    public Staff update(User user) throws NotFoundException {
-        Staff staff = findOne(user.getId());
-        staff.setFirstName(user.getFirstName());
-        staff.setLastName(user.getLastName());
-        staff.setEmail(user.getEmail());
-        staff.setPhoneNumber(user.getPhoneNumber());
+    public Staff update(UserDTO userDTO) throws NotFoundException {
+        Staff staff = findOne(userDTO.getId());
+        staff.setFirstName(userDTO.getFirstName());
+        staff.setLastName(userDTO.getLastName());
+        staff.setEmail(userDTO.getEmail());
+        staff.setPhoneNumber(userDTO.getPhoneNumber());
         return staffRepository.save(staff);
     }
 

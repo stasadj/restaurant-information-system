@@ -3,6 +3,8 @@ package com.restaurant.backend.dto;
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
+import com.restaurant.backend.validation.interfaces.CreateInfo;
+import com.restaurant.backend.validation.interfaces.EditInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import lombok.Setter;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.List;
 @Setter
 public class ItemDTO {
 
+    @NotNull(message = "Id cannot be null.", groups = EditInfo.class)
+    @Null(message = "Id should be null.", groups = CreateInfo.class)
     protected Long id;
 
     @NotBlank(message = "Item name must not be blank.")
