@@ -12,8 +12,7 @@ public class UserMapper extends GenericObjectMapper<User, UserDTO> {
     private ModelMapper modelMapper;
 
     public UserDTO convertToDto(User user) {
-        UserDTO dto = modelMapper.map(user, UserDTO.class);
-        return dto;
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Override

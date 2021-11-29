@@ -1,15 +1,12 @@
 package com.restaurant.backend.domain;
 
-import javax.persistence.*;
-
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public abstract class PasswordUser extends User {

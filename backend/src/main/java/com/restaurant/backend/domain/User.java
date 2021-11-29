@@ -1,13 +1,14 @@
 package com.restaurant.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -16,10 +17,11 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "user")
+@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ?")
+@FilterDef(name = "deletedItemFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
+@Filter(name = "deletedItemFilter", condition = "deleted = :isDeleted")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public abstract class User implements UserDetails {
@@ -42,6 +44,9 @@ public abstract class User implements UserDetails {
 
     @Column(name = "role", insertable = false, updatable = false)
     protected String role;
+
+    @Column(name = "deleted", nullable = false)
+    protected Boolean deleted;
 
     @JsonIgnore
     private Timestamp lastPasswordResetDate;

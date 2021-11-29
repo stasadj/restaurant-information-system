@@ -32,7 +32,7 @@ public class ItemValueDTO {
 
     protected LocalDateTime fromDate;
 
-    public static ItemValue toDomain(ItemValueDTO dto){
+    public static ItemValue toDomain(ItemValueDTO dto) {
         ItemValue itemValue = new ItemValue();
         itemValue.setId(dto.getId());
         itemValue.setPurchasePrice(dto.getPurchasePrice());
