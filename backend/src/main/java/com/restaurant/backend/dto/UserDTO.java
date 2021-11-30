@@ -2,14 +2,12 @@ package com.restaurant.backend.dto;
 
 import com.restaurant.backend.validation.interfaces.CreateInfo;
 import com.restaurant.backend.validation.interfaces.EditInfo;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
 
