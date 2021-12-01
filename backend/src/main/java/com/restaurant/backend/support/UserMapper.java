@@ -11,14 +11,7 @@ import org.springframework.stereotype.Component;
 public class UserMapper extends GenericObjectMapper<User, UserDTO> {
     private ModelMapper modelMapper;
 
-    public UserDTO convertToDto(User user) {
-        UserDTO dto = modelMapper.map(user, UserDTO.class);
-        return dto;
-    }
-
-    @Override
-    public User convertToDomain(UserDTO dto) {
-        User user = modelMapper.map(dto, User.class);
-        return user;
+    public UserDTO convert(User user) {
+        return modelMapper.map(user, UserDTO.class);
     }
 }

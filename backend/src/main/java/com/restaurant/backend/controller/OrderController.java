@@ -3,12 +3,15 @@ package com.restaurant.backend.controller;
 import com.restaurant.backend.domain.OrderRecord;
 import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.service.OrderService;
-import com.restaurant.backend.support.OrderToOrderDTO;
+import com.restaurant.backend.support.OrderMapper;
+import com.restaurant.backend.validation.interfaces.CreateInfo;
+import com.restaurant.backend.validation.interfaces.EditInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,30 +21,30 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    private final OrderToOrderDTO toOrderDTO;
+    private final OrderMapper orderMapper;
 
     @PreAuthorize("hasRole('WAITER')")
     @GetMapping("/all")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.findAll()), HttpStatus.OK);
+        return new ResponseEntity<>(orderMapper.convertAll(orderService.findAll()), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")
     @GetMapping("/all/{id}")
     public ResponseEntity<List<OrderDTO>> getAllOrdersForWaiter(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.findAllForWaiter(id)), HttpStatus.OK);
+        return new ResponseEntity<>(orderMapper.convertAll(orderService.findAllForWaiter(id)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")
     @PostMapping("/create")
-    public ResponseEntity<List<OrderDTO>> createOrder(@RequestBody OrderDTO order) {
-        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.create(order)), HttpStatus.OK);
+    public ResponseEntity<List<OrderDTO>> createOrder(@Validated(CreateInfo.class) @RequestBody OrderDTO order) {
+        return new ResponseEntity<>(orderMapper.convertAll(orderService.create(order)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")
     @PutMapping("/edit")
-    public ResponseEntity<List<OrderDTO>> editOrderItems(@RequestBody OrderDTO order) {
-        return new ResponseEntity<>(toOrderDTO.convertAll(orderService.editOrder(order)), HttpStatus.OK);
+    public ResponseEntity<List<OrderDTO>> editOrderItems(@Validated(EditInfo.class) @RequestBody OrderDTO order) {
+        return new ResponseEntity<>(orderMapper.convertAll(orderService.editOrder(order)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('WAITER')")

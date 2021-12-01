@@ -1,7 +1,6 @@
 package com.restaurant.backend.dto;
 
 import com.restaurant.backend.domain.ItemValue;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class ItemValueDTO {
@@ -32,7 +30,7 @@ public class ItemValueDTO {
 
     protected LocalDateTime fromDate;
 
-    public static ItemValue toDomain(ItemValueDTO dto){
+    public static ItemValue toDomain(ItemValueDTO dto) {
         ItemValue itemValue = new ItemValue();
         itemValue.setId(dto.getId());
         itemValue.setPurchasePrice(dto.getPurchasePrice());

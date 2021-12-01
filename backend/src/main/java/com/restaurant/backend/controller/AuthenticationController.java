@@ -1,6 +1,7 @@
 package com.restaurant.backend.controller;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import com.restaurant.backend.domain.User;
 import com.restaurant.backend.dto.requests.CredentialsDTO;
@@ -32,7 +33,7 @@ public class AuthenticationController {
     private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public void login(@RequestBody CredentialsDTO credentials, HttpServletResponse response) {
+    public void login(@Valid @RequestBody CredentialsDTO credentials, HttpServletResponse response) {
         LOG.debug("Received request for login");
         authenticationService.login(credentials, response);
         LOG.debug("Authentication passed");
@@ -53,6 +54,6 @@ public class AuthenticationController {
     @GetMapping("/whoami")
     @PreAuthorize("hasRole('USER')")
     public UserDTO whoami(@AuthenticationPrincipal User user) {
-        return userMapper.convertToDto(user);
+        return userMapper.convert(user);
     }
 }

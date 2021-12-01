@@ -47,7 +47,7 @@ public class OrderService {
 
     public List<Order> create(OrderDTO order) {
         boolean isDrink = false, isFood = false;
-        Staff waiter = staffService.getById(order.getWaiterId());
+        Staff waiter = staffService.findOne(order.getWaiterId());
         Optional<Order> maybeOrder = orderRepository.findByTableId(order.getTableId());
         if (maybeOrder.isPresent())
             throw new BadRequestException(String.format("Table #%d already has an order.", order.getTableId()));
