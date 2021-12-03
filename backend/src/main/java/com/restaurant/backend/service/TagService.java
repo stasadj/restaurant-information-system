@@ -1,6 +1,5 @@
 package com.restaurant.backend.service;
 
-import com.restaurant.backend.domain.Category;
 import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.TagRepository;
@@ -21,7 +20,7 @@ public class TagService implements GenericService<Tag> {
     }
 
     @Override
-    public Tag findOne(Long id) {
+    public Tag findOne(Long id) throws NotFoundException {
         return tagRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No tag with id %d has been found", id)));
     }

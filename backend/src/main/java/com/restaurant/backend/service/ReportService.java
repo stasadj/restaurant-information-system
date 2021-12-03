@@ -84,7 +84,7 @@ public class ReportService {
         }
     }
 
-    public ReportResultsDTO getResults(ReportQueryDTO query) {
+    public ReportResultsDTO getResults(ReportQueryDTO query) throws BadRequestException {
         List<AbstractDateReportResultItemDTO> dataPoints = generateDataPoints(query);
         ArrayList<ItemReportResultItemDTO> individualItems = new ArrayList<>();
         Long itemId = query.getItemId();

@@ -35,7 +35,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Order findOne(Long id) {
+    public Order findOne(Long id) throws NotFoundException {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No order with id %d has been found", id)));
     }
@@ -45,7 +45,7 @@ public class OrderService {
         return orderRepository.findAllByWaiter_Id(id);
     }
 
-    public List<Order> create(OrderDTO order) {
+    public List<Order> create(OrderDTO order) throws NotFoundException, BadRequestException {
         boolean isDrink = false, isFood = false;
         Staff waiter = staffService.findOne(order.getWaiterId());
         Optional<Order> maybeOrder = orderRepository.findByTableId(order.getTableId());
@@ -70,7 +70,7 @@ public class OrderService {
         return findAllForWaiter(order.getWaiterId());
     }
 
-    public List<Order> editOrder(OrderDTO order) {
+    public List<Order> editOrder(OrderDTO order) throws NotFoundException {
         Order editedOrder = findOne(order.getId());
         editedOrder.setNote(order.getNote());
 
@@ -93,7 +93,7 @@ public class OrderService {
         return orderRepository.count() > 0;
     }
 
-    public List<OrderRecord> finalizeOrder(Long id) {
+    public List<OrderRecord> finalizeOrder(Long id) throws NotFoundException, BadRequestException {
         Order order = findOne(id);
 
         if (order.getOrderItems().stream().anyMatch(orderItem -> orderItem.getOrderStatus() != OrderStatus.READY))

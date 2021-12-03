@@ -1,7 +1,6 @@
 package com.restaurant.backend.service;
 
 import com.restaurant.backend.domain.Staff;
-import com.restaurant.backend.domain.User;
 import com.restaurant.backend.dto.UserDTO;
 import com.restaurant.backend.dto.requests.ChangePinDTO;
 import com.restaurant.backend.dto.requests.SetSalaryDTO;
@@ -30,7 +29,7 @@ public class StaffService {
                 () -> new NotFoundException(String.format("No staff member with id %d has been found", id)));
     }
 
-    public Staff create(Staff staff) {
+    public Staff create(Staff staff) throws BadRequestException {
         staff.setId(null);
         staff.setDeleted(false);
         Optional<Staff> maybeStaff = staffRepository.findByPin(staff.getPin());
@@ -53,7 +52,7 @@ public class StaffService {
         staffRepository.delete(staff);
     }
 
-    public Staff changePin(ChangePinDTO changePinDTO) throws NotFoundException {
+    public Staff changePin(ChangePinDTO changePinDTO) throws NotFoundException, BadRequestException {
         Optional<Staff> maybeStaff = staffRepository.findByPin(changePinDTO.getCurrentPin());
         Optional<Staff> maybeOtherStaff = staffRepository.findByPin(changePinDTO.getNewPin());
         if (maybeStaff.isEmpty())

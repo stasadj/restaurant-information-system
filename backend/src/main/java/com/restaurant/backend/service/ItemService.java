@@ -54,7 +54,7 @@ public class ItemService {
         return itemRepository.findAllByCategory_Id(categoryId);
     }
 
-    public Item findOne(Long id) {
+    public Item findOne(Long id) throws NotFoundException {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No item with id %d has been found", id)));
     }
@@ -115,7 +115,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public ItemValue changeItemPrice(ChangePriceDTO dto) {
+    public ItemValue changeItemPrice(ChangePriceDTO dto) throws NotFoundException {
         Item item = findOne(dto.getItemId());
         ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
 

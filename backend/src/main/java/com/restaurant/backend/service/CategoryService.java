@@ -20,7 +20,7 @@ public class CategoryService implements GenericService<Category> {
     }
 
     @Override
-    public Category findOne(Long id) {
+    public Category findOne(Long id) throws NotFoundException {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No category with id %d has been found", id)));
     }
@@ -31,7 +31,7 @@ public class CategoryService implements GenericService<Category> {
         return maybeCategory.orElseGet(() -> categoryRepository.save(entity));
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws NotFoundException {
         Category category = findOne(id);
         if (categoryRepository.timesUsed(category.getId()) == 0)
             categoryRepository.deleteById(id);
