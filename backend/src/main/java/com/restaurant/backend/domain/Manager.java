@@ -21,4 +21,8 @@ public class Manager extends PasswordUser {
     @Digits(integer = 9, fraction = 2)
     @Column(name = "monthly_wage")
     protected BigDecimal monthlyWage;
+
+    public String getRole() {
+        return "manager";
+    }
 }
