@@ -1,15 +1,18 @@
 package com.restaurant.backend.support;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.dto.CategoryDTO;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.ItemValueDTO;
 import com.restaurant.backend.dto.TagDTO;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ItemMapper extends GenericObjectMapper<Item, ItemDTO> {
     @Override
     public ItemDTO convert(Item source) {
