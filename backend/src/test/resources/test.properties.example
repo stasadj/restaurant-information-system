@@ -5,17 +5,17 @@ server.error.include-message=ALWAYS
 spring.mvc.static-path-pattern=/static/**
 spring.web.resources.static-locations=classpath:C:/files/
 
-spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.url=jdbc:h2:mem:test2db
 spring.datasource.driverClassName=org.h2.Driver
 spring.datasource.username=sa
 spring.datasource.password=
-spring.sql.init.data-locations=classpath:/dev.sql
+spring.sql.init.data-locations=classpath:/test.sql
 
 spring.h2.console.enabled=true
 spring.h2.console.path=/api/h2-console
 
 spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-spring.jpa.show-sql=false
+spring.jpa.show-sql=true
 spring.jpa.generate-ddl=true
 spring.jpa.hibernate.ddl-auto=create
 
