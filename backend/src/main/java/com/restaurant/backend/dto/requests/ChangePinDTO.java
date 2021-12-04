@@ -1,12 +1,12 @@
 package com.restaurant.backend.dto.requests;
 
-import lombok.Getter;
+import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-@Getter
+@Data
 public class ChangePinDTO {
 
     @NotNull(message = "Current pin is missing.")
