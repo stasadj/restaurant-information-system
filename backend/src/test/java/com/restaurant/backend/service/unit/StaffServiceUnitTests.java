@@ -21,15 +21,12 @@ import com.restaurant.backend.repository.StaffRepository;
 import com.restaurant.backend.service.StaffService;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @Transactional
-@ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:test.properties")
 @SpringBootTest
 public class StaffServiceUnitTests {
@@ -136,12 +133,12 @@ public class StaffServiceUnitTests {
     }
 
     private Waiter generateWaiter() {
-        Waiter staff = new Waiter();
-        staff.setFirstName(StaffServiceTestConstants.STAFF_FIRST_NAME);
-        staff.setLastName(StaffServiceTestConstants.STAFF_LAST_NAME);
-        staff.setPin(StaffServiceTestConstants.STAFF_PIN);
-        staff.setMonthlyWage(StaffServiceTestConstants.STAFF_WAGE);
-        staff.setPhoneNumber(StaffServiceTestConstants.STAFF_PHONE_NUMBER);
-        return staff;
+        Waiter waiter = new Waiter();
+        waiter.setFirstName(StaffServiceTestConstants.STAFF_FIRST_NAME);
+        waiter.setLastName(StaffServiceTestConstants.STAFF_LAST_NAME);
+        waiter.setPin(StaffServiceTestConstants.STAFF_PIN);
+        waiter.setMonthlyWage(StaffServiceTestConstants.STAFF_WAGE);
+        waiter.setPhoneNumber(StaffServiceTestConstants.STAFF_PHONE_NUMBER);
+        return waiter;
     }
 }
