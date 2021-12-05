@@ -26,7 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  Todo: 
  1. Test method naming convention
  2. Add more asserts in methods
- 3. Create common file for constants
+ 3. Create common file for constants and use them here
  4. Add tests for the rest of service methods
  */
 
@@ -61,6 +61,7 @@ public class ItemServiceIntegrationTest {
         assertEquals(3, found.size());
     }
 
+    //TODO: either delete this test and its method or implement both
     // @Test
     // public void testGetAlByCategory() {
     // List<Item> found = itemService.getAllByCategory(1L);
@@ -89,8 +90,18 @@ public class ItemServiceIntegrationTest {
         assertTrue(!item.getInMenu());
     }
 
-    // @Test
-    // public void testDelete() {
-    //     itemService.delete(1L);
-    // }
+    @Test
+    public void deleteItem_successful() {
+        itemService.delete(1L);
+    }
+
+    @Test
+    public void deleteItem_unsuccessful() {
+        long id = 1111111L;
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            itemService.delete(id);
+        }, "NotFoundException was expected");
+
+        assertEquals(String.format("No item with id %d has been found", id), thrown.getMessage());
+    }
 }
