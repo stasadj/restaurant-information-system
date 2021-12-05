@@ -8,13 +8,11 @@ import com.restaurant.backend.dto.responses.DataWithMessage;
 import com.restaurant.backend.repository.OrderItemRepository;
 import com.restaurant.backend.service.NotificationService;
 import com.restaurant.backend.service.OrderItemService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,43 +31,24 @@ public class OrderItemServiceUnitTest {
     @Autowired
     private OrderItemService orderItemService;
 
-    private List<OrderItem> orderItems;
-
-    @BeforeEach
-    public void initOrderItems() {
-        Cook cook = new Cook();
-        Barman barman = new Barman();
-        Item foodItem = new Item();
-        foodItem.setItemType(ItemType.FOOD);
-        Item drinkItem = new Item();
-        drinkItem.setItemType(ItemType.DRINK);
-        Order order = new Order();
-        orderItems = Arrays.asList(
-            new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null),
-            new OrderItem(2L, 1, order, OrderStatus.PENDING, drinkItem, null, null),
-            new OrderItem(3L, 1, order, OrderStatus.DECLINED, foodItem, null, null),
-            new OrderItem(4L, 1, order, OrderStatus.DECLINED, drinkItem, null, null),
-            new OrderItem(5L, 1, order, OrderStatus.IN_PROGRESS, foodItem, cook, null),
-            new OrderItem(6L, 1, order, OrderStatus.IN_PROGRESS, drinkItem, null, barman),
-            new OrderItem(7L, 1, order, OrderStatus.READY, foodItem, cook, null),
-            new OrderItem(8L, 1, order, OrderStatus.READY, drinkItem, null, barman)
-        );
-    }
-
     @Test
     public void acceptOrderItems_anOrderItemIsNotFound() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.empty())
-                .thenReturn(Optional.of(orderItems.get(0)));
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.acceptOrderItems(cook, Arrays.asList(9L, 1L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.empty());
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.acceptOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
         assertEquals(1L, result.getData().get(0).getId());
-        assertEquals("Order item #9 not found.\n", result.getMessage());
-        assertSame(cook, orderItems.get(0).getCook());
+        assertEquals("Order item #2 not found.\n", result.getMessage());
+        assertSame(cook, orderItem1.getCook());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
         verify(orderItemRepository, times(1)).save(any(OrderItem.class));
@@ -77,157 +56,242 @@ public class OrderItemServiceUnitTest {
 
     @Test
     public void acceptOrderItems_anOrderItemIsNotPending() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.of(orderItems.get(4)))
-                .thenReturn(Optional.of(orderItems.get(0)));
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
+        OrderItem orderItem2 = new OrderItem(2L, 1, order, OrderStatus.IN_PROGRESS, foodItem, cook, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.acceptOrderItems(cook, Arrays.asList(5L, 1L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.acceptOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
         assertEquals(1L, result.getData().get(0).getId());
-        assertEquals("Order item #5 is not pending.\n", result.getMessage());
-        assertSame(cook, orderItems.get(0).getCook());
+        assertEquals("Order item #2 is not pending.\n", result.getMessage());
+        assertSame(cook, orderItem1.getCook());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
+        verify(orderItemRepository, times(1)).save(eq(orderItem1));
+        verify(orderItemRepository, never()).save(eq(orderItem2));
     }
 
     @Test
     public void acceptOrderItems_anOrderItemCannotBeAccepted() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.of(orderItems.get(1)))
-                .thenReturn(Optional.of(orderItems.get(0)));
-        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Item drinkItem = new Item();
+        drinkItem.setItemType(ItemType.DRINK);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
+        OrderItem orderItem2 = new OrderItem(2L, 1, order, OrderStatus.PENDING, drinkItem, null, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.acceptOrderItems(cook, Arrays.asList(2L, 1L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.acceptOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
         assertEquals(1L, result.getData().get(0).getId());
         assertEquals("DRINK order item #2 cannot be accepted by cook.\n", result.getMessage());
-        assertSame(cook, orderItems.get(0).getCook());
+        assertSame(cook, orderItem1.getCook());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
+        verify(orderItemRepository, times(1)).save(eq(orderItem1));
+        verify(orderItemRepository, never()).save(eq(orderItem2));
     }
 
     @Test
     public void declineOrderItems_anOrderItemIsNotFound() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.empty())
-                .thenReturn(Optional.of(orderItems.get(0)));
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.declineOrderItems(cook, Arrays.asList(9L, 1L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.empty());
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.declineOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
         assertEquals(1L, result.getData().get(0).getId());
-        assertEquals("Order item #9 not found.\n", result.getMessage());
+        assertEquals("Order item #2 not found.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), anyLong());
+        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(1L));
+        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(2L));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
     @Test
     public void declineOrderItems_anOrderItemIsNotPending() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.of(orderItems.get(4)))
-                .thenReturn(Optional.of(orderItems.get(0)));
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
+        OrderItem orderItem2 = new OrderItem(2L, 1, order, OrderStatus.IN_PROGRESS, foodItem, cook, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.declineOrderItems(cook, Arrays.asList(5L, 1L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.declineOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
         assertEquals(1L, result.getData().get(0).getId());
-        assertEquals("Order item #5 is not pending.\n", result.getMessage());
+        assertEquals("Order item #2 is not pending.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), anyLong());
+        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(1L));
+        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(2L));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
     @Test
     public void declineOrderItems_anOrderItemCannotBeDeclined() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.of(orderItems.get(1)))
-                .thenReturn(Optional.of(orderItems.get(0)));
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Item drinkItem = new Item();
+        drinkItem.setItemType(ItemType.DRINK);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
+        OrderItem orderItem2 = new OrderItem(2L, 1, order, OrderStatus.PENDING, drinkItem, null, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.declineOrderItems(cook, Arrays.asList(2L, 1L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.declineOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
         assertEquals(1L, result.getData().get(0).getId());
         assertEquals("DRINK order item #2 cannot be declined by cook.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), anyLong());
+        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(1L));
+        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(2L));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
     @Test
     public void prepareOrderItems_anOrderItemIsNotFound() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.empty())
-                .thenReturn(Optional.of(orderItems.get(4)));
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.IN_PROGRESS, foodItem, cook, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(cook, Arrays.asList(9L, 5L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.empty());
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
-        assertEquals(5L, result.getData().get(0).getId());
-        assertEquals("Order item #9 not found.\n", result.getMessage());
+        assertEquals(1L, result.getData().get(0).getId());
+        assertEquals("Order item #2 not found.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), anyLong());
+        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(1L));
+        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(2L));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
     @Test
     public void prepareOrderItems_anOrderItemIsNotInProgress() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.of(orderItems.get(0)))
-                .thenReturn(Optional.of(orderItems.get(4)));
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Order order = new Order();
         Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.IN_PROGRESS, foodItem, cook, null);
+        OrderItem orderItem2 = new OrderItem(2L, 1, order, OrderStatus.PENDING, foodItem, null, null);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(cook, Arrays.asList(1L, 5L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
-        assertEquals(5L, result.getData().get(0).getId());
-        assertEquals("Order item #1 is not in progress.\n", result.getMessage());
+        assertEquals(1L, result.getData().get(0).getId());
+        assertEquals("Order item #2 is not in progress.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), anyLong());
+        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(1L));
+        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(2L));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
     @Test
     public void prepareOrderItems_anOrderItemCannotBePrepared() {
-        when(orderItemRepository.findById(anyLong()))
-                .thenReturn(Optional.of(orderItems.get(5)))
-                .thenReturn(Optional.of(orderItems.get(4)));
+        Item foodItem = new Item();
+        foodItem.setItemType(ItemType.FOOD);
+        Item drinkItem = new Item();
+        drinkItem.setItemType(ItemType.DRINK);
+        Order order = new Order();
         Cook cook = new Cook();
+        Barman barman = new Barman();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.IN_PROGRESS, foodItem, cook, null);
+        OrderItem orderItem2 = new OrderItem(2L, 1, order, OrderStatus.IN_PROGRESS, drinkItem, null, barman);
 
-        DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(cook, Arrays.asList(6L, 5L));
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+
+        DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(cook, List.of(2L, 1L));
 
         assertEquals(1, result.getData().size());
-        assertEquals(5L, result.getData().get(0).getId());
-        assertEquals("DRINK order item #6 cannot be prepared by cook.\n", result.getMessage());
+        assertEquals(1L, result.getData().get(0).getId());
+        assertEquals("DRINK order item #2 cannot be prepared by cook.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), anyLong());
+        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(1L));
+        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(2L));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
     @Test
     public void cancelOrderItems_anOrderItemIsNotFound() {
+        Item foodItem = new Item();
+        Order order = new Order();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
 
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.empty());
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+
+        DataWithMessage<List<Long>> result = orderItemService.cancelOrderItems(List.of(2L, 1L));
+
+        assertEquals(List.of(1L), result.getData());
+        assertEquals("Order item #2 not found.\n", result.getMessage());
+
+        verify(orderItemRepository, times(2)).findById(anyLong());
+        verify(orderItemRepository, times(1)).deleteById(eq(1L));
+        verify(orderItemRepository, never()).deleteById(eq(2L));
     }
 
     @Test
-    public void cancelOrderItems_anOrderItemCannotBeAccepted() {
+    public void cancelOrderItems_anOrderItemCannotBeCancelled() {
+        Item foodItem = new Item();
+        Order order = new Order();
+        Cook cook = new Cook();
+        OrderItem orderItem1 = new OrderItem(1L, 1, order, OrderStatus.PENDING, foodItem, null, null);
+        OrderItem orderItem2 = new OrderItem(2L, 1, order, OrderStatus.IN_PROGRESS, foodItem, cook, null);
 
+        when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
+        when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+
+        DataWithMessage<List<Long>> result = orderItemService.cancelOrderItems(List.of(2L, 1L));
+
+        assertEquals(List.of(1L), result.getData());
+        assertEquals("Order item #2 cannot be cancelled.\n", result.getMessage());
+
+        verify(orderItemRepository, times(2)).findById(anyLong());
+        verify(orderItemRepository, times(1)).deleteById(eq(1L));
+        verify(orderItemRepository, never()).deleteById(eq(2L));
     }
 }
