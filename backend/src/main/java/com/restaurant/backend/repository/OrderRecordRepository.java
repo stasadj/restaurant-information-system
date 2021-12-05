@@ -18,7 +18,7 @@ public interface OrderRecordRepository extends JpaRepository<OrderRecord, Long> 
                                                             @Param("fromDate") LocalDate fromDate,
                                                             @Param("toDate") LocalDate toDate);
 
-    @Query(value = "SELECT * FROM order_record WHERE created_at BETWEEN :fromDate AND :toDate;", nativeQuery = true)
+    @Query(value = "SELECT * FROM order_record WHERE created_at BETWEEN :fromDate AND :toDate ;", nativeQuery = true)
     List<OrderRecord> getAllOrderRecordsBetweenDates(@Param("fromDate") LocalDate fromDate,
                                                      @Param("toDate") LocalDate toDate);
 }
