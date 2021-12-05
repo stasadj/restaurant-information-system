@@ -1,5 +1,6 @@
 package com.restaurant.backend.controller;
 
+import javax.servlet.http.Cookie;
 import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -102,6 +103,24 @@ public class AuthenticationControllerIntegrationTest {
         }
     }
 
+    @Test
+    public void whoami_loginThenCheckData_successfuly() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/pin-login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(VALID_PIN_1))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+        checkForCookie(true, response);
+
+        result = mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/whoami")
+                .cookie(getCookie(response)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andReturn();
+    }
+
     private void checkForCookie(Boolean expectedToLogin, MockHttpServletResponse response) {
         // If we have a cookie, we've successfully logged in.
         if (expectedToLogin) {
@@ -109,6 +128,10 @@ public class AuthenticationControllerIntegrationTest {
         } else {
             assertNull(response.getCookie("accessToken"));
         }
+    }
+
+    private Cookie getCookie(MockHttpServletResponse response) {
+        return response.getCookie("accessToken");
     }
 
     /// Returns a collection of [Pin, Expected To Login]
