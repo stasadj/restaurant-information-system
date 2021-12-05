@@ -8,8 +8,12 @@ import com.restaurant.backend.dto.reports.enums.ReportGranularity;
 import com.restaurant.backend.dto.reports.enums.ReportType;
 import com.restaurant.backend.validation.ValueOfEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReportQueryDTO {
     @Getter
     @NotNull(message = "From date must not be null")
@@ -30,11 +34,11 @@ public class ReportQueryDTO {
     @Getter
     private Long itemId;
 
-    public ReportGranularity getReportGranularity() {
+    public ReportGranularity getReportGranularity() throws IllegalArgumentException {
         return ReportGranularity.valueOf(reportGranularity);
     }
 
-    public ReportType getReportType() {
+    public ReportType getReportType() throws IllegalArgumentException {
         return ReportType.valueOf(reportType);
     }
 }
