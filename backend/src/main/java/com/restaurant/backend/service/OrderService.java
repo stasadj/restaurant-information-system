@@ -58,9 +58,10 @@ public class OrderService {
             Item item = itemService.findOne(orderItem.getItemId());
             if (item.getItemType() == ItemType.DRINK) isDrink = true;
             else isFood = true;
-            newOrder.getOrderItems().add(new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.PENDING, item));
+            OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.PENDING, item);
+            orderItemService.save(newOrderItem);
+            newOrder.getOrderItems().add(newOrderItem);
         }
-        orderItemService.saveAll(newOrder.getOrderItems());
 
         if (isDrink)
             notificationService.createNotification("NEW ORDER", NotificationType.WAITER_BARMAN, newOrder);
@@ -78,7 +79,6 @@ public class OrderService {
             if (orderItem.getId() == null) {
                 Item item = itemService.findOne(orderItem.getItemId());
                 OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
-                editedOrder.getOrderItems().add(newOrderItem);
                 orderItemService.save(newOrderItem);
             } else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
                 orderItemService.updateAmount(orderItem.getItemId(), orderItem.getAmount());
