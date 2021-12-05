@@ -44,28 +44,32 @@ public class ReportService {
     }
 
     private List<AbstractDateReportResultItemDTO> generateDataPoints(ReportQueryDTO query) {
-        switch (query.getReportGranularity()) {
-        case DAILY:
-            return query.getFromDate().datesUntil(query.getToDate().plusDays(1L)).map(DailyReportResultItemDTO::new)
-                    .collect(Collectors.toList());
-        case WEEKLY:
-            WeekFields weekFields = WeekFields.of(Locale.getDefault());
-            return query.getFromDate().datesUntil(query.getToDate(), Period.ofWeeks(1)).map(
-                    date -> new WeeklyReportResultItemDTO(date.get(weekFields.weekOfWeekBasedYear()), Year.from(date)))
-                    .collect(Collectors.toList());
-        case MONTHLY:
-            return query.getFromDate().datesUntil(query.getToDate(), Period.ofMonths(1))
-                    .map(date -> new MonthlyReportResultItemDTO(date.getMonth(), Year.from(date)))
-                    .collect(Collectors.toList());
-        case QUARTERLY:
-            return query.getFromDate().datesUntil(query.getToDate(), Period.ofWeeks(13))
-                    .map(date -> new QuarterlyReportResultItemDTO(Year.from(date), QuarterOfYear.from(date)))
-                    .collect(Collectors.toList());
-        case YEARLY:
-            return query.getFromDate().datesUntil(query.getToDate(), Period.ofYears(1))
-                    .map(date -> new YearlyReportResultItemDTO(Year.from(date))).collect(Collectors.toList());
-        default:
-            return new ArrayList<>();
+        try {
+            switch (query.getReportGranularity()) {
+            case DAILY:
+                return query.getFromDate().datesUntil(query.getToDate().plusDays(1L)).map(DailyReportResultItemDTO::new)
+                        .collect(Collectors.toList());
+            case WEEKLY:
+                WeekFields weekFields = WeekFields.of(Locale.getDefault());
+                return query.getFromDate().datesUntil(query.getToDate(), Period.ofWeeks(1)).map(
+                        date -> new WeeklyReportResultItemDTO(date.get(weekFields.weekOfWeekBasedYear()), Year.from(date)))
+                        .collect(Collectors.toList());
+            case MONTHLY:
+                return query.getFromDate().datesUntil(query.getToDate(), Period.ofMonths(1))
+                        .map(date -> new MonthlyReportResultItemDTO(date.getMonth(), Year.from(date)))
+                        .collect(Collectors.toList());
+            case QUARTERLY:
+                return query.getFromDate().datesUntil(query.getToDate(), Period.ofWeeks(13))
+                        .map(date -> new QuarterlyReportResultItemDTO(Year.from(date), QuarterOfYear.from(date)))
+                        .collect(Collectors.toList());
+            case YEARLY:
+                return query.getFromDate().datesUntil(query.getToDate(), Period.ofYears(1))
+                        .map(date -> new YearlyReportResultItemDTO(Year.from(date))).collect(Collectors.toList());
+            default:
+                return new ArrayList<>();
+        }
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Bad query.");
         }
     }
 
@@ -89,39 +93,43 @@ public class ReportService {
         ArrayList<ItemReportResultItemDTO> individualItems = new ArrayList<>();
         Long itemId = query.getItemId();
 
-        switch (query.getReportType()) {
-            case PROFIT:
-                List<Item> allItems = (itemId == null) ? itemService.getAll() : new ArrayList<>() {{
-                    add(itemService.findOne(itemId));
-                }};
+        try {
+            switch (query.getReportType()) {
+                case PROFIT:
+                    List<Item> allItems = (itemId == null) ? itemService.getAll() : new ArrayList<>() {{
+                        add(itemService.findOne(itemId));
+                    }};
 
-                for (Item item : allItems) {
-                    ItemReportResultItemDTO result = getItemSales(item, query.getFromDate(), query.getToDate());
-                    if (result.getQuantity() > 0)
-                        individualItems.add(result);
-                }
+                    for (Item item : allItems) {
+                        ItemReportResultItemDTO result = getItemSales(item, query.getFromDate(), query.getToDate());
+                        if (result.getQuantity() > 0)
+                            individualItems.add(result);
+                    }
 
-                (itemId == null
-                        ? orderRecordService.getAllOrderRecordsBetweenDates(query.getFromDate(), query.getToDate())
-                        : orderRecordService.getAllOrderRecordsBetweenDatesForItem(itemId, query.getFromDate(), query.getToDate()))
-                        .forEach(record -> insertItemIntoDataPoints(dataPoints, record));
-                break;
+                    (itemId == null
+                            ? orderRecordService.getAllOrderRecordsBetweenDates(query.getFromDate(), query.getToDate())
+                            : orderRecordService.getAllOrderRecordsBetweenDatesForItem(itemId, query.getFromDate(), query.getToDate()))
+                            .forEach(record -> insertItemIntoDataPoints(dataPoints, record));
+                    break;
 
-            case PRICE_HISTORY:
-                if (itemId == null)
+                case PRICE_HISTORY:
+                    if (itemId == null)
+                        throw new BadRequestException("Bad query.");
+
+                    Item item = itemService.findOne(itemId);
+                    individualItems.add(getItemSales(item, query.getFromDate(), query.getToDate()));
+
+                    for (AbstractDateReportResultItemDTO datapoint : dataPoints) {
+                        ItemValue itemValue = item.getItemValueAt(datapoint.getApproximateDate().atStartOfDay());
+                        if (itemValue != null)
+                            insertItemValueIntoDatapoint(itemValue, datapoint);
+                    }
+                    break;
+                default:
                     throw new BadRequestException("Bad query.");
-
-                Item item = itemService.findOne(itemId);
-                individualItems.add(getItemSales(item, query.getFromDate(), query.getToDate()));
-
-                for (AbstractDateReportResultItemDTO datapoint : dataPoints) {
-                    ItemValue itemValue = item.getItemValueAt(datapoint.getApproximateDate().atStartOfDay());
-                    if (itemValue != null)
-                        insertItemValueIntoDatapoint(itemValue, datapoint);
-                }
-                break;
-            default:
-                throw new BadRequestException("Bad query.");
+            }
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Bad query.");
         }
 
         return new ReportResultsDTO(dataPoints, individualItems);

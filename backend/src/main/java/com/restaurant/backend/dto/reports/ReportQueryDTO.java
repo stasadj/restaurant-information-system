@@ -30,11 +30,11 @@ public class ReportQueryDTO {
     @Getter
     private Long itemId;
 
-    public ReportGranularity getReportGranularity() {
+    public ReportGranularity getReportGranularity() throws IllegalArgumentException {
         return ReportGranularity.valueOf(reportGranularity);
     }
 
-    public ReportType getReportType() {
+    public ReportType getReportType() throws IllegalArgumentException {
         return ReportType.valueOf(reportType);
     }
 }
