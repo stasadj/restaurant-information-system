@@ -5,6 +5,7 @@ import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.domain.enums.NotificationType;
 import com.restaurant.backend.domain.enums.OrderStatus;
 import com.restaurant.backend.dto.responses.DataWithMessage;
+import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.OrderItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,11 @@ import java.util.Optional;
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final NotificationService notificationService;
+
+    public OrderItem findOne(Long id) throws NotFoundException {
+        return orderItemRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("No order item with id %d has been found", id)));
+    }
 
     public void save(OrderItem orderItem) {
         orderItemRepository.save(orderItem);
