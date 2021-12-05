@@ -8,20 +8,25 @@ import static com.restaurant.backend.dto.reports.enums.ReportGranularity.*;
 import static com.restaurant.backend.dto.reports.enums.ReportType.*;
 
 public final class ReportServiceTestConstants {
-    private static final LocalDate DAILY_START_DATE = LocalDate.of(2021, 1, 1);
-    private static final LocalDate DAILY_END_DATE = LocalDate.of(2021, 12, 31);
+    public static final LocalDate ORDER_DATE_ONE = LocalDate.of(2021, 1, 1);
+    public static final LocalDate ORDER_DATE_TWO = LocalDate.of(2021, 3, 14);
+    public static final LocalDate ORDER_DATE_THREE = LocalDate.of(2021, 6, 20);
+    public static final LocalDate ORDER_DATE_FOUR = LocalDate.of(2021, 11, 15);
 
-    private static final LocalDate WEEKLY_START_DATE = LocalDate.of(2021, 1, 1);
-    private static final LocalDate WEEKLY_END_DATE = LocalDate.of(2021, 2, 1);
+    public static final LocalDate DAILY_START_DATE = LocalDate.of(2021, 1, 1);
+    public static final LocalDate DAILY_END_DATE = LocalDate.of(2021, 12, 31);
 
-    private static final LocalDate MONTHLY_START_DATE = LocalDate.of(2021, 1, 1);
-    private static final LocalDate MONTHLY_END_DATE = LocalDate.of(2021, 12, 31);
+    public static final LocalDate WEEKLY_START_DATE = LocalDate.of(2021, 1, 1);
+    public static final LocalDate WEEKLY_END_DATE = LocalDate.of(2021, 2, 1);
 
-    private static final LocalDate QUARTERLY_START_DATE = LocalDate.of(2021, 1, 1);
-    private static final LocalDate QUARTERLY_END_DATE = LocalDate.of(2021, 12, 31);
+    public static final LocalDate MONTHLY_START_DATE = LocalDate.of(2021, 1, 1);
+    public static final LocalDate MONTHLY_END_DATE = LocalDate.of(2021, 12, 31);
 
-    private static final LocalDate YEARLY_START_DATE = LocalDate.of(2021, 1, 1);
-    private static final LocalDate YEARLY_END_DATE = LocalDate.of(2022, 12, 31);
+    public static final LocalDate QUARTERLY_START_DATE = LocalDate.of(2021, 1, 1);
+    public static final LocalDate QUARTERLY_END_DATE = LocalDate.of(2021, 12, 31);
+
+    public static final LocalDate YEARLY_START_DATE = LocalDate.of(2021, 1, 1);
+    public static final LocalDate YEARLY_END_DATE = LocalDate.of(2022, 12, 31);
 
     public static final ReportQueryDTO DAILY_PROFIT_QUERY = new ReportQueryDTO(
             ReportServiceTestConstants.DAILY_START_DATE,
