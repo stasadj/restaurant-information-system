@@ -84,7 +84,6 @@ public class OrderServiceUnitTest {
         verify(staffService, times(1)).findOne(anyLong());
         verify(orderRepository, times(1)).findByTableId(anyInt());
         verify(orderRepository, times(1)).save(any(Order.class));
-        verify(orderItemService, times(1)).saveAll(anyList());
         verify(itemService, times(1)).findOne(anyLong());
     }
 
