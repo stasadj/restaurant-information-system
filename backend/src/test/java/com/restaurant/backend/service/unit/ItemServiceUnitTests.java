@@ -51,7 +51,6 @@ public class ItemServiceUnitTests {
         when(categoryService.findOne(eq(2L)))
                 .thenReturn(category);
 
-
         List<Item> items = (new ArrayList<>() {
             {
                 add(createValidItem());
