@@ -18,7 +18,6 @@ import com.restaurant.backend.domain.Category;
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
-import com.restaurant.backend.repository.CategoryRepository;
 import com.restaurant.backend.repository.ItemRepository;
 import com.restaurant.backend.service.CategoryService;
 import com.restaurant.backend.service.ItemService;
@@ -30,6 +29,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 
+
+/*
+Todo:
+1. add constants 
+2. naming convention
+3. tests for rest of methods
+
+*/
 @Transactional
 @TestPropertySource(locations = "classpath:test.properties")
 @SpringBootTest
