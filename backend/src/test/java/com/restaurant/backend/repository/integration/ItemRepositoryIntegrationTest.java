@@ -25,10 +25,5 @@ public class ItemRepositoryIntegrationTest {
     @Autowired
     private ItemRepository itemRepository;
 
-    @Test
-    public void proba() throws Exception {
-        Optional<Item> persistedItem = itemRepository.findById(1L);
-        assertEquals(1L, persistedItem.get().getId());
-    }
     
 }
