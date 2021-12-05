@@ -35,7 +35,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @TestPropertySource(locations = "classpath:test.properties")
 @Sql("classpath:item_service_integration.sql")
 @Transactional
-public class ItemServiceIntegrationTest {
+public class ItemServiceIntegrationTests {
 
     @Autowired
     private ItemService itemService;
