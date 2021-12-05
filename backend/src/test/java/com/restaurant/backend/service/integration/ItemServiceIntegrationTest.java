@@ -1,4 +1,4 @@
-package com.restaurant.backend.repository.integration;
+package com.restaurant.backend.service.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
