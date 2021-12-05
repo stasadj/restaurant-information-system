@@ -8,8 +8,12 @@ import com.restaurant.backend.dto.reports.enums.ReportGranularity;
 import com.restaurant.backend.dto.reports.enums.ReportType;
 import com.restaurant.backend.validation.ValueOfEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReportQueryDTO {
     @Getter
     @NotNull(message = "From date must not be null")
