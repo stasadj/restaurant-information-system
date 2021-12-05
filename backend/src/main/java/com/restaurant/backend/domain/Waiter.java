@@ -19,4 +19,8 @@ public class Waiter extends Staff {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "waiter")
     protected Set<Order> currentOrders;
+
+    public String getRole() {
+        return "waiter";
+    }
 }
