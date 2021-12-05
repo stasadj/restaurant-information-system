@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
@@ -29,11 +30,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  4. Add tests for the rest of service methods
  */
 
-@Transactional
+@SpringBootTest
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
+@Sql("classpath:item_service_integration.sql")
+@Transactional
 public class ItemServiceIntegrationTest {
 
     @Autowired

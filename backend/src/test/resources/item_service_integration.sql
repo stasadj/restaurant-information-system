@@ -1,3 +1,14 @@
+INSERT INTO category (id, name) VALUES
+  (1, 'appetizer'),
+  (2, 'main course'),
+  (3,'dessert'),
+  (4,'drink');
+
+INSERT INTO tag (id, name) VALUES
+  (1, 'vegan'),
+  (2, 'vegetarian'),
+  (3, 'gluten free'),
+  (4, 'dairy free');
 
 INSERT INTO item (id, name, category_id, description, image_url, in_menu, type, deleted) VALUES
   (1, 'Spaghetti carbonara', 2, 'Traditional Italian dish served with garlic, olive oil and parsley', NULL, true, 0, false),
