@@ -34,7 +34,7 @@ public class PinBasedAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return authenticatedUser.getPassword();
+        return authenticatedUser == null ? null : authenticatedUser.getPassword();
     }
 
     @Override

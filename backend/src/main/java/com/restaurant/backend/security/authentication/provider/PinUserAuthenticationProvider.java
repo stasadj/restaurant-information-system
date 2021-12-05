@@ -21,7 +21,15 @@ public class PinUserAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        String pin = authentication.getName();
+        String pin;
+        if (authentication == null) {
+            return null;
+        }
+        if (authentication.getCredentials() != null) {
+            pin = authentication.getCredentials().toString();
+        } else {
+            pin = authentication.getName();
+        }
 
         try {
             Optional<Staff> maybeUser = staffRepository.findByPin(Integer.parseInt(pin));
