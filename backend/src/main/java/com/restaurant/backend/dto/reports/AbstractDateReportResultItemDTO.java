@@ -6,5 +6,6 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractDateReportResultItemDTO extends AbstractReportResultItemDTO {
+    private String type;
     public abstract LocalDate getApproximateDate();
 }
