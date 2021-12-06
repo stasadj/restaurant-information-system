@@ -1,18 +1,32 @@
 package com.restaurant.backend.domain;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import com.restaurant.backend.domain.enums.ItemType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "item")
@@ -68,5 +82,19 @@ public class Item {
                     itemValueAt = itemValue;
             }
         return itemValueAt;
+    }
+
+    public Item(Item source){
+        this.setId(source.getId());
+        this.setName(source.getName());
+        this.setDescription(source.getDescription());
+        this.setImageURL(source.getImageURL());
+        this.setInMenu(source.getInMenu());
+        this.setItemType(source.getItemType());
+        this.setDeleted(source.getDeleted());
+        this.setCategory(new Category(source.getCategory().getId(), source.getCategory().getName()));
+        this.setTags(source.getTags().stream().map(tag -> new Tag(tag.getId(), tag.getName())).collect(Collectors.toList()));
+        this.setItemValues(source.getItemValues().stream().map(val -> new ItemValue(val.getId(), val.getPurchasePrice(), val.getSellingPrice(), val.getFromDate(), this)).collect(Collectors.toList()));
+
     }
 }

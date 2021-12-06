@@ -1,4 +1,5 @@
 package com.restaurant.backend.service.integration;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -68,26 +69,48 @@ public class ItemServiceIntegrationTests {
     // }
 
     @Test
-    public void testFindOne() {
+    public void testFindOne_successful() {
         Item item = itemService.findOne(1L);
         assertEquals(item.getName(), "Spaghetti carbonara");
     }
 
     @Test
     public void testFindOne_InvalidId() {
-        assertThrows(NotFoundException.class, () -> itemService.findOne(111111L));
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            itemService.findOne(NONEXISTENT_ITEM_ID);
+        }, "NotFoundException was expected");
+
+        assertEquals(String.format("No item with id %d has been found", NONEXISTENT_ITEM_ID), thrown.getMessage());
     }
 
     @Test
-    public void testAddToMenu() {
+    public void testAddToMenu_successful() {
         Item item = itemService.addToMenu(3L);
         assertTrue(item.getInMenu());
     }
 
     @Test
-    public void testRemoveFromMenu() {
+    public void testAddToMenu_InvalidId() {
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            itemService.addToMenu(NONEXISTENT_ITEM_ID);
+        }, "NotFoundException was expected");
+
+        assertEquals(String.format("No item with id %d has been found", NONEXISTENT_ITEM_ID), thrown.getMessage());
+    }
+
+    @Test
+    public void testRemoveFromMenu_successful() {
         Item item = itemService.removeFromMenu(3L);
         assertTrue(!item.getInMenu());
+    }
+
+    @Test
+    public void testRemoveFromMenu_InvalidId() {
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            itemService.removeFromMenu(NONEXISTENT_ITEM_ID);
+        }, "NotFoundException was expected");
+
+        assertEquals(String.format("No item with id %d has been found", NONEXISTENT_ITEM_ID), thrown.getMessage());
     }
 
     @Test
@@ -97,11 +120,10 @@ public class ItemServiceIntegrationTests {
 
     @Test
     public void deleteItem_unsuccessful() {
-        long id = 1111111L;
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.delete(id);
+            itemService.delete(NONEXISTENT_ITEM_ID);
         }, "NotFoundException was expected");
 
-        assertEquals(String.format("No item with id %d has been found", id), thrown.getMessage());
+        assertEquals(String.format("No item with id %d has been found", NONEXISTENT_ITEM_ID), thrown.getMessage());
     }
 }
