@@ -58,7 +58,8 @@ public class StaffServiceIntegrationTests {
         Waiter waiter = generateWaiter();
         Staff staff = staffService.create(waiter);
         assertEquals("waiter", staff.getRole());
-        assertEquals(7L, staff.getId());
+        List<Staff> all = staffService.getAll();
+        assertEquals(7, all.size());
     }
 
     @Test
