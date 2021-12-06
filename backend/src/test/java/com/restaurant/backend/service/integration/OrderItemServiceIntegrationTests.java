@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 @TestPropertySource(locations = "classpath:test.properties")
 @Sql("classpath:order_item_service_integration.sql")
 @Transactional
-public class OrderItemServiceIntegrationTest {
+public class OrderItemServiceIntegrationTests {
     @Autowired
     private OrderItemService orderItemService;
 

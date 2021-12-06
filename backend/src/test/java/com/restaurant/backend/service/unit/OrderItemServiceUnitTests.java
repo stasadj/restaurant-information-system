@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class OrderItemServiceUnitTest {
+public class OrderItemServiceUnitTests {
     @MockBean
     private OrderItemRepository orderItemRepository;
 
