@@ -8,8 +8,10 @@ import com.restaurant.backend.dto.reports.enums.QuarterOfYear;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class QuarterlyReportResultItemDTO extends AbstractDateReportResultItemDTO {
