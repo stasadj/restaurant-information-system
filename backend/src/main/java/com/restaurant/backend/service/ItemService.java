@@ -83,7 +83,7 @@ public class ItemService {
         item.setCategory(categoryService.findOne(item.getCategory().getId()));                                                                                          // somehow?
 
         List<Tag> tags = new ArrayList<>();
-        item.getTags().forEach(tag -> {tags.add(tagService.findOne(tag.getId())); System.out.println(tag.getId());});
+        item.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
 
         item.setTags(tags);
         Item savedItem = itemRepository.save(item);
@@ -106,11 +106,7 @@ public class ItemService {
         item.setInMenu(changedItem.getInMenu()); //todo maybe remove this line because we have separate methods for adding to menu
         item.setDeleted(changedItem.getDeleted()); //same goes for this one
 
-        Long catid = changedItem.getCategory().getId();
-        System.out.println(catid + "================================" );
-
         item.setCategory(categoryService.findOne(changedItem.getCategory().getId()));
-        System.out.println(item.getCategory().getName());
 
         List<Tag> tags = new ArrayList<>();
         changedItem.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
