@@ -29,7 +29,7 @@ public class OrderItemController {
     @PutMapping("/accept")
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> acceptOrderItems(@AuthenticationPrincipal Staff staff,
                                                                                @Valid @RequestBody OrderItemIds orderItemIds) {
-        DataWithMessage<List<OrderItem>> acceptedItems = orderItemService.acceptOrderItems(staff, orderItemIds.ids);
+        DataWithMessage<List<OrderItem>> acceptedItems = orderItemService.acceptOrderItems(staff, orderItemIds.getIds());
         return new ResponseEntity<>(new DataWithMessage<>(orderItemMapper.convertAll(acceptedItems.getData()), acceptedItems.getMessage()),
                 HttpStatus.OK);
     }
@@ -38,7 +38,7 @@ public class OrderItemController {
     @PutMapping("/decline")
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> declineOrderItems(@AuthenticationPrincipal Staff staff,
                                                                 @Valid @RequestBody OrderItemIds orderItemIds) {
-        DataWithMessage<List<OrderItem>> declinedItems = orderItemService.declineOrderItems(staff, orderItemIds.ids);
+        DataWithMessage<List<OrderItem>> declinedItems = orderItemService.declineOrderItems(staff, orderItemIds.getIds());
         return new ResponseEntity<>(new DataWithMessage<>(orderItemMapper.convertAll(declinedItems.getData()), declinedItems.getMessage()),
                 HttpStatus.OK);
     }
@@ -47,7 +47,7 @@ public class OrderItemController {
     @PutMapping("/mark-prepared")
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> markOrderItemsAsPrepared(@AuthenticationPrincipal Staff staff,
                                                                        @Valid @RequestBody OrderItemIds orderItemIds) {
-        DataWithMessage<List<OrderItem>> preparedItems = orderItemService.prepareOrderItems(staff, orderItemIds.ids);
+        DataWithMessage<List<OrderItem>> preparedItems = orderItemService.prepareOrderItems(staff, orderItemIds.getIds());
         return new ResponseEntity<>(new DataWithMessage<>(orderItemMapper.convertAll(preparedItems.getData()), preparedItems.getMessage()),
                 HttpStatus.OK);
     }
@@ -55,6 +55,6 @@ public class OrderItemController {
     @PreAuthorize("hasRole('WAITER')")
     @DeleteMapping("/cancel")
     public ResponseEntity<DataWithMessage<List<Long>>> cancelOrderItem(@Valid @RequestBody OrderItemIds orderItemIds) {
-        return new ResponseEntity<>(orderItemService.cancelOrderItems(orderItemIds.ids), HttpStatus.OK);
+        return new ResponseEntity<>(orderItemService.cancelOrderItems(orderItemIds.getIds()), HttpStatus.OK);
     }
 }
