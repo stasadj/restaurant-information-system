@@ -1,7 +1,7 @@
 package com.restaurant.backend.service.integration;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.*;
-
+import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_ITEM_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -101,7 +101,7 @@ public class ItemServiceIntegrationTests {
     @Test
     public void testRemoveFromMenu_successful() {
         Item item = itemService.removeFromMenu(3L);
-        assertTrue(!item.getInMenu());
+        assertFalse(item.getInMenu());
     }
 
     @Test
