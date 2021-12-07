@@ -1,7 +1,22 @@
 
 package com.restaurant.backend.service.unit;
 
-import static com.restaurant.backend.constants.ItemServiceTestConstants.*;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.CATEGORY_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.EXISTENT_ITEM;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.NEW_ITEM_VALUE;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.NEW_ITEM_VALUE_DTO;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_CATEGORY_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_ITEM_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_TAG_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.NULL_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.TAG1_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.TAG2_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_CATEGORY;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_ITEM;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_ITEM_ID;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG1;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG2;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.generateValidItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,6 +37,7 @@ import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
+import com.restaurant.backend.repository.ItemValueRepository;
 import com.restaurant.backend.service.CategoryService;
 import com.restaurant.backend.service.ItemService;
 import com.restaurant.backend.service.ItemValueService;
@@ -32,6 +48,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.TestPropertySource;
 
 /*
@@ -57,8 +74,11 @@ public class ItemServiceUnitTests {
     @Autowired
     private ItemService itemService;
 
-    @MockBean
+    @SpyBean
     private ItemValueService itemValueService;
+
+    @MockBean
+    private ItemValueRepository itemValueRepository;
 
     @BeforeEach
     public void setup() {
@@ -106,7 +126,7 @@ public class ItemServiceUnitTests {
         when(itemRepository.save(EXISTENT_ITEM))
                 .thenReturn(EXISTENT_ITEM);
 
-        when(itemValueService.create(any(ItemValue.class)))
+        when(itemValueRepository.save(any(ItemValue.class)))
                 .thenReturn(NEW_ITEM_VALUE);
 
     }
