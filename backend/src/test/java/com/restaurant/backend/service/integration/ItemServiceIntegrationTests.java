@@ -58,7 +58,7 @@ public class ItemServiceIntegrationTests {
     public void testGetAllMenuItems() {
         List<Item> found = itemService.getAllMenuItems();
         found.forEach(item -> assertTrue(item.getInMenu()));
-        found.forEach(item -> assertTrue(!item.getDeleted()));
+        found.forEach(item -> assertFalse(item.getDeleted()));
         assertEquals(3, found.size());
     }
 
