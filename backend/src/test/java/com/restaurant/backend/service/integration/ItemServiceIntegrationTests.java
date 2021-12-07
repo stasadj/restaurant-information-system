@@ -44,7 +44,7 @@ public class ItemServiceIntegrationTests {
     @Test
     public void testGetAll() {
         List<Item> found = itemService.getAll();
-        found.forEach(item -> assertTrue(!item.getDeleted()));
+        found.forEach(item -> assertFalse(item.getDeleted()));
         assertEquals(4, found.size()); //todo: add constants into common file
     }
 
