@@ -198,4 +198,38 @@ public class ItemServiceUnitTests {
                 NULL_ID), thrown.getMessage());
     }
 
+    @Test
+    public void updateItem_invalidCategory() {
+
+        Item item = new Item(EXISTENT_ITEM);
+        item.getCategory().setId(NONEXISTENT_CATEGORY_ID);
+
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            itemService.editItem(item);
+        }, "NotFoundException was expected");
+
+        assertEquals(String.format("No category with id %d has been found",
+                NONEXISTENT_CATEGORY_ID), thrown.getMessage());
+
+    }
+
+    @Test
+    public void updateItem_invalidTags() {
+
+        Item item = new Item(EXISTENT_ITEM);
+
+        item.setTags(new ArrayList<>() {
+            {
+                add(new Tag(NONEXISTENT_TAG_ID, null));
+            }
+        });
+
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            itemService.editItem(item);
+        }, "NotFoundException was expected");
+
+        assertEquals(String.format("No tag with id %d has been found",
+                NONEXISTENT_TAG_ID), thrown.getMessage());
+    }
+
 }
