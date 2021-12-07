@@ -55,7 +55,6 @@ import org.springframework.test.context.TestPropertySource;
 Todo:
 1. Invalid img url tests
 2. naming convention
-3. tests for rest of methods
 
 */
 @Transactional
@@ -158,7 +157,6 @@ public class ItemServiceUnitTests {
     @Test
     public void createItem() {
 
-        System.out.println(VALID_ITEM.getCategory().getId() + "--------------------");
         itemService.create(VALID_ITEM);
         verify(itemRepository, times(1)).save(any(Item.class));
     }
@@ -264,5 +262,6 @@ public class ItemServiceUnitTests {
         assertEquals(updatedValue.getPurchasePrice(), NEW_ITEM_VALUE_DTO.getPurchasePrice());
     }
 
+    //TODO add tests for only changing selling price, test for adding future date etc.
 
 }
