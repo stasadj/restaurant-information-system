@@ -117,10 +117,10 @@ public class ItemServiceUnitTests {
                 .thenReturn(Optional.of(EXISTENT_ITEM));
 
         when(itemRepository.findById(eq(NONEXISTENT_ITEM_ID)))
-                .thenReturn(Optional.ofNullable(null));
+                .thenReturn(Optional.empty());
 
         when(itemRepository.findById(null))
-                .thenReturn(Optional.ofNullable(null));
+                .thenReturn(Optional.empty());
 
         when(itemRepository.save(EXISTENT_ITEM))
                 .thenReturn(EXISTENT_ITEM);
