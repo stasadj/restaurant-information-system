@@ -10,14 +10,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import com.restaurant.backend.domain.Category;
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.Tag;
@@ -26,6 +24,7 @@ import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
 import com.restaurant.backend.service.CategoryService;
 import com.restaurant.backend.service.ItemService;
+import com.restaurant.backend.service.ItemValueService;
 import com.restaurant.backend.service.TagService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +56,9 @@ public class ItemServiceUnitTests {
 
     @Autowired
     private ItemService itemService;
+
+    @MockBean
+    private ItemValueService itemValueService;
 
     @BeforeEach
     public void setup() {
@@ -103,6 +105,9 @@ public class ItemServiceUnitTests {
 
         when(itemRepository.save(EXISTENT_ITEM))
                 .thenReturn(EXISTENT_ITEM);
+
+        when(itemValueService.create(any(ItemValue.class)))
+                .thenReturn(NEW_ITEM_VALUE);
 
     }
 
@@ -231,5 +236,13 @@ public class ItemServiceUnitTests {
         assertEquals(String.format("No tag with id %d has been found",
                 NONEXISTENT_TAG_ID), thrown.getMessage());
     }
+
+    @Test
+    public void changePrice() {
+
+        ItemValue updatedValue = itemService.changeItemPrice(NEW_ITEM_VALUE_DTO);
+        assertEquals(updatedValue.getPurchasePrice(), NEW_ITEM_VALUE_DTO.getPurchasePrice());
+    }
+
 
 }

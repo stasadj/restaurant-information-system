@@ -10,6 +10,7 @@ import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.domain.enums.ItemType;
+import com.restaurant.backend.dto.requests.ChangePriceDTO;
 
 
 public final class ItemServiceTestConstants {
@@ -38,6 +39,9 @@ public final class ItemServiceTestConstants {
     public static final Item EXISTENT_ITEM = generateValidItemWithId(); 
 
     public static final Long NULL_ID = null;
+
+    public static final ChangePriceDTO NEW_ITEM_VALUE_DTO = new ChangePriceDTO(BigDecimal.valueOf(1000.5), BigDecimal.valueOf(1500.5), LocalDateTime.now().plusMonths(2), VALID_ITEM_ID);
+    public static final ItemValue NEW_ITEM_VALUE = new ItemValue(null, NEW_ITEM_VALUE_DTO.getPurchasePrice(), NEW_ITEM_VALUE_DTO.getSellingPrice(), NEW_ITEM_VALUE_DTO.getFromDate(), VALID_ITEM);
 
 
     public static Item generateValidItem() {
