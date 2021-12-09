@@ -103,10 +103,10 @@ public class ItemService {
         item.setDescription(changedItem.getDescription());
         item.setImageURL(changedItem.getImageURL());
         item.setItemType(changedItem.getItemType());
-        item.setInMenu(changedItem.getInMenu());
-        item.setDeleted(changedItem.getDeleted());
+        item.setInMenu(changedItem.getInMenu()); //todo maybe remove this line because we have separate methods for adding to menu
+        item.setDeleted(changedItem.getDeleted()); //same goes for this one
 
-        item.setCategory(categoryService.findOne(item.getCategory().getId()));
+        item.setCategory(categoryService.findOne(changedItem.getCategory().getId()));
 
         List<Tag> tags = new ArrayList<>();
         changedItem.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
