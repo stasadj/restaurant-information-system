@@ -97,8 +97,8 @@ public class ItemService {
     }
 
     public Item editItem(Item changedItem) throws NotFoundException {
-        Item item = findOne(changedItem.getId());
 
+        Item item = findOne(changedItem.getId());
         item.setName(changedItem.getName());
         item.setDescription(changedItem.getDescription());
         item.setImageURL(changedItem.getImageURL());
