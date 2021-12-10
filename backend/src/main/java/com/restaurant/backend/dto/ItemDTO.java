@@ -1,24 +1,27 @@
 package com.restaurant.backend.dto;
 
-import com.restaurant.backend.domain.enums.ItemType;
-import com.restaurant.backend.validation.interfaces.CreateInfo;
-import com.restaurant.backend.validation.interfaces.EditInfo;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-import java.util.List;
+
+import com.restaurant.backend.domain.enums.ItemType;
+import com.restaurant.backend.validation.interfaces.CreateInfo;
+import com.restaurant.backend.validation.interfaces.EditInfo;
+import javax.validation.groups.Default;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class ItemDTO {
 
-    @NotNull(message = "Id cannot be null.", groups = EditInfo.class)
+    @NotNull(message = "Id cannot be null.", groups = {Default.class, EditInfo.class})
     @Null(message = "Id should be null.", groups = CreateInfo.class)
     protected Long id;
 

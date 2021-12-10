@@ -93,7 +93,7 @@ public class ItemController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@Validated(CreateInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
-        return new ResponseEntity<>(itemMapper.convert(itemService.create(itemMapper.convertToDomain(itemDTO))), HttpStatus.OK);
+        return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO)), HttpStatus.OK);
     }
 
     @ResponseBody
@@ -101,7 +101,7 @@ public class ItemController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> editItem(@Validated(EditInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to edit item.");
-        return new ResponseEntity<>(itemMapper.convert(itemService.editItem(itemMapper.convertToDomain(itemDTO))), HttpStatus.OK);
+        return new ResponseEntity<>(itemMapper.convert(itemService.editItem(itemDTO)), HttpStatus.OK);
     }
 
     @ResponseBody
