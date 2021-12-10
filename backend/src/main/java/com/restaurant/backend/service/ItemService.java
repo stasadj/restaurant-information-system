@@ -96,7 +96,7 @@ public class ItemService {
         item.setId(null);
         item.setDeleted(false); // initially false
 
-        item.setCategory(categoryService.findOne(item.getCategory().getId())); // somehow?
+        item.setCategory(categoryService.findOne(item.getCategory().getId())); 
 
         List<Tag> tags = new ArrayList<>();
         item.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
@@ -132,7 +132,6 @@ public class ItemService {
         item.setImageURL(changedItem.getImageURL());
         item.setItemType(changedItem.getItemType());
         item.setInMenu(changedItem.getInMenu()); // todo maybe remove this line because we have separate methods for
-                                                 // adding to menu
         item.setDeleted(changedItem.getDeleted()); // same goes for this one
 
         item.setCategory(categoryService.findOne(changedItem.getCategory().getId()));
