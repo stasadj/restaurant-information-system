@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByName(String name);
 
-    @Query(value = "SELECT COUNT(id) FROM item WHERE category_id = :id", nativeQuery = true)
+    @Query("SELECT COUNT(id) FROM Item i WHERE i.category.id = :id")
     int timesUsed(Long id);
 }

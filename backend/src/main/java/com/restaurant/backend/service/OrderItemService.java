@@ -31,16 +31,8 @@ public class OrderItemService {
         orderItemRepository.save(orderItem);
     }
 
-    public void saveAll(List<OrderItem> orderItems) {
-        orderItemRepository.saveAll(orderItems);
-    }
-
     public void deleteAll(List<OrderItem> orderItems) {
         orderItemRepository.deleteAll(orderItems);
-    }
-
-    public void updateAmount(Long id, Integer amount) {
-        orderItemRepository.updateAmount(id, amount);
     }
 
     public DataWithMessage<List<OrderItem>> acceptOrderItems(Staff staff, List<Long> ids) {
@@ -101,7 +93,7 @@ public class OrderItemService {
                 continue;
             }
             orderItem.setOrderStatus(OrderStatus.DECLINED);
-            orderItemRepository.setStatusForOrderItem(OrderStatus.DECLINED.ordinal(), id);
+            orderItemRepository.save(orderItem);
             declinedItems.add(orderItem);
 
             notificationService.createNotification("Order item #"+id+" is DECLINED.",
@@ -138,7 +130,7 @@ public class OrderItemService {
                 continue;
             }
             orderItem.setOrderStatus(OrderStatus.READY);
-            orderItemRepository.setStatusForOrderItem(OrderStatus.READY.ordinal(), id);
+            orderItemRepository.save(orderItem);
             preparedItems.add(orderItem);
 
             notificationService.createNotification("Order item #"+id+" is PREPARED.",

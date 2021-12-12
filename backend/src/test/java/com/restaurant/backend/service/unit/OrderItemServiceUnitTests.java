@@ -108,8 +108,7 @@ public class OrderItemServiceUnitTests {
         assertEquals("Order item #2 not found.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(1L));
-        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(2L));
+        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
@@ -129,8 +128,7 @@ public class OrderItemServiceUnitTests {
         assertEquals("Order item #2 is not pending.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(1L));
-        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(2L));
+        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
@@ -141,6 +139,7 @@ public class OrderItemServiceUnitTests {
 
         when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
         when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
 
         DataWithMessage<List<OrderItem>> result = orderItemService.declineOrderItems(A_COOK, List.of(2L, 1L));
 
@@ -149,8 +148,7 @@ public class OrderItemServiceUnitTests {
         assertEquals("DRINK order item #2 cannot be declined by cook.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(1L));
-        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.DECLINED.ordinal()), eq(2L));
+        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
@@ -160,6 +158,7 @@ public class OrderItemServiceUnitTests {
 
         when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.empty());
         when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
 
         DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(A_COOK, List.of(2L, 1L));
 
@@ -168,8 +167,7 @@ public class OrderItemServiceUnitTests {
         assertEquals("Order item #2 not found.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(1L));
-        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(2L));
+        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
@@ -180,6 +178,7 @@ public class OrderItemServiceUnitTests {
 
         when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
         when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
 
         DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(A_COOK, List.of(2L, 1L));
 
@@ -188,8 +187,7 @@ public class OrderItemServiceUnitTests {
         assertEquals("Order item #2 is not in progress.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(1L));
-        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(2L));
+        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 
@@ -200,6 +198,7 @@ public class OrderItemServiceUnitTests {
 
         when(orderItemRepository.findById(eq(2L))).thenReturn(Optional.of(orderItem2));
         when(orderItemRepository.findById(eq(1L))).thenReturn(Optional.of(orderItem1));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(null);
 
         DataWithMessage<List<OrderItem>> result = orderItemService.prepareOrderItems(A_COOK, List.of(2L, 1L));
 
@@ -208,8 +207,7 @@ public class OrderItemServiceUnitTests {
         assertEquals("DRINK order item #2 cannot be prepared by cook.\n", result.getMessage());
 
         verify(orderItemRepository, times(2)).findById(anyLong());
-        verify(orderItemRepository, times(1)).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(1L));
-        verify(orderItemRepository, never()).setStatusForOrderItem(eq(OrderStatus.READY.ordinal()), eq(2L));
+        verify(orderItemRepository, times(1)).save(any(OrderItem.class));
         verify(notificationService, times(1)).createNotification(anyString(), any(NotificationType.class), any(Order.class));
     }
 

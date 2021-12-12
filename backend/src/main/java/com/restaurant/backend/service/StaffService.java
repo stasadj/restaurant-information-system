@@ -61,7 +61,7 @@ public class StaffService {
             throw new BadRequestException("New pin is already in use.");
         Staff staff = maybeStaff.get();
         staff.setPin(changePinDTO.getNewPin());
-        staffRepository.setNewPinForStaff(changePinDTO.getNewPin(), changePinDTO.getCurrentPin());
+        staffRepository.save(staff);
         return staff;
     }
 

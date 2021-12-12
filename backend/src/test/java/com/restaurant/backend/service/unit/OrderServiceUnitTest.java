@@ -53,9 +53,7 @@ public class OrderServiceUnitTest {
 
         when(orderRepository.findByTableId(eq(orderDTO.getTableId()))).thenReturn(Optional.of(new Order()));
 
-        assertThrows(BadRequestException.class, () -> {
-            orderService.create(orderDTO);
-        }, "BadRequestException was expected");
+        assertThrows(BadRequestException.class, () -> orderService.create(orderDTO), "BadRequestException was expected");
     }
 
     @Test
@@ -67,13 +65,14 @@ public class OrderServiceUnitTest {
         OrderDTO orderDTO = new OrderDTO(1L, LocalDateTime.now(), "note", 1, items, 1L);
 
         Item item = new Item(1L, "Pizza", null, "", "", null, true, null, ItemType.FOOD, false);
-        Order order = new Order(LocalDateTime.now(), orderDTO.getNote(), orderDTO.getTableId(), (Waiter) waiter);
+        Order order = new Order(LocalDateTime.now(), orderDTO.getNote(), orderDTO.getTableId(), waiter);
 
         when(staffService.findOne(eq(orderDTO.getWaiterId()))).thenReturn(waiter);
         when(orderRepository.findByTableId(eq(orderDTO.getTableId()))).thenReturn(Optional.empty());
         when(itemService.findOne(eq(itemDTO.getItemId()))).thenReturn(item);
         when(orderRepository.save(any(Order.class))).thenReturn(order);
         when(orderService.findAllForWaiter(eq(orderDTO.getWaiterId()))).thenReturn(Collections.singletonList(order));
+        doNothing().when(orderItemService).save(any(OrderItem.class));
 
         List<Order> results = orderService.create(orderDTO);
 
@@ -84,6 +83,7 @@ public class OrderServiceUnitTest {
         verify(staffService, times(1)).findOne(anyLong());
         verify(orderRepository, times(1)).findByTableId(anyInt());
         verify(orderRepository, times(1)).save(any(Order.class));
+        verify(orderItemService, times(1)).save(any(OrderItem.class));
         verify(itemService, times(1)).findOne(anyLong());
     }
 
@@ -101,12 +101,14 @@ public class OrderServiceUnitTest {
         when(orderRepository.findById(eq(orderDTO.getId()))).thenReturn(Optional.of(order));
         when(itemService.findOne(eq(item1.getItemId()))).thenReturn(new Item());
         when(itemService.findOne(eq(item2.getItemId()))).thenReturn(new Item());
+        when(orderItemService.findOne(eq(1L))).thenReturn(new OrderItem());
+        doNothing().when(orderItemService).save(any(OrderItem.class));
 
         orderService.editOrder(orderDTO);
 
         verify(itemService, times(1)).findOne(anyLong());
-        verify(orderItemService, times(1)).save(any(OrderItem.class));
-        verify(orderItemService, times(1)).updateAmount(anyLong(), anyInt());
+        verify(orderItemService, times(2)).save(any(OrderItem.class));
+        verify(orderItemService, times(1)).findOne(anyLong());
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 
@@ -119,9 +121,7 @@ public class OrderServiceUnitTest {
 
        when(orderRepository.findById(anyLong())).thenReturn(Optional.of(order));
 
-        assertThrows(BadRequestException.class, () -> {
-            orderService.finalizeOrder(1L);
-        }, "BadRequestException was expected");
+        assertThrows(BadRequestException.class, () -> orderService.finalizeOrder(1L), "BadRequestException was expected");
     }
 
     private Waiter generateWaiter() {

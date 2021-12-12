@@ -5,20 +5,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderRecordRepository extends JpaRepository<OrderRecord, Long> {
 
-    @Query(
-        value = "SELECT * FROM order_record WHERE created_at BETWEEN :fromDate AND :toDate " +
-                "AND item_value_id IN (SELECT id FROM item_values WHERE item_id = :itemId);",
-        nativeQuery = true)
+    @Query("SELECT r FROM OrderRecord r WHERE r.createdAt BETWEEN :fromDate AND :toDate " +
+                "AND r.itemValue.id IN (SELECT id FROM ItemValue WHERE item.id = :itemId)")
     List<OrderRecord> getAllOrderRecordsBetweenDatesForItem(@Param("itemId") Long itemId,
-                                                            @Param("fromDate") LocalDate fromDate,
-                                                            @Param("toDate") LocalDate toDate);
+                                                            @Param("fromDate") LocalDateTime fromDate,
+                                                            @Param("toDate") LocalDateTime toDate);
 
-    @Query(value = "SELECT * FROM order_record WHERE created_at BETWEEN :fromDate AND :toDate ;", nativeQuery = true)
-    List<OrderRecord> getAllOrderRecordsBetweenDates(@Param("fromDate") LocalDate fromDate,
-                                                     @Param("toDate") LocalDate toDate);
+    @Query("SELECT r FROM OrderRecord r WHERE r.createdAt BETWEEN :fromDate AND :toDate")
+    List<OrderRecord> getAllOrderRecordsBetweenDates(@Param("fromDate") LocalDateTime fromDate,
+                                                     @Param("toDate") LocalDateTime toDate);
 }
