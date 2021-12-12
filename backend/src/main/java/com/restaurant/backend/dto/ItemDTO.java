@@ -22,7 +22,7 @@ import lombok.Setter;
 public class ItemDTO {
 
     @NotNull(message = "Id cannot be null.", groups = EditInfo.class)
-    @Null(message = "Id should be null.", groups =  CreateInfo.class)
+    @Null(message = "Id should be null.", groups = CreateInfo.class)
     protected Long id;
 
     @NotBlank(message = "Item name must not be blank.")

@@ -170,7 +170,6 @@ public class ItemServiceUnitTests {
     public void createItem_invalidCategory() {
 
         ItemDTO itemDTO = itemMapper.convert(VALID_ITEM);
-        // Item item = new Item(VALID_ITEM);
         itemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {

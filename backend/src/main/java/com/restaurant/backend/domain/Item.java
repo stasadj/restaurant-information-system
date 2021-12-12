@@ -67,7 +67,6 @@ public class Item {
     protected Boolean inMenu;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
-    //@Size(min=1, message = "Item Value list cannot be empty.")
     protected List<ItemValue> itemValues;
 
     @Column(name = "type", nullable = false)

@@ -202,7 +202,7 @@ public final class ItemControllerIntegrationTest {
     @Test
     public void updateItem_invalidCategory() throws Exception {
 
-        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM); //ovde nekad rendom na convert metodi puca kao da je itemValue null??
+        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM); 
         existantItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/item/edit")

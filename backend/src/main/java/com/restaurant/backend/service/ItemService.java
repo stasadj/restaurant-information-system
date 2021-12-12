@@ -114,8 +114,6 @@ public class ItemService {
     public Item editItem(@Validated(EditInfo.class) ItemDTO changedItemDTO) throws NotFoundException, CustomConstraintViolationException {
 
         Set<ConstraintViolation<ItemDTO>> violations = validator.validate(changedItemDTO, EditInfo.class);
-        System.out.println(violations.size() + "------------------" + changedItemDTO.getId()); //nula
-        
 
         if (!violations.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -132,7 +130,7 @@ public class ItemService {
         item.setDescription(changedItem.getDescription());
         item.setImageURL(changedItem.getImageURL());
         item.setItemType(changedItem.getItemType());
-        item.setInMenu(changedItem.getInMenu()); // todo maybe remove this line because we have separate methods for
+        item.setInMenu(changedItem.getInMenu()); // todo maybe remove this line because we have separate methods for adding to menu
         item.setDeleted(changedItem.getDeleted()); // same goes for this one
 
         item.setCategory(categoryService.findOne(changedItem.getCategory().getId()));
