@@ -2,8 +2,8 @@ server.port=8098
 
 server.error.include-message=ALWAYS
 
-spring.mvc.static-path-pattern=/static/**
-spring.web.resources.static-locations=classpath:C:/files/
+spring.mvc.static-path-pattern=/**
+spring.web.resources.static-locations=classpath:/public/
 
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driverClassName=org.h2.Driver
