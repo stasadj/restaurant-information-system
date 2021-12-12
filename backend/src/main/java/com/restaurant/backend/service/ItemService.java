@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
 import com.restaurant.backend.domain.Item;
@@ -15,12 +14,12 @@ import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.requests.ChangePriceDTO;
-import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.CustomConstraintViolationException;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
 import com.restaurant.backend.support.ItemMapper;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
+import com.restaurant.backend.validation.interfaces.EditInfo;
 
 import org.hibernate.Filter;
 import org.hibernate.Session;
@@ -112,9 +111,11 @@ public class ItemService {
         return item;
     }
 
-    public Item editItem(ItemDTO changedItemDTO) throws NotFoundException, ConstraintViolationException {
+    public Item editItem(@Validated(EditInfo.class) ItemDTO changedItemDTO) throws NotFoundException, CustomConstraintViolationException {
 
-        Set<ConstraintViolation<ItemDTO>> violations = validator.validate(changedItemDTO);
+        Set<ConstraintViolation<ItemDTO>> violations = validator.validate(changedItemDTO, EditInfo.class);
+        System.out.println(violations.size() + "------------------" + changedItemDTO.getId()); //nula
+        
 
         if (!violations.isEmpty()) {
             StringBuilder sb = new StringBuilder();

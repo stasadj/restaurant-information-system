@@ -1,11 +1,23 @@
 package com.restaurant.backend.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.transaction.Transactional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restaurant.backend.domain.OrderItem;
 import com.restaurant.backend.domain.enums.OrderStatus;
 import com.restaurant.backend.dto.requests.OrderItemIds;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.service.OrderItemService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,16 +34,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import javax.servlet.http.Cookie;
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -155,7 +157,6 @@ public final class OrderItemControllerIntegrationTest {
         login(1234);
         OrderItemIds ids = new OrderItemIds(List.of(9L, 1L));
         ObjectMapper mapper = new ObjectMapper();
-
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/decline")
                         .cookie(cookie)
                         .contentType(MediaType.APPLICATION_JSON)

@@ -55,7 +55,7 @@ public final class ItemServiceTestConstants {
         item.setCategory(VALID_CATEGORY);
 
         ItemValue itemValue = new ItemValue();
-        itemValue.setFromDate(LocalDateTime.now());
+        itemValue.setFromDate(LocalDateTime.now().minusMonths(1));
         itemValue.setPurchasePrice(ITEM_PURCHASE_PRICE);
         itemValue.setSellingPrice(ITEM_SELLING_PRICE);
 
