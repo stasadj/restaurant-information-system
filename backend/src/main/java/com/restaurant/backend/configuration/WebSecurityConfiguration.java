@@ -59,8 +59,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // No session will be created or used by spring security
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and().authorizeRequests()
-                // Keep authentication and helloworld open but close all other requests.
-                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/helloworld/**").permitAll()
+                // Keep authentication open but close all other requests.
+                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/h2-console/**").permitAll().anyRequest()
                 .authenticated().and().cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
@@ -73,7 +73,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         // Ignore all requests to endpoints that do not contain /api/
         web.ignoring().regexMatchers(HttpMethod.GET, "/((?!api).*)");
     }
