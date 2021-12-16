@@ -18,10 +18,10 @@ public class OrderRecordService {
     }
 
     public List<OrderRecord> getAllOrderRecordsBetweenDatesForItem(Long itemId, LocalDate fromDate, LocalDate toDate) {
-        return orderRecordRepository.getAllOrderRecordsBetweenDatesForItem(itemId, fromDate, toDate);
+        return orderRecordRepository.getAllOrderRecordsBetweenDatesForItem(itemId, fromDate.atStartOfDay(), toDate.atStartOfDay());
     }
 
     public List<OrderRecord> getAllOrderRecordsBetweenDates(LocalDate fromDate, LocalDate toDate) {
-        return orderRecordRepository.getAllOrderRecordsBetweenDates(fromDate, toDate);
+        return orderRecordRepository.getAllOrderRecordsBetweenDates(fromDate.atStartOfDay(), toDate.atStartOfDay());
     }
 }

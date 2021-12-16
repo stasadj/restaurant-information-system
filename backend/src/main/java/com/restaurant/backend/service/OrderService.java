@@ -81,7 +81,9 @@ public class OrderService {
                 OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
                 orderItemService.save(newOrderItem);
             } else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
-                orderItemService.updateAmount(orderItem.getItemId(), orderItem.getAmount());
+                OrderItem editedOrderItem = orderItemService.findOne(orderItem.getId());
+                editedOrderItem.setAmount(orderItem.getAmount());
+                orderItemService.save(editedOrderItem);
             }
         }
         orderRepository.save(editedOrder);

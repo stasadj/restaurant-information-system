@@ -46,9 +46,8 @@ public class StaffServiceIntegrationTests {
     @Test
     public void findOne_findStaffMember_unsuccessful() {
         long id = 7L;
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            staffService.findOne(id);
-        }, "NotFoundException was expected");
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> staffService.findOne(id),
+                "NotFoundException was expected");
 
         assertEquals(String.format("No staff member with id %d has been found", id), thrown.getMessage());
     }
@@ -68,9 +67,8 @@ public class StaffServiceIntegrationTests {
         Integer pin = StaffServiceTestConstants.USED_STAFF_PIN;
         waiter.setPin(pin);
 
-        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
-            staffService.create(waiter);
-        }, "BadRequestException was expected");
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> staffService.create(waiter),
+                "BadRequestException was expected");
 
         assertEquals(String.format("Staff member with pin %d already exists.", pin), thrown.getMessage());
     }
@@ -100,9 +98,8 @@ public class StaffServiceIntegrationTests {
     @Test
     public void delete_deleteStaff_notFound() {
         long id = 7L;
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            staffService.delete(id);
-        }, "NotFoundException was expected");
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> staffService.delete(id),
+                "NotFoundException was expected");
 
         assertEquals(String.format("No staff member with id %d has been found", id), thrown.getMessage());
     }
