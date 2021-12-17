@@ -9,12 +9,9 @@ import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.restaurant.backend.domain.Item;
-import com.restaurant.backend.domain.ItemValue;
 import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.TagDTO;
-import com.restaurant.backend.service.ItemService;
 import com.restaurant.backend.support.ItemMapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +36,6 @@ import org.springframework.web.context.WebApplicationContext;
 @WithMockUser(authorities = { "ROLE_MANAGER" })
 @Transactional
 public final class ItemControllerIntegrationTest {
-    @Autowired
-    private ItemService itemService;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
