@@ -6,8 +6,6 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 public class ChangePasswordDTO {
-    private Long userId;
-
     @NotEmpty(message = "Current password cannot be empty.")
     private String currentPassword;
 

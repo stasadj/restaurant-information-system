@@ -30,20 +30,20 @@ public class StaffController {
 
     @GetMapping("/self")
     @PreAuthorize("hasRole('STAFF')")
-    public StaffDTO getSelf(@AuthenticationPrincipal Staff staff) {
-        return staffMapper.convert(staff);
+    public ResponseEntity<StaffDTO> getSelf(@AuthenticationPrincipal Staff staff) {
+        return new ResponseEntity<>(staffMapper.convert(staff), HttpStatus.OK);
     }
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('MANAGER')")
-    public List<StaffDTO> getAll() {
-        return staffMapper.convertAll(staffService.getAll());
+    public ResponseEntity<List<StaffDTO>> getAll() {
+        return new ResponseEntity<>(staffMapper.convertAll(staffService.getAll()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public StaffDTO getById(@PathVariable Long id) {
-        return staffMapper.convert(staffService.findOne(id));
+    public ResponseEntity<StaffDTO> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(staffMapper.convert(staffService.findOne(id)), HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -67,13 +67,13 @@ public class StaffController {
 
     @PutMapping("/change-salary")
     @PreAuthorize("hasRole('MANAGER')")
-    public StaffDTO setSalary(@Valid @RequestBody SetSalaryDTO dto) {
-        return staffMapper.convert(staffService.changeSalary(dto));
+    public ResponseEntity<StaffDTO> setSalary(@Valid @RequestBody SetSalaryDTO dto) {
+        return new ResponseEntity<>(staffMapper.convert(staffService.changeSalary(dto)), HttpStatus.OK);
     }
 
     @PutMapping("/change-pin")
     @PreAuthorize("hasRole('MANAGER')")
-    public StaffDTO changePin(@Valid @RequestBody ChangePinDTO changePinDTO) {
-        return staffMapper.convert(staffService.changePin(changePinDTO));
+    public ResponseEntity<StaffDTO> changePin(@Valid @RequestBody ChangePinDTO changePinDTO) {
+        return new ResponseEntity<>(staffMapper.convert(staffService.changePin(changePinDTO)), HttpStatus.OK);
     }
 }

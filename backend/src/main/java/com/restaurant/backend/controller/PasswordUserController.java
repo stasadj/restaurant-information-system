@@ -5,6 +5,7 @@ import com.restaurant.backend.dto.PasswordUserDTO;
 import com.restaurant.backend.dto.UserDTO;
 import com.restaurant.backend.dto.requests.ChangePasswordDTO;
 import com.restaurant.backend.dto.requests.ChangeUsernameDTO;
+import com.restaurant.backend.service.JWTUserDetailsService;
 import com.restaurant.backend.service.PasswordUserService;
 import com.restaurant.backend.support.PasswordUserMapper;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
@@ -26,18 +27,19 @@ import java.util.List;
 @RequestMapping(value = "/api/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PasswordUserController {
     private final PasswordUserService passwordUserService;
+    private final JWTUserDetailsService userDetailsService;
     private final PasswordUserMapper passwordUserMapper;
 
     @GetMapping("/self")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public PasswordUserDTO getSelf(@AuthenticationPrincipal PasswordUser user) {
-        return passwordUserMapper.convert(user);
+    public ResponseEntity<PasswordUserDTO> getSelf(@AuthenticationPrincipal PasswordUser user) {
+        return new ResponseEntity<>(passwordUserMapper.convert(user), HttpStatus.OK);
     }
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<PasswordUserDTO> getAll() {
-        return passwordUserMapper.convertAll(passwordUserService.getAll());
+    public ResponseEntity<List<PasswordUserDTO>> getAll() {
+        return new ResponseEntity<>(passwordUserMapper.convertAll(passwordUserService.getAll()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -67,14 +69,14 @@ public class PasswordUserController {
 
     @PutMapping("/change-username")
     @PreAuthorize("hasRole('ADMIN')")
-    public PasswordUserDTO changeUsername(@Valid @RequestBody ChangeUsernameDTO dto) {
-        return passwordUserMapper.convert(passwordUserService.changeUsername(dto));
+    public ResponseEntity<PasswordUserDTO> changeUsername(@Valid @RequestBody ChangeUsernameDTO dto) {
+        return new ResponseEntity<>(passwordUserMapper.convert(passwordUserService.changeUsername(dto)), HttpStatus.OK);
     }
 
     @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public PasswordUserDTO changePassword(@AuthenticationPrincipal PasswordUser user, @Valid @RequestBody ChangePasswordDTO dto) {
-        dto.setUserId(user.getId());
-        return passwordUserMapper.convert(passwordUserService.changePassword(dto));
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDTO dto) {
+        boolean success = userDetailsService.changePassword(dto);
+        return new ResponseEntity<>(success? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }

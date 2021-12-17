@@ -2,7 +2,6 @@ package com.restaurant.backend.service;
 
 import com.restaurant.backend.domain.PasswordUser;
 import com.restaurant.backend.dto.UserDTO;
-import com.restaurant.backend.dto.requests.ChangePasswordDTO;
 import com.restaurant.backend.dto.requests.ChangeUsernameDTO;
 import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.NotFoundException;
@@ -61,15 +60,6 @@ public class PasswordUserService {
             throw new BadRequestException("New username is already in use.");
         PasswordUser user = maybeUser.get();
         user.setUsername(changeUsernameDTO.getNewUsername());
-        passwordUserRepository.save(user);
-        return user;
-    }
-
-    public PasswordUser changePassword(ChangePasswordDTO changePasswordDTO) throws NotFoundException, BadRequestException {
-        PasswordUser user = findOne(changePasswordDTO.getUserId());
-        if (!user.getPassword().equals(changePasswordDTO.getCurrentPassword()))
-            throw new BadRequestException("Incorrect password.");
-        user.setPassword(changePasswordDTO.getNewPassword());
         passwordUserRepository.save(user);
         return user;
     }
