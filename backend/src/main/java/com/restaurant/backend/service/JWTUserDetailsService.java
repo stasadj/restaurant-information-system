@@ -5,8 +5,6 @@ import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.dto.requests.ChangePasswordDTO;
 import com.restaurant.backend.repository.PasswordUserRepository;
 import com.restaurant.backend.repository.StaffRepository;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@NoArgsConstructor
-@Setter
 public class JWTUserDetailsService implements UserDetailsService {
 
     private PasswordUserRepository passwordUserRepository;
@@ -29,6 +25,17 @@ public class JWTUserDetailsService implements UserDetailsService {
 
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+
+    public JWTUserDetailsService(PasswordUserRepository passwordUserRepository, StaffRepository staffRepository, AuthenticationManager authenticationManager) {
+        this.passwordUserRepository = passwordUserRepository;
+        this.staffRepository = staffRepository;
+        this.authenticationManager = authenticationManager;
+    }
+
+
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

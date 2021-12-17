@@ -1,5 +1,7 @@
 package com.restaurant.backend.configuration;
 
+import javax.annotation.PostConstruct;
+
 import com.restaurant.backend.security.TokenUtils;
 import com.restaurant.backend.security.authentication.RestAuthenticationEntryPoint;
 import com.restaurant.backend.security.authentication.TokenAuthenticationFilter;
@@ -21,10 +23,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import lombok.AllArgsConstructor;
 
 @Configuration
-@AllArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -34,12 +34,26 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private TokenUtils tokenUtils;
-
     private JWTUserDetailsService jwtUserDetailsService;
-
     private PinUserAuthenticationProvider pinUserAuthenticationProvider;
-
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    public WebSecurityConfiguration(TokenUtils tokenUtils, PinUserAuthenticationProvider pinUserAuthenticationProvider, RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
+        this.tokenUtils = tokenUtils;
+        this.pinUserAuthenticationProvider = pinUserAuthenticationProvider;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+    }
+
+    @Autowired
+    public void setJWTUserDetailsService(JWTUserDetailsService userDetailsService) {
+        jwtUserDetailsService = userDetailsService;
+    }
+
+
+    @PostConstruct
+    public void init() {
+        jwtUserDetailsService.setPasswordEncoder(passwordEncoder());
+    }
 
     @Bean
     @Override
