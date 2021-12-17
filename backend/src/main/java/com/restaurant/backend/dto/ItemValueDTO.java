@@ -7,7 +7,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.restaurant.backend.domain.ItemValue;
 
 import lombok.Getter;

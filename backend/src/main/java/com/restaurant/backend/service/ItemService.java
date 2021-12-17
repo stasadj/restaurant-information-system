@@ -124,19 +124,18 @@ public class ItemService {
             throw new CustomConstraintViolationException(sb.toString());
         }
 
-        Item changedItem = itemMapper.convertToDomain(changedItemDTO);
-        Item item = findOne(changedItem.getId());
-        item.setName(changedItem.getName());
-        item.setDescription(changedItem.getDescription());
-        item.setImageURL(changedItem.getImageURL());
-        item.setItemType(changedItem.getItemType());
-        item.setInMenu(changedItem.getInMenu()); // todo maybe remove this line because we have separate methods for adding to menu
-        item.setDeleted(changedItem.getDeleted()); // same goes for this one
+        Item item = findOne(changedItemDTO.getId());
+        item.setName(changedItemDTO.getName());
+        item.setDescription(changedItemDTO.getDescription());
+        item.setImageURL(changedItemDTO.getImageURL());
+        item.setItemType(changedItemDTO.getItemType());
+        item.setInMenu(changedItemDTO.getInMenu()); // todo maybe remove this line because we have separate methods for adding to menu
+        item.setDeleted(changedItemDTO.getDeleted()); // same goes for this one
 
-        item.setCategory(categoryService.findOne(changedItem.getCategory().getId()));
+        item.setCategory(categoryService.findOne(changedItemDTO.getCategory().getId()));
 
         List<Tag> tags = new ArrayList<>();
-        changedItem.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
+        changedItemDTO.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
         item.setTags(tags);
 
         return itemRepository.save(item);

@@ -135,30 +135,6 @@ public class ItemServiceUnitTests {
     }
 
     @Test
-    public void getAll() {
-        List<Item> found = itemService.getAll();
-
-        verify(itemRepository, times(1)).findAll();
-    }
-
-    @Test
-    public void getAllMenuItems() {
-        List<Item> found = itemService.getAllMenuItems();
-
-        verify(itemRepository, times(1)).findByInMenuTrue();
-    }
-
-    @Test
-    public void findOne_invalidId() {
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.findOne(NONEXISTENT_ITEM_ID);
-        }, "NotFoundException was expected");
-
-        assertEquals(String.format("No item with id %d has been found",
-                NONEXISTENT_ITEM_ID), thrown.getMessage());
-    }
-
-    @Test
     public void createItem() {
 
         ItemDTO itemDTO = itemMapper.convert(VALID_ITEM);

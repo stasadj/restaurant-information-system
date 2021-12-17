@@ -10,8 +10,6 @@ import javax.validation.constraints.Null;
 import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
 import com.restaurant.backend.validation.interfaces.EditInfo;
-import javax.validation.groups.Default;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
