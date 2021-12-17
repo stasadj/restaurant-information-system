@@ -26,12 +26,12 @@ public class JWTUserDetailsService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
 
-    public JWTUserDetailsService(PasswordUserRepository passwordUserRepository, StaffRepository staffRepository, AuthenticationManager authenticationManager) {
+    public JWTUserDetailsService(PasswordUserRepository passwordUserRepository, StaffRepository staffRepository,
+            AuthenticationManager authenticationManager) {
         this.passwordUserRepository = passwordUserRepository;
         this.staffRepository = staffRepository;
         this.authenticationManager = authenticationManager;
     }
-
 
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
@@ -60,8 +60,10 @@ public class JWTUserDetailsService implements UserDetailsService {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String username = currentUser.getName();
 
-        if (authenticationManager == null) return false;
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, changePasswordDTO.getCurrentPassword()));
+        if (authenticationManager == null)
+            return false;
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, changePasswordDTO.getCurrentPassword()));
 
         PasswordUser user = (PasswordUser) loadUserByUsername(username);
 
