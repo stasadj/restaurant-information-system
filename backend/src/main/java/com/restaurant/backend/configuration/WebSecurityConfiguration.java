@@ -1,5 +1,7 @@
 package com.restaurant.backend.configuration;
 
+import javax.annotation.PostConstruct;
+
 import com.restaurant.backend.security.TokenUtils;
 import com.restaurant.backend.security.authentication.RestAuthenticationEntryPoint;
 import com.restaurant.backend.security.authentication.TokenAuthenticationFilter;
@@ -21,10 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import lombok.AllArgsConstructor;
-
 @Configuration
-@AllArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -34,12 +33,26 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private TokenUtils tokenUtils;
-
     private JWTUserDetailsService jwtUserDetailsService;
-
     private PinUserAuthenticationProvider pinUserAuthenticationProvider;
-
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    public WebSecurityConfiguration(TokenUtils tokenUtils, PinUserAuthenticationProvider pinUserAuthenticationProvider,
+            RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
+        this.tokenUtils = tokenUtils;
+        this.pinUserAuthenticationProvider = pinUserAuthenticationProvider;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+    }
+
+    @Autowired
+    public void setJWTUserDetailsService(JWTUserDetailsService userDetailsService) {
+        jwtUserDetailsService = userDetailsService;
+    }
+
+    @PostConstruct
+    public void init() {
+        jwtUserDetailsService.setPasswordEncoder(passwordEncoder());
+    }
 
     @Bean
     @Override
@@ -59,8 +72,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // No session will be created or used by spring security
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and().authorizeRequests()
-                // Keep authentication and helloworld open but close all other requests.
-                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/helloworld/**").permitAll()
+                // Keep authentication open but close all other requests.
+                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/h2-console/**").permitAll().anyRequest()
                 .authenticated().and().cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
@@ -73,7 +86,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         // Ignore all requests to endpoints that do not contain /api/
         web.ignoring().regexMatchers(HttpMethod.GET, "/((?!api).*)");
     }

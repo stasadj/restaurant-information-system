@@ -31,5 +31,4 @@ public class StaffMapper extends GenericObjectMapper<Staff, StaffDTO> {
                 return null;
         }
     }
-
 }
