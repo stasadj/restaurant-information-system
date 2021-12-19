@@ -1,20 +1,32 @@
 package com.restaurant.backend.service;
 
-import com.restaurant.backend.domain.Item;
-import com.restaurant.backend.domain.ItemValue;
-import com.restaurant.backend.domain.Tag;
-import com.restaurant.backend.dto.requests.ChangePriceDTO;
-import com.restaurant.backend.exception.NotFoundException;
-import com.restaurant.backend.repository.ItemRepository;
-import lombok.AllArgsConstructor;
-import org.hibernate.Filter;
-import org.hibernate.Session;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+
+import com.restaurant.backend.domain.Item;
+import com.restaurant.backend.domain.ItemValue;
+import com.restaurant.backend.domain.Tag;
+import com.restaurant.backend.dto.ItemDTO;
+import com.restaurant.backend.dto.requests.ChangePriceDTO;
+import com.restaurant.backend.exception.CustomConstraintViolationException;
+import com.restaurant.backend.exception.NotFoundException;
+import com.restaurant.backend.repository.ItemRepository;
+import com.restaurant.backend.support.ItemMapper;
+import com.restaurant.backend.validation.interfaces.CreateInfo;
+import com.restaurant.backend.validation.interfaces.EditInfo;
+
+import org.hibernate.Filter;
+import org.hibernate.Session;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +36,8 @@ public class ItemService {
     private final TagService tagService;
     private final CategoryService categoryService;
     private final EntityManager entityManager;
+    private final ItemMapper itemMapper;
+    private Validator validator;
 
     public List<Item> getAll() {
         // Retrieves undeleted items
@@ -41,7 +55,7 @@ public class ItemService {
     }
 
     public List<Item> getAllMenuItems() {
-        // Retrieves all undeleted items in the menu
+        // Retrieves all not deleted items in the menu
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedItemFilter");
         filter.setParameter("isDeleted", false);
@@ -76,11 +90,12 @@ public class ItemService {
         itemRepository.delete(item);
     }
 
-    public Item create(Item item) throws NotFoundException {
+    public Item create(@Validated(CreateInfo.class) ItemDTO itemDTO) throws NotFoundException {
+        Item item = itemMapper.convertToDomain(itemDTO);
         item.setId(null);
         item.setDeleted(false); // initially false
 
-        item.setCategory(categoryService.findOne(item.getCategory().getId()));                                                                                          // somehow?
+        item.setCategory(categoryService.findOne(item.getCategory().getId())); 
 
         List<Tag> tags = new ArrayList<>();
         item.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
@@ -96,20 +111,31 @@ public class ItemService {
         return item;
     }
 
-    public Item editItem(Item changedItem) throws NotFoundException {
-        Item item = findOne(changedItem.getId());
+    public Item editItem(@Validated(EditInfo.class) ItemDTO changedItemDTO) throws NotFoundException, CustomConstraintViolationException {
 
-        item.setName(changedItem.getName());
-        item.setDescription(changedItem.getDescription());
-        item.setImageURL(changedItem.getImageURL());
-        item.setItemType(changedItem.getItemType());
-        item.setInMenu(changedItem.getInMenu()); //todo maybe remove this line because we have separate methods for adding to menu
-        item.setDeleted(changedItem.getDeleted()); //same goes for this one
+        Set<ConstraintViolation<ItemDTO>> violations = validator.validate(changedItemDTO, EditInfo.class);
 
-        item.setCategory(categoryService.findOne(changedItem.getCategory().getId()));
+        if (!violations.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (ConstraintViolation<ItemDTO> constraintViolation : violations) {
+                System.out.println(constraintViolation.getMessage());
+                sb.append(constraintViolation.getMessage());
+            }
+            throw new CustomConstraintViolationException(sb.toString());
+        }
+
+        Item item = findOne(changedItemDTO.getId());
+        item.setName(changedItemDTO.getName());
+        item.setDescription(changedItemDTO.getDescription());
+        item.setImageURL(changedItemDTO.getImageURL());
+        item.setItemType(changedItemDTO.getItemType());
+        item.setInMenu(changedItemDTO.getInMenu()); // todo maybe remove this line because we have separate methods for adding to menu
+        item.setDeleted(changedItemDTO.getDeleted()); // same goes for this one
+
+        item.setCategory(categoryService.findOne(changedItemDTO.getCategory().getId()));
 
         List<Tag> tags = new ArrayList<>();
-        changedItem.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
+        changedItemDTO.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
         item.setTags(tags);
 
         return itemRepository.save(item);
@@ -122,8 +148,10 @@ public class ItemService {
         ItemValue newValue = new ItemValue();
         newValue.setItem(item);
         newValue.setFromDate(dto.getFromDate() == null ? LocalDateTime.now() : dto.getFromDate());
-        newValue.setPurchasePrice(dto.getPurchasePrice() == null ? currentValue.getPurchasePrice() : dto.getPurchasePrice());
-        newValue.setSellingPrice(dto.getSellingPrice() == null ? currentValue.getSellingPrice() : dto.getSellingPrice());
+        newValue.setPurchasePrice(
+                dto.getPurchasePrice() == null ? currentValue.getPurchasePrice() : dto.getPurchasePrice());
+        newValue.setSellingPrice(
+                dto.getSellingPrice() == null ? currentValue.getSellingPrice() : dto.getSellingPrice());
 
         return itemValueService.create(newValue);
     }

@@ -15,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import com.restaurant.backend.domain.enums.ItemType;
 
 import org.hibernate.annotations.Filter;
@@ -31,7 +30,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "item")
 @SQLDelete(sql = "UPDATE item SET deleted = true WHERE id = ?")
-// @Where(clause = "deleted = false")
 @FilterDef(name = "deletedItemFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
 @Filter(name = "deletedItemFilter", condition = "deleted = :isDeleted")
 @NoArgsConstructor

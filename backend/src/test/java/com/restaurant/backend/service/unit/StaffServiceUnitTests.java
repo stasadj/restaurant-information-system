@@ -92,7 +92,7 @@ public class StaffServiceUnitTests {
     }
 
     @Test
-    public void changePin_changeStaffPin_nonexistantPin() {
+    public void changePin_changeStaffPin_nonexistentPin() {
         ChangePinDTO dto = new ChangePinDTO();
         dto.setCurrentPin(StaffServiceTestConstants.OTHER_PIN);
         dto.setNewPin(StaffServiceTestConstants.STAFF_PIN);

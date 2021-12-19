@@ -8,7 +8,6 @@ import static com.restaurant.backend.constants.ItemServiceTestConstants.NEW_ITEM
 import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_CATEGORY_ID;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_ITEM_ID;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_TAG_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.NULL_ID;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.TAG1_ID;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.TAG2_ID;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_CATEGORY;
@@ -16,7 +15,6 @@ import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_IT
 import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_ITEM_ID;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG1;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG2;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.generateValidItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,15 +24,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
-import com.restaurant.backend.domain.Tag;
 import com.restaurant.backend.domain.enums.ItemType;
+import com.restaurant.backend.dto.ItemDTO;
+import com.restaurant.backend.dto.TagDTO;
+import com.restaurant.backend.exception.CustomConstraintViolationException;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
 import com.restaurant.backend.repository.ItemValueRepository;
@@ -42,6 +41,7 @@ import com.restaurant.backend.service.CategoryService;
 import com.restaurant.backend.service.ItemService;
 import com.restaurant.backend.service.ItemValueService;
 import com.restaurant.backend.service.TagService;
+import com.restaurant.backend.support.ItemMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,6 @@ import org.springframework.test.context.TestPropertySource;
 /*
 Todo:
 1. Invalid img url tests
-2. naming convention
 
 */
 @Transactional
@@ -79,6 +78,9 @@ public class ItemServiceUnitTests {
     @MockBean
     private ItemValueRepository itemValueRepository;
 
+    @Autowired
+    private ItemMapper itemMapper;
+
     @BeforeEach
     public void setup() {
 
@@ -88,6 +90,7 @@ public class ItemServiceUnitTests {
         when(categoryService.findOne(eq(NONEXISTENT_CATEGORY_ID)))
                 .thenThrow(new NotFoundException(String.format("No category with id %d has been found",
                         NONEXISTENT_CATEGORY_ID)));
+
 
         when(tagService.findOne(eq(TAG1_ID)))
                 .thenReturn(VALID_TAG1);
@@ -99,31 +102,15 @@ public class ItemServiceUnitTests {
                 .thenThrow(new NotFoundException(String.format("No tag with id %d has been found",
                         NONEXISTENT_TAG_ID)));
 
-        List<Item> items = (new ArrayList<>() {
-            {
-                add(generateValidItem());
-                add(generateValidItem());
-                add(generateValidItem());
-            }
-        });
-
-        when(itemRepository.findAll())
-                .thenReturn(items);
-
-        when(itemRepository.findByInMenuTrue())
-                .thenReturn(items);
 
         when(itemRepository.findById(eq(VALID_ITEM_ID)))
-                .thenReturn(Optional.of(EXISTENT_ITEM));
+                .thenReturn(Optional.of(new Item(EXISTENT_ITEM))); //copying the object to prevent changes to original EXISTENT_ITEM constant
 
         when(itemRepository.findById(eq(NONEXISTENT_ITEM_ID)))
                 .thenReturn(Optional.empty());
 
-        when(itemRepository.findById(null))
-                .thenReturn(Optional.empty());
-
-        when(itemRepository.save(EXISTENT_ITEM))
-                .thenReturn(EXISTENT_ITEM);
+        when(itemRepository.save(any(Item.class)))
+                .thenAnswer(i -> i.getArguments()[0]); //returning the same object that was passed as a parameter
 
         when(itemValueRepository.save(any(ItemValue.class)))
                 .thenReturn(NEW_ITEM_VALUE);
@@ -131,44 +118,21 @@ public class ItemServiceUnitTests {
     }
 
     @Test
-    public void getAll() {
-        List<Item> found = itemService.getAll();
-
-        verify(itemRepository, times(1)).findAll();
-    }
-
-    @Test
-    public void getAllMenuItems() {
-        List<Item> found = itemService.getAllMenuItems();
-
-        verify(itemRepository, times(1)).findByInMenuTrue();
-    }
-
-    @Test
-    public void findOne_invalidId() {
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.findOne(NONEXISTENT_ITEM_ID);
-        }, "NotFoundException was expected");
-
-        assertEquals(String.format("No item with id %d has been found",
-                NONEXISTENT_ITEM_ID), thrown.getMessage());
-    }
-
-    @Test
     public void createItem() {
 
-        itemService.create(VALID_ITEM);
+        ItemDTO itemDTO = itemMapper.convert(VALID_ITEM);
+        itemService.create(itemDTO);
         verify(itemRepository, times(1)).save(any(Item.class));
     }
 
     @Test
     public void createItem_invalidCategory() {
 
-        Item item = new Item(VALID_ITEM);
-        item.getCategory().setId(NONEXISTENT_CATEGORY_ID);
+        ItemDTO itemDTO = itemMapper.convert(VALID_ITEM);
+        itemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.create(item);
+            itemService.create(itemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No category with id %d has been found",
@@ -179,16 +143,16 @@ public class ItemServiceUnitTests {
     @Test
     public void createItem_invalidTags() {
 
-        Item item = new Item(VALID_ITEM);
+        ItemDTO itemDTO = itemMapper.convert(VALID_ITEM);
 
-        item.setTags(new ArrayList<>() {
+        itemDTO.setTags(new ArrayList<>() {
             {
-                add(new Tag(NONEXISTENT_TAG_ID, null));
+                add(new TagDTO(NONEXISTENT_TAG_ID, null));
             }
         });
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.create(item);
+            itemService.create(itemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No tag with id %d has been found",
@@ -198,37 +162,36 @@ public class ItemServiceUnitTests {
     @Test
     public void updateItem() {
 
-        Item updatedItem = new Item(EXISTENT_ITEM);
+        ItemDTO updatedItemDTO = itemMapper.convert(EXISTENT_ITEM);
         String VALUE_FOR_CONCAT = "ABC";
-        updatedItem.setName(updatedItem.getName() + VALUE_FOR_CONCAT);
-        updatedItem.setDescription(updatedItem.getDescription() + VALUE_FOR_CONCAT);
-        // updatedItem.setImageURL(); //TODO write separate tests for image upload
-        updatedItem.setItemType(ItemType.DRINK);
+        updatedItemDTO.setName(updatedItemDTO.getName() + VALUE_FOR_CONCAT);
 
-        Item savedItem = itemService.editItem(updatedItem);
+        Item savedItem = itemService.editItem(updatedItemDTO);
+
         verify(itemRepository, times(1)).save(any(Item.class));
-        assertEquals(updatedItem.getName(), savedItem.getName());
+        assertEquals(updatedItemDTO.getName(), savedItem.getName());
+        assertEquals(updatedItemDTO.getDescription(), savedItem.getDescription());
+        assertEquals(updatedItemDTO.getItemType(), savedItem.getItemType());
+
     }
 
     @Test
     public void updateItem_missingId() {
 
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.editItem(VALID_ITEM);
-        }, "NotFoundException was expected");
+        CustomConstraintViolationException thrown = assertThrows(CustomConstraintViolationException.class, () -> {
+            itemService.editItem(itemMapper.convert(VALID_ITEM));
+        }, "CustomConstraintViolationException was expected");
 
-        assertEquals(String.format("No item with id %d has been found",
-                NULL_ID), thrown.getMessage());
     }
 
     @Test
     public void updateItem_invalidCategory() {
 
-        Item item = new Item(EXISTENT_ITEM);
-        item.getCategory().setId(NONEXISTENT_CATEGORY_ID);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM);
+        existentItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.editItem(item);
+            itemService.editItem(existentItemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No category with id %d has been found",
@@ -239,20 +202,29 @@ public class ItemServiceUnitTests {
     @Test
     public void updateItem_invalidTags() {
 
-        Item item = new Item(EXISTENT_ITEM);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM);
 
-        item.setTags(new ArrayList<>() {
+        existentItemDTO.setTags(new ArrayList<>() {
             {
-                add(new Tag(NONEXISTENT_TAG_ID, null));
+                add(new TagDTO(NONEXISTENT_TAG_ID, null));
             }
         });
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.editItem(item);
+            itemService.editItem(existentItemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No tag with id %d has been found",
                 NONEXISTENT_TAG_ID), thrown.getMessage());
+    }
+
+    @Test
+    public void deleteItem_unsuccessful() {
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
+            itemService.delete(NONEXISTENT_ITEM_ID);
+        }, "NotFoundException was expected");
+
+        assertEquals(String.format("No item with id %d has been found", NONEXISTENT_ITEM_ID), thrown.getMessage());
     }
 
     @Test
@@ -261,7 +233,5 @@ public class ItemServiceUnitTests {
         ItemValue updatedValue = itemService.changeItemPrice(NEW_ITEM_VALUE_DTO);
         assertEquals(updatedValue.getPurchasePrice(), NEW_ITEM_VALUE_DTO.getPurchasePrice());
     }
-
-    //TODO add tests for only changing selling price, test for adding future date etc.
 
 }
