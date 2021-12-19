@@ -3,11 +3,8 @@ package com.restaurant.backend.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
@@ -18,6 +15,7 @@ import com.restaurant.backend.exception.CustomConstraintViolationException;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
 import com.restaurant.backend.support.ItemMapper;
+import com.restaurant.backend.validation.DTOValidator;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
 import com.restaurant.backend.validation.interfaces.EditInfo;
 
@@ -37,7 +35,6 @@ public class ItemService {
     private final CategoryService categoryService;
     private final EntityManager entityManager;
     private final ItemMapper itemMapper;
-    private Validator validator;
 
     public List<Item> getAll() {
         // Retrieves undeleted items
@@ -113,16 +110,7 @@ public class ItemService {
 
     public Item editItem(@Validated(EditInfo.class) ItemDTO changedItemDTO) throws NotFoundException, CustomConstraintViolationException {
 
-        Set<ConstraintViolation<ItemDTO>> violations = validator.validate(changedItemDTO, EditInfo.class);
-
-        if (!violations.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (ConstraintViolation<ItemDTO> constraintViolation : violations) {
-                System.out.println(constraintViolation.getMessage());
-                sb.append(constraintViolation.getMessage());
-            }
-            throw new CustomConstraintViolationException(sb.toString());
-        }
+        DTOValidator.validate(changedItemDTO, EditInfo.class);
 
         Item item = findOne(changedItemDTO.getId());
         item.setName(changedItemDTO.getName());
