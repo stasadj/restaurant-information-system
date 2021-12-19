@@ -21,7 +21,6 @@ import javax.transaction.Transactional;
 
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
-import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.TagDTO;
 import com.restaurant.backend.exception.CustomConstraintViolationException;
@@ -180,17 +179,11 @@ public class ItemServiceIntegrationTests {
     public void updateItem() {
 
         ItemDTO updatedItemDTO = itemMapper.convert(EXISTENT_ITEM);
-        String VALUE_FOR_CONCAT = "ABC";
+        String VALUE_FOR_CONCAT = "ABCCC";
         updatedItemDTO.setName(updatedItemDTO.getName() + VALUE_FOR_CONCAT);
-        updatedItemDTO.setDescription(updatedItemDTO.getDescription() + VALUE_FOR_CONCAT);
-        // updatedItem.setImageURL(); //TODO write separate tests for image upload
-        updatedItemDTO.setItemType(ItemType.DRINK);
 
         Item savedItem = itemService.editItem(updatedItemDTO);
         assertEquals(updatedItemDTO.getName(), savedItem.getName());
-        assertEquals(updatedItemDTO.getDescription(), savedItem.getDescription());
-        assertEquals(updatedItemDTO.getItemType(), savedItem.getItemType());
-
 
     }
 
@@ -208,11 +201,11 @@ public class ItemServiceIntegrationTests {
     @Test
     public void updateItem_invalidCategory() {
 
-        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM);
-        existantItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM);
+        existentItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.editItem(existantItemDTO);
+            itemService.editItem(existentItemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No category with id %d has been found",
@@ -223,16 +216,16 @@ public class ItemServiceIntegrationTests {
     @Test
     public void updateItem_invalidTags() {
 
-        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM);
 
-        existantItemDTO.setTags(new ArrayList<>() {
+        existentItemDTO.setTags(new ArrayList<>() {
             {
                 add(new TagDTO(NONEXISTENT_TAG_ID, null));
             }
         });
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.editItem(existantItemDTO);
+            itemService.editItem(existentItemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No tag with id %d has been found",

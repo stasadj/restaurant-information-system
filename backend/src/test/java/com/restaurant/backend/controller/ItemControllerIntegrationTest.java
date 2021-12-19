@@ -168,20 +168,15 @@ public final class ItemControllerIntegrationTest {
     public void updateItem() throws Exception {
 
     ItemDTO updatedItemDTO = itemMapper.convert(EXISTENT_ITEM);
-    String VALUE_FOR_CONCAT = "ABC";
+    String VALUE_FOR_CONCAT = "ABCC";
     updatedItemDTO.setName(updatedItemDTO.getName() + VALUE_FOR_CONCAT);
-    updatedItemDTO.setDescription(updatedItemDTO.getDescription() +
-    VALUE_FOR_CONCAT);
-    // updatedItem.setImageURL(); //TODO write separate tests for image upload
-    updatedItemDTO.setItemType(ItemType.DRINK);
 
     mockMvc.perform(MockMvcRequestBuilders.put("/api/item/edit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedItemDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(VALID_ITEM.getName() + VALUE_FOR_CONCAT))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(VALID_ITEM.getDescription() + VALUE_FOR_CONCAT));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(VALID_ITEM.getName() + VALUE_FOR_CONCAT));
 
     }
 
@@ -197,12 +192,12 @@ public final class ItemControllerIntegrationTest {
     @Test
     public void updateItem_invalidCategory() throws Exception {
 
-        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM); 
-        existantItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM); 
+        existentItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/item/edit")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(existantItemDTO)))
+                .content(objectMapper.writeValueAsString(existentItemDTO)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
 
     }
@@ -210,9 +205,9 @@ public final class ItemControllerIntegrationTest {
     @Test
     public void updateItem_invalidTags() throws Exception {
 
-        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM);
 
-        existantItemDTO.setTags(new ArrayList<>() {
+        existentItemDTO.setTags(new ArrayList<>() {
             {
                 add(new TagDTO(NONEXISTENT_TAG_ID, null));
             }
@@ -220,7 +215,7 @@ public final class ItemControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/item/edit")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(existantItemDTO)))
+            .content(objectMapper.writeValueAsString(existentItemDTO)))
             .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -234,7 +229,6 @@ public final class ItemControllerIntegrationTest {
             .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.sellingPrice").value(NEW_ITEM_VALUE_DTO.getSellingPrice()))
             .andExpect(MockMvcResultMatchers.jsonPath("$.purchasePrice").value(NEW_ITEM_VALUE_DTO.getPurchasePrice()));
-
     }       
 
 

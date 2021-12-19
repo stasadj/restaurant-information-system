@@ -15,7 +15,6 @@ import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_IT
 import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_ITEM_ID;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG1;
 import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG2;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.generateValidItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,7 +24,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -93,6 +91,7 @@ public class ItemServiceUnitTests {
                 .thenThrow(new NotFoundException(String.format("No category with id %d has been found",
                         NONEXISTENT_CATEGORY_ID)));
 
+
         when(tagService.findOne(eq(TAG1_ID)))
                 .thenReturn(VALID_TAG1);
 
@@ -103,31 +102,15 @@ public class ItemServiceUnitTests {
                 .thenThrow(new NotFoundException(String.format("No tag with id %d has been found",
                         NONEXISTENT_TAG_ID)));
 
-        List<Item> items = (new ArrayList<>() {
-            {
-                add(generateValidItem());
-                add(generateValidItem());
-                add(generateValidItem());
-            }
-        });
-
-        when(itemRepository.findAll())
-                .thenReturn(items);
-
-        when(itemRepository.findByInMenuTrue())
-                .thenReturn(items);
 
         when(itemRepository.findById(eq(VALID_ITEM_ID)))
-                .thenReturn(Optional.of(EXISTENT_ITEM));
+                .thenReturn(Optional.of(new Item(EXISTENT_ITEM))); //copying the object to prevent changes to original EXISTENT_ITEM constant
 
         when(itemRepository.findById(eq(NONEXISTENT_ITEM_ID)))
                 .thenReturn(Optional.empty());
 
-        when(itemRepository.findById(null))
-                .thenReturn(Optional.empty());
-
         when(itemRepository.save(any(Item.class)))
-                .thenReturn(EXISTENT_ITEM);
+                .thenAnswer(i -> i.getArguments()[0]); //returning the same object that was passed as a parameter
 
         when(itemValueRepository.save(any(ItemValue.class)))
                 .thenReturn(NEW_ITEM_VALUE);
@@ -182,15 +165,14 @@ public class ItemServiceUnitTests {
         ItemDTO updatedItemDTO = itemMapper.convert(EXISTENT_ITEM);
         String VALUE_FOR_CONCAT = "ABC";
         updatedItemDTO.setName(updatedItemDTO.getName() + VALUE_FOR_CONCAT);
-        updatedItemDTO.setDescription(updatedItemDTO.getDescription() + VALUE_FOR_CONCAT);
-        // updatedItem.setImageURL(); //TODO write separate tests for image upload
-        updatedItemDTO.setItemType(ItemType.DRINK);
 
         Item savedItem = itemService.editItem(updatedItemDTO);
+
         verify(itemRepository, times(1)).save(any(Item.class));
         assertEquals(updatedItemDTO.getName(), savedItem.getName());
         assertEquals(updatedItemDTO.getDescription(), savedItem.getDescription());
         assertEquals(updatedItemDTO.getItemType(), savedItem.getItemType());
+
     }
 
     @Test
@@ -205,11 +187,11 @@ public class ItemServiceUnitTests {
     @Test
     public void updateItem_invalidCategory() {
 
-        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM);
-        existantItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM);
+        existentItemDTO.getCategory().setId(NONEXISTENT_CATEGORY_ID);
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.editItem(existantItemDTO);
+            itemService.editItem(existentItemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No category with id %d has been found",
@@ -220,16 +202,16 @@ public class ItemServiceUnitTests {
     @Test
     public void updateItem_invalidTags() {
 
-        ItemDTO existantItemDTO = itemMapper.convert(EXISTENT_ITEM);
+        ItemDTO existentItemDTO = itemMapper.convert(EXISTENT_ITEM);
 
-        existantItemDTO.setTags(new ArrayList<>() {
+        existentItemDTO.setTags(new ArrayList<>() {
             {
                 add(new TagDTO(NONEXISTENT_TAG_ID, null));
             }
         });
 
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            itemService.editItem(existantItemDTO);
+            itemService.editItem(existentItemDTO);
         }, "NotFoundException was expected");
 
         assertEquals(String.format("No tag with id %d has been found",
