@@ -26,15 +26,17 @@ public class JWTUserDetailsService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
 
-    public JWTUserDetailsService(PasswordUserRepository passwordUserRepository, StaffRepository staffRepository,
-            AuthenticationManager authenticationManager) {
+    public JWTUserDetailsService(PasswordUserRepository passwordUserRepository, StaffRepository staffRepository) {
         this.passwordUserRepository = passwordUserRepository;
         this.staffRepository = staffRepository;
-        this.authenticationManager = authenticationManager;
     }
 
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 
     @Override

@@ -23,7 +23,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import lombok.AllArgsConstructor;
+
 @Configuration
+@AllArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -37,21 +40,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private PinUserAuthenticationProvider pinUserAuthenticationProvider;
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    public WebSecurityConfiguration(TokenUtils tokenUtils, PinUserAuthenticationProvider pinUserAuthenticationProvider,
-            RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
-        this.tokenUtils = tokenUtils;
-        this.pinUserAuthenticationProvider = pinUserAuthenticationProvider;
-        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
-    }
-
-    @Autowired
-    public void setJWTUserDetailsService(JWTUserDetailsService userDetailsService) {
-        jwtUserDetailsService = userDetailsService;
-    }
-
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
         jwtUserDetailsService.setPasswordEncoder(passwordEncoder());
+        jwtUserDetailsService.setAuthenticationManager(authenticationManagerBean());
     }
 
     @Bean
