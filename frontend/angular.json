@@ -70,7 +70,12 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "deployUrl": "/",
+              "index": {
+                "input": "src/index.html",
+                "output": "./index.html"
+              }
             }
           },
           "defaultConfiguration": "production"
