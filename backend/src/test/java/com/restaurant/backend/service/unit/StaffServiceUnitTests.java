@@ -49,9 +49,8 @@ public class StaffServiceUnitTests {
         // No pin is valid anymore
         when(staffRepository.findByPin(anyInt())).thenReturn(Optional.of(staff));
 
-        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
-            staffService.create(staff);
-        }, "BadRequestException was expected");
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> staffService.create(staff),
+                "BadRequestException was expected");
 
         assertEquals(String.format("Staff member with pin %d already exists.", staff.getPin()), thrown.getMessage());
     }
@@ -84,9 +83,8 @@ public class StaffServiceUnitTests {
         dto.setCurrentPin(otherPin);
         dto.setNewPin(staffPin);
 
-        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
-            staffService.changePin(dto);
-        }, "BadRequestException was expected");
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> staffService.changePin(dto),
+                "BadRequestException was expected");
 
         assertEquals("New pin is already in use.", thrown.getMessage());
     }
@@ -97,9 +95,8 @@ public class StaffServiceUnitTests {
         dto.setCurrentPin(StaffServiceTestConstants.OTHER_PIN);
         dto.setNewPin(StaffServiceTestConstants.STAFF_PIN);
 
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            staffService.changePin(dto);
-        }, "NotFoundException was expected");
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> staffService.changePin(dto),
+                "NotFoundException was expected");
 
         assertEquals("Current pin does not exist.", thrown.getMessage());
     }
@@ -125,9 +122,8 @@ public class StaffServiceUnitTests {
         Long staffId = StaffServiceTestConstants.STAFF_ID;
         dto.setStaffId(staffId);
 
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            staffService.changeSalary(dto);
-        }, "NotFoundException was expected");
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> staffService.changeSalary(dto),
+                "NotFoundException was expected");
 
         assertEquals(String.format("No staff member with id %d has been found", staffId), thrown.getMessage());
     }

@@ -7,6 +7,7 @@ import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.PasswordUserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PasswordUserService {
     private final PasswordUserRepository passwordUserRepository;
+    private PasswordEncoder passwordEncoder;
 
     public List<PasswordUser> getAll() {
         return passwordUserRepository.findAll();
@@ -25,15 +27,16 @@ public class PasswordUserService {
 
     public PasswordUser findOne(Long id) throws NotFoundException {
         return passwordUserRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("No password user with id %d has been found", id)));
+                () -> new NotFoundException(String.format("No user with id %d has been found", id)));
     }
 
     public PasswordUser create(PasswordUser passwordUser) throws BadRequestException {
         passwordUser.setId(null);
         passwordUser.setDeleted(false);
+        passwordUser.setPassword(passwordEncoder.encode(passwordUser.getPassword()));
         Optional<PasswordUser> maybeUser = passwordUserRepository.findByUsername(passwordUser.getUsername());
         if (maybeUser.isPresent())
-            throw new BadRequestException(String.format("Password user with username %s already exists.", passwordUser.getUsername()));
+            throw new BadRequestException(String.format("User with username %s already exists.", passwordUser.getUsername()));
         return passwordUserRepository.save(passwordUser);
     }
 

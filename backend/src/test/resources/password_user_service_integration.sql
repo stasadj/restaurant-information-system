@@ -1,0 +1,3 @@
+INSERT INTO user (id, first_name, last_name, email, username, password, phone_number, role, monthly_wage, pin, deleted) VALUES
+  (1, 'Will', 'Smith', 'will@somedomain.smith', 'Petar1', '$2y$10$t4NZP3qGGdzGakospEzFHOPQngmjvi7dZeZSiwfiNz.1rv/smO0Ce', '12345678', 'manager', 400, NULL, false),
+  (2, 'William', 'Smith', 'william@somedomain.smith', 'admin', '$2y$10$t4NZP3qGGdzGakospEzFHOPQngmjvi7dZeZSiwfiNz.1rv/smO0Ce', '12345678', 'admin', NULL, NULL, false);

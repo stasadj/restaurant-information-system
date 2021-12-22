@@ -42,7 +42,7 @@ public class ReportControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
@@ -53,9 +53,13 @@ public class ReportControllerIntegrationTest {
             throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/report/query")
-                .header("Content-type", "application/json")
-                .content(objectMapper.writeValueAsString(dto)))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/report/query")
+                        .param("fromDate", dto.getFromDate().toString())
+                        .param("toDate", dto.getToDate().toString())
+                        .param("reportGranularity", dto.getReportGranularity().name())
+                        .param("reportType", dto.getReportType().name())
+                        .param("itemId", dto.getItemId() == null ? "" : dto.getItemId().toString())
+                )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andReturn();
