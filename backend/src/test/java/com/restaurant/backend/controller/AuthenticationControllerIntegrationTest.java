@@ -30,7 +30,6 @@ import org.springframework.web.util.NestedServletException;
 
 import static com.restaurant.backend.constants.AuthenticationServiceTestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,7 +48,7 @@ public class AuthenticationControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
@@ -60,21 +59,20 @@ public class AuthenticationControllerIntegrationTest {
 
         if (expectedToLogin) {
             MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(credentials)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(credentials)))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
 
             MockHttpServletResponse response = result.getResponse();
-            checkForCookie(expectedToLogin, response);
+            checkForCookie(response);
         } else {
-            NestedServletException thrown = assertThrows(NestedServletException.class, () -> {
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(credentials)))
-                        .andExpect(res -> assertTrue(res.getResolvedException() instanceof NestedServletException))
-                        .andReturn();
-            }, "NestedServletException expected");
+            NestedServletException thrown = assertThrows(NestedServletException.class, () ->
+                    mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(credentials)))
+                            .andExpect(res -> assertTrue(res.getResolvedException() instanceof NestedServletException))
+                            .andReturn(), "NestedServletException expected");
             assertTrue(thrown.getCause() instanceof BadCredentialsException, "BadCredentialsException expected");
         }
     }
@@ -84,50 +82,44 @@ public class AuthenticationControllerIntegrationTest {
     public void login_pinUser_successful(String pin, Boolean expectedToLogin) throws Exception {
         if (expectedToLogin) {
             MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/pin-login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(pin))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(pin))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
 
             MockHttpServletResponse response = result.getResponse();
-            checkForCookie(expectedToLogin, response);
+            checkForCookie(response);
         } else {
-            NestedServletException thrown = assertThrows(NestedServletException.class, () -> {
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/pin-login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(pin))
-                        .andExpect(res -> assertTrue(res.getResolvedException() instanceof NestedServletException))
-                        .andReturn();
-            }, "NestedServletException expected");
+            NestedServletException thrown = assertThrows(NestedServletException.class, () ->
+                    mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/pin-login")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(pin))
+                            .andExpect(res -> assertTrue(res.getResolvedException() instanceof NestedServletException))
+                            .andReturn(), "NestedServletException expected");
             assertTrue(thrown.getCause() instanceof ProviderNotFoundException, "ProviderNotFoundException expected");
         }
     }
 
     @Test
-    public void whoami_loginThenCheckData_successfuly() throws Exception {
+    public void whoami_loginThenCheckData_successfully() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/pin-login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(VALID_PIN_1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(VALID_PIN_1))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
         MockHttpServletResponse response = result.getResponse();
-        checkForCookie(true, response);
+        checkForCookie(response);
 
-        result = mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/whoami")
-                .cookie(getCookie(response)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/whoami")
+                        .cookie(getCookie(response)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andReturn();
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"));
     }
 
-    private void checkForCookie(Boolean expectedToLogin, MockHttpServletResponse response) {
+    private void checkForCookie(MockHttpServletResponse response) {
         // If we have a cookie, we've successfully logged in.
-        if (expectedToLogin) {
-            assertNotNull(response.getCookie("accessToken"));
-        } else {
-            assertNull(response.getCookie("accessToken"));
-        }
+        assertNotNull(response.getCookie("accessToken"));
     }
 
     private Cookie getCookie(MockHttpServletResponse response) {
@@ -152,7 +144,7 @@ public class AuthenticationControllerIntegrationTest {
         });
     }
 
-    /// Returns a collection of [CredentialsDTO, Expected To Login]
+    /// Returns a collection of [CredentialsDTO, Expected To log in]
     private static Collection<Object[]> passwordCredentials() {
         return Arrays.asList(new Object[][] {
                 { new CredentialsDTO(ADMIN_USERNAME, USER_PASSWORD), true },

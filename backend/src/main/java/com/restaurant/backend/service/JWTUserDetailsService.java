@@ -20,8 +20,8 @@ import java.util.Optional;
 @Service
 public class JWTUserDetailsService implements UserDetailsService {
 
-    private PasswordUserRepository passwordUserRepository;
-    private StaffRepository staffRepository;
+    private final PasswordUserRepository passwordUserRepository;
+    private final StaffRepository staffRepository;
 
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
