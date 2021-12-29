@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TableService } from 'src/app/services/table.service';
 import { RestaurantTable } from '../RestaurantTable';
 
 @Component({
@@ -7,52 +8,41 @@ import { RestaurantTable } from '../RestaurantTable';
   styleUrls: ['./canvas.component.less'],
 })
 export class CanvasComponent implements OnInit {
-  tables: RestaurantTable[] = [
-    {
-      id: '1',
-      rotateValue: 0,
-      size: { w: 150, h: 50 },
-      radius: 0,
-      position: { x: 0, y: 0 },
-      status: 'a',
-    },
-    {
-      id: '2',
-      rotateValue: 50,
-      size: { w: 50, h: 50 },
-      radius: 0,
-      position: { x: 100, y: 0 },
-      status: 'a',
-    },
-    {
-      id: '3',
-      rotateValue: 100,
-      size: { w: 120, h: 50 },
-      radius: 0,
-      position: { x: 50, y: 50 },
-      status: 'b',
-    },
-  ];
-  currentTable?: RestaurantTable;
+  rooms: { id: string; tables: RestaurantTable[] }[] =
+    this.tableService.getRooms();
 
-  constructor() {}
+  currentTable?: RestaurantTable;
+  currentRoomIndex: number = 0;
+
+  constructor(private tableService: TableService) {}
 
   ngOnInit(): void {}
   onSave() {
-    console.log(this.tables);
+    console.log(this.rooms);
   }
   onTableClick(id: string) {
-    this.currentTable = this.tables.filter((x) => x.id === id)[0];
+    this.currentTable = this.rooms[this.currentRoomIndex].tables.find(
+      (x) => x.id === id
+    );
     console.log(this.currentTable);
   }
+  tabChanged($event: any) {
+    this.currentRoomIndex = $event.index;
+  }
   onAdd() {
-    this.tables.push({
-      id: `${this.tables.length + 1}`,
+    this.rooms[this.currentRoomIndex].tables.push({
+      id: `${Math.floor(Math.random() * 1000)}`,
       rotateValue: 0,
       size: { w: 100, h: 50 },
       radius: 20,
-      position: { x: 0, y: -this.tables.length * 100 },
+      position: { x: 0, y: 0 },
       status: 'b',
     });
+  }
+  formatDegrees(value: number) {
+    return value + 'º';
+  }
+  formatPx(value: number) {
+    return value + 'px';
   }
 }

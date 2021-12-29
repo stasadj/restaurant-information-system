@@ -8,7 +8,8 @@
   (cdkDragEnded)="dragEnd($event)"
   [ngStyle]="{
     width: table.size.w + 'px',
-    height: table.size.h + 'px'
+    height: table.size.h + 'px',
+    cursor: disableDrag ? 'pointer' : 'move'
   }"
 >
   <div
