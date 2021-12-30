@@ -16,7 +16,7 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {}
 
   onTableClick(id: string) {
-    console.log(id);
+    alert('Order for table ' + id);
     //todo: order view
   }
 }
