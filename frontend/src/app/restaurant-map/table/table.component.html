@@ -22,6 +22,12 @@
       backgroundColor: table.status === 'a' ? 'green' : 'blue'
     }"
   >
-    {{ table.id }}
+    <b
+      [ngStyle]="{
+        transform: 'rotate(' + -table.rotateValue + 'deg)'
+      }"
+    >
+      {{ table.id }}
+    </b>
   </div>
 </div>
