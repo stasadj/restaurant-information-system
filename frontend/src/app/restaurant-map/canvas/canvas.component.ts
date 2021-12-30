@@ -33,15 +33,30 @@ export class CanvasComponent implements OnInit {
     this.currentRoomIndex = $event.index;
   }
 
-  onAddTable() {
-    this.rooms[this.currentRoomIndex].tables.push({
-      id: `${Math.floor(Math.random() * 1000)}`,
-      rotateValue: 0,
-      size: { w: 100, h: 50 },
-      radius: 20,
-      position: { x: 0, y: 0 },
-      status: 'b',
-    });
+  onAddTable(copy: boolean) {
+    let newTable =
+      copy && this.currentTable
+        ? {
+            id: `${Math.floor(Math.random() * 1000)}`,
+            rotateValue: this.currentTable.rotateValue,
+            size: { ...this.currentTable.size },
+            radius: this.currentTable.radius,
+            position: {
+              x: this.currentTable.position.x + 10,
+              y: this.currentTable.position.y + 10,
+            },
+            status: '',
+          }
+        : {
+            id: `${Math.floor(Math.random() * 1000)}`,
+            rotateValue: 0,
+            size: { w: 100, h: 50 },
+            radius: 20,
+            position: { x: 0, y: 0 },
+            status: '',
+          };
+    this.rooms[this.currentRoomIndex].tables.push(newTable);
+    this.currentTable = newTable;
   }
 
   onDeleteTable() {
