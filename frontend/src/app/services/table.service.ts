@@ -8,6 +8,7 @@ export class TableService {
   constructor() {}
 
   getRooms(): { id: string; tables: RestaurantTable[] }[] {
+    // TODO: api call
     return [
       {
         id: 'Room 1',
@@ -60,5 +61,10 @@ export class TableService {
         ],
       },
     ];
+  }
+
+  saveRooms(rooms: { id: string; tables: RestaurantTable[] }[]) {
+    console.log(rooms);
+    // TODO: post to backend
   }
 }

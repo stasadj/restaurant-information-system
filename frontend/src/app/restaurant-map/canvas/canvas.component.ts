@@ -17,19 +17,23 @@ export class CanvasComponent implements OnInit {
   constructor(private tableService: TableService) {}
 
   ngOnInit(): void {}
+
   onSave() {
-    console.log(this.rooms);
+    this.tableService.saveRooms(this.rooms);
   }
+
   onTableClick(id: string) {
     this.currentTable = this.rooms[this.currentRoomIndex].tables.find(
       (x) => x.id === id
     );
     console.log(this.currentTable);
   }
+
   tabChanged($event: any) {
     this.currentRoomIndex = $event.index;
   }
-  onAdd() {
+
+  onAddTable() {
     this.rooms[this.currentRoomIndex].tables.push({
       id: `${Math.floor(Math.random() * 1000)}`,
       rotateValue: 0,
@@ -39,10 +43,28 @@ export class CanvasComponent implements OnInit {
       status: 'b',
     });
   }
-  formatDegrees(value: number) {
-    return value + 'º';
+
+  onDeleteTable() {
+    let i = this.rooms[this.currentRoomIndex].tables.findIndex(
+      (x) => x.id === this.currentTable?.id
+    );
+    this.rooms[this.currentRoomIndex].tables.splice(i, 1);
+    this.currentTable = undefined;
   }
-  formatPx(value: number) {
-    return value + 'px';
+
+  onAddRoom() {
+    this.rooms.push({
+      id: `Room ${this.rooms.length + 1}`,
+      tables: [],
+    });
   }
+
+  onDeleteRoom() {
+    this.rooms.splice(this.currentRoomIndex, 1);
+    if (this.rooms.length === 0) this.onAddRoom();
+    this.currentRoomIndex = 0;
+  }
+
+  formatDegrees = (value: number) => value + 'º';
+  formatPx = (value: number) => value + 'px';
 }

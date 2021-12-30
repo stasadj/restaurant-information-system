@@ -17,58 +17,87 @@
     </mat-tab-group>
   </div>
 
-  <div *ngIf="currentTable" class="inline">
-    Table #
-    <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>id</mat-label>
-      <input matInput [(ngModel)]="currentTable.id" />
-    </mat-form-field>
-    <div>
-      <div>
-        Rotate:
-        <mat-slider
-          thumbLabel
-          min="-150"
-          max="150"
-          [displayWith]="formatDegrees"
-          [(ngModel)]="currentTable.rotateValue"
-        ></mat-slider>
-      </div>
-      <div>
-        Width:
-        <mat-slider
-          thumbLabel
-          min="10"
-          max="200"
-          [displayWith]="formatPx"
-          [(ngModel)]="currentTable.size.w"
-        ></mat-slider>
-      </div>
-      <div>
-        Height:
-        <mat-slider
-          thumbLabel
-          min="10"
-          max="200"
-          [displayWith]="formatPx"
-          [(ngModel)]="currentTable.size.h"
-        ></mat-slider>
-      </div>
-      <div>
-        Radius:
-        <mat-slider
-          thumbLabel
-          min="0"
-          max="100"
-          [displayWith]="formatPx"
-          [(ngModel)]="currentTable.radius"
-        ></mat-slider>
-      </div>
-      <div></div>
-    </div>
-    <button mat-raised-button color="primary" (click)="onAdd()">
-      Add table
-    </button>
-    <button mat-button color="primary" (click)="onSave()">save</button>
+  <div class="inline">
+    <mat-card>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="onAddRoom()">
+          Add room
+        </button>
+        <button mat-button color="primary" (click)="onSave()">Save all</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-title>Room settings</mat-card-title>
+      <mat-card-content>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Room id</mat-label>
+          <input matInput [(ngModel)]="rooms[currentRoomIndex].id" />
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="onAddTable()">
+          Add table
+        </button>
+        <button mat-stroked-button color="warn" (click)="onDeleteRoom()">
+          Delete room
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card *ngIf="currentTable">
+      <mat-card-title>Table settings</mat-card-title>
+      <mat-card-content>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Table id</mat-label>
+          <input matInput [(ngModel)]="currentTable.id" />
+        </mat-form-field>
+        <div>
+          Rotate:
+          <mat-slider
+            thumbLabel
+            min="-150"
+            max="150"
+            [displayWith]="formatDegrees"
+            [(ngModel)]="currentTable.rotateValue"
+          ></mat-slider>
+        </div>
+        <div>
+          Width:
+          <mat-slider
+            thumbLabel
+            min="10"
+            max="200"
+            [displayWith]="formatPx"
+            [(ngModel)]="currentTable.size.w"
+          ></mat-slider>
+        </div>
+        <div>
+          Height:
+          <mat-slider
+            thumbLabel
+            min="10"
+            max="200"
+            [displayWith]="formatPx"
+            [(ngModel)]="currentTable.size.h"
+          ></mat-slider>
+        </div>
+        <div>
+          Radius:
+          <mat-slider
+            thumbLabel
+            min="0"
+            max="100"
+            [displayWith]="formatPx"
+            [(ngModel)]="currentTable.radius"
+          ></mat-slider>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button color="warn" (click)="onDeleteTable()">
+          Delete table
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>
