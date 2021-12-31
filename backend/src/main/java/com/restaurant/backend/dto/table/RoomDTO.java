@@ -4,13 +4,15 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-public class TableOrganizationDTO {
+@Data
+@NoArgsConstructor
+public class RoomDTO {
+    @NotNull(message = "Room id must be present")
+    private String id;
+
     @NotNull(message = "Tables list must be present")
     private List<TableDTO> tables;
-
-    @NotNull(message = "Rooms list must be present")
-    private List<String> rooms;
 }

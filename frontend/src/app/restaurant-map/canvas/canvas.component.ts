@@ -53,7 +53,6 @@ export class CanvasComponent implements OnInit {
             size: { w: 100, h: 50 },
             radius: 20,
             position: { x: 0, y: 0 },
-            status: '',
           };
     this.rooms[this.currentRoomIndex].tables.push(newTable);
     this.currentTable = newTable;
@@ -82,4 +81,17 @@ export class CanvasComponent implements OnInit {
 
   formatDegrees = (value: number) => value + 'º';
   formatPx = (value: number) => value + 'px';
+
+  rotate90() {
+    if (!this.currentTable) return;
+    let h = this.currentTable.size.h;
+    let w = this.currentTable.size.w;
+    let pos = this.currentTable.position;
+    this.currentTable.position = {
+      x: pos.x + (w - h) / 2,
+      y: pos.y - (w - h) / 2,
+    };
+    this.currentTable.size.h = this.currentTable.size.w;
+    this.currentTable.size.w = h;
+  }
 }

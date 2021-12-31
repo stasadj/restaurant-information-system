@@ -1,26 +1,27 @@
 package com.restaurant.backend.dto.table;
 
-import java.math.BigDecimal;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class TableDTO {
     @NotNull(message = "Table identifier is missing for table")
     @Positive(message = "Table identifier must be greater than 0")
-    private Long id;
+    private Integer id;
 
-    @NotNull(message = "Room index is missing for table")
-    private Long roomIndex;
+    @NotNull(message = "Rotate value is missing for table")
+    private Integer rotateValue;
 
-    @NotNull(message = "xPos is missing for table")
-    private BigDecimal xPos;
+    @NotNull(message = "Size is missing for table")
+    private TableSizeDTO size;
 
-    @NotNull(message = "yPos is missing for table")
-    private BigDecimal yPos;
+    @NotNull(message = "Radius is missing for table")
+    private Integer radius;
+
+    @NotNull(message = "Position is missing for table")
+    private TablePositionDTO position;
 }

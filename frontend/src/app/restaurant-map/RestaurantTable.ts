@@ -10,5 +10,5 @@ export interface RestaurantTable {
     x: number;
     y: number;
   };
-  status: string;
+  status?: string;
 }

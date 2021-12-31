@@ -1,18 +1,16 @@
 package com.restaurant.backend.service;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
-import javax.transaction.Transactional;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restaurant.backend.dto.table.TableOrganizationDTO;
-
+import com.restaurant.backend.validation.DTOValidator;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
+import javax.transaction.Transactional;
+import java.io.FileWriter;
+import java.io.IOException;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +26,8 @@ public class TableService {
     private final OrderService orderService;
 
     public Boolean setNewTableOrganization(TableOrganizationDTO dto) {
+        DTOValidator.validate(dto);
+
         if (orderService.getHasTablesTaken()) {
         return false;
         }

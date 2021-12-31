@@ -41,13 +41,12 @@ public class AuthenticationServiceIntegrationTests {
 
         if (expectedToLogin) {
             authenticationService.login(credentials, mockResponse);
-            checkForCookie(expectedToLogin, mockResponse);
         } else {
             assertThrows(BadCredentialsException.class, () -> {
                 authenticationService.login(credentials, mockResponse);
             });
-            checkForCookie(expectedToLogin, mockResponse);
         }
+        checkForCookie(expectedToLogin, mockResponse);
     }
 
     @ParameterizedTest
@@ -57,13 +56,12 @@ public class AuthenticationServiceIntegrationTests {
 
         if (expectedToLogin) {
             authenticationService.login(pin, mockResponse);
-            checkForCookie(expectedToLogin, mockResponse);
         } else {
             assertThrows(ProviderNotFoundException.class, () -> {
                 authenticationService.login(pin, mockResponse);
             });
-            checkForCookie(expectedToLogin, mockResponse);
         }
+        checkForCookie(expectedToLogin, mockResponse);
     }
 
     private void checkForCookie(Boolean expectedToLogin, MockHttpServletResponse response) {

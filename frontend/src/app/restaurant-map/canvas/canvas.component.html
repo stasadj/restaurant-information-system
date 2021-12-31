@@ -55,12 +55,21 @@
         <div>
           Rotate:
           <mat-slider
+            class="rotate"
             thumbLabel
-            min="-150"
-            max="150"
+            min="-45"
+            max="45"
             [displayWith]="formatDegrees"
             [(ngModel)]="currentTable.rotateValue"
           ></mat-slider>
+          <button
+            mat-icon-button
+            color="accent"
+            aria-label="rotate90"
+            (click)="rotate90()"
+          >
+            <mat-icon>rotate_90_degrees_ccw</mat-icon>
+          </button>
         </div>
         <div>
           Width:
