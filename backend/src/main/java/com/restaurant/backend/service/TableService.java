@@ -44,4 +44,12 @@ public class TableService {
 
         return true;
     }
+
+    public TableOrganizationDTO getTableOrganization() {
+        try {
+            return new ObjectMapper().readValue(loadTablesJsonFile().getFile(), TableOrganizationDTO.class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }

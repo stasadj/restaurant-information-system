@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -19,8 +16,14 @@ import javax.validation.Valid;
 public class TableController {
     private final TableService tableService;
 
-    @PostMapping("/")
-    public ResponseEntity<Boolean> setNewTableOrganization(@RequestBody TableOrganizationDTO dto) {
+    @GetMapping
+    public ResponseEntity<TableOrganizationDTO> getTableOrganization() {
+        TableOrganizationDTO dto = tableService.getTableOrganization();
+        return new ResponseEntity<>(dto, dto == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Boolean> setNewTableOrganization(@RequestBody @Valid TableOrganizationDTO dto) {
         boolean success = tableService.setNewTableOrganization(dto);
         return new ResponseEntity<>(success, success ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
