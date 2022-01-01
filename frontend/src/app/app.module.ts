@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -32,6 +33,7 @@ import { MapComponent } from './restaurant-map/map/map.component';
     MatButtonModule,
     MatCardModule,
     MatIconModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

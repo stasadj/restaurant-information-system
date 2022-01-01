@@ -1,65 +1,22 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { RestaurantTable } from '../restaurant-map/RestaurantTable';
+import { Observable } from 'rxjs';
+import { RoomOrganization } from '../restaurant-map/RoomOrganization';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TableService {
-  constructor() {}
+  private readonly path = '/api/table';
 
-  getRooms(): { id: string; tables: RestaurantTable[] }[] {
-    // TODO: api call
-    return [
-      {
-        id: 'Room 1',
-        tables: [
-          {
-            id: '1',
-            rotateValue: 0,
-            size: { w: 150, h: 50 },
-            radius: 0,
-            position: { x: 0, y: 0 },
-          },
-          {
-            id: '2',
-            rotateValue: 45,
-            size: { w: 50, h: 50 },
-            radius: 0,
-            position: { x: 100, y: 150 },
-          },
-          {
-            id: '3',
-            rotateValue: 30,
-            size: { w: 120, h: 50 },
-            radius: 0,
-            position: { x: 230, y: 230 },
-          },
-        ],
-      },
-      {
-        id: 'Room 2',
-        tables: [
-          {
-            id: '4',
-            rotateValue: 0,
-            size: { w: 150, h: 50 },
-            radius: 0,
-            position: { x: 60, y: 0 },
-          },
-          {
-            id: '5',
-            rotateValue: 45,
-            size: { w: 50, h: 50 },
-            radius: 0,
-            position: { x: 100, y: 70 },
-          },
-        ],
-      },
-    ];
+  constructor(private http: HttpClient) {}
+
+  getRooms(): Observable<{ rooms: RoomOrganization[] }> {
+    return this.http.get<{ rooms: RoomOrganization[] }>(this.path);
   }
 
-  saveRooms(rooms: { id: string; tables: RestaurantTable[] }[]) {
+  saveRooms(rooms: RoomOrganization[]) {
     console.log(rooms);
-    // TODO: post to backend
+    this.http.post(this.path, { rooms }).subscribe((d) => console.log('Saved'));
   }
 }

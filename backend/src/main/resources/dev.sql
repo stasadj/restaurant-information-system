@@ -29,16 +29,17 @@ INSERT INTO item_values (from_date, purchase_price, selling_price, item_id) VALU
   ('2021-11-11', 13.00, 130.00, 4),
   ('2021-11-11', 66.00, 660.00, 5);
 
+-- Had to comment this part, because table organization can only be changed if there are no orders
 
-INSERT INTO restaurant_order (created_at, note, table_id, waiter_id) VALUES
-  ('2021-11-14', 'note 1', 1, 2),
-  ('2021-11-14', 'note 2', 2, 2);
-
-INSERT INTO order_item (amount, status, cook_id, barman_id, item_id, order_id) VALUES
-  (1, 0, null, null, 1, 1),
-  (2, 0, null, null, 2, 1),
-  (1, 0, null, null, 3, 1),
-  (3, 0, null, null, 4, 2);
+--INSERT INTO restaurant_order (created_at, note, table_id, waiter_id) VALUES
+--  ('2021-11-14', 'note 1', 1, 2),
+--  ('2021-11-14', 'note 2', 2, 2);
+--
+--INSERT INTO order_item (amount, status, cook_id, barman_id, item_id, order_id) VALUES
+--  (1, 0, null, null, 1, 1),
+--  (2, 0, null, null, 2, 1),
+--  (1, 0, null, null, 3, 1),
+--  (3, 0, null, null, 4, 2);
 
 INSERT INTO order_record (amount, item_value_id, created_at) VALUES
   (1, 1, '2021-11-21'),

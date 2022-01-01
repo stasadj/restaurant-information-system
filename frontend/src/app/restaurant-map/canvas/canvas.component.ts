@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TableService } from 'src/app/services/table.service';
 import { RestaurantTable } from '../RestaurantTable';
+import { RoomOrganization } from '../RoomOrganization';
 
 @Component({
   selector: 'app-canvas',
@@ -8,15 +9,16 @@ import { RestaurantTable } from '../RestaurantTable';
   styleUrls: ['./canvas.component.less'],
 })
 export class CanvasComponent implements OnInit {
-  rooms: { id: string; tables: RestaurantTable[] }[] =
-    this.tableService.getRooms();
+  rooms: RoomOrganization[] = [{ id: 'Room1', tables: [] }];
 
   currentTable?: RestaurantTable;
   currentRoomIndex: number = 0;
 
   constructor(private tableService: TableService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.tableService.getRooms().subscribe((data) => (this.rooms = data.rooms));
+  }
 
   onSave() {
     this.tableService.saveRooms(this.rooms);
