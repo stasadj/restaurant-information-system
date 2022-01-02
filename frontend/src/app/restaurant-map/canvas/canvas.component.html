@@ -1,10 +1,11 @@
 <div>
   <div class="inline">
-    <mat-tab-group
-      animationDuration="0ms"
-      (selectedTabChange)="tabChanged($event)"
-    >
-      <mat-tab *ngFor="let room of rooms" label="{{ room.id }}">
+    <mat-tab-group animationDuration="0ms" [(selectedIndex)]="currentRoomIndex">
+      <mat-tab
+        *ngFor="let room of rooms"
+        label="{{ room.id }}"
+        [disabled]="roomIdForm.invalid"
+      >
         <div class="canvas-boundary">
           <app-table
             *ngFor="let table of room.tables"
@@ -20,10 +21,22 @@
   <div class="inline">
     <mat-card>
       <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="onAddRoom()">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onAddRoom()"
+          [disabled]="roomIdForm.invalid"
+        >
           Add room
         </button>
-        <button mat-button color="primary" (click)="onSave()">Save all</button>
+        <button
+          mat-button
+          color="primary"
+          (click)="onSave()"
+          [disabled]="roomIdForm.invalid || tableIdForm.invalid"
+        >
+          Save all
+        </button>
       </mat-card-actions>
     </mat-card>
 
@@ -32,11 +45,29 @@
       <mat-card-content>
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Room id</mat-label>
-          <input matInput [(ngModel)]="rooms[currentRoomIndex].id" />
+          <input
+            matInput
+            [value]="rooms[currentRoomIndex].id"
+            [formControl]="roomIdForm"
+          />
+          <mat-error *ngIf="roomIdForm.hasError('required')">
+            Room id is required
+          </mat-error>
+          <mat-error *ngIf="roomIdForm.hasError('exists')">
+            Room id should be unique
+          </mat-error>
+          <mat-error *ngIf="roomIdForm.hasError('pattern')">
+            Room id is alphanumeric
+          </mat-error>
         </mat-form-field>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="onAddTable(false)">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onAddTable(false)"
+          [disabled]="tableIdForm.invalid"
+        >
           Add table
         </button>
         <button mat-stroked-button color="warn" (click)="onDeleteRoom()">
@@ -50,7 +81,16 @@
       <mat-card-content>
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Table id</mat-label>
-          <input matInput [(ngModel)]="currentTable.id" />
+          <input matInput [formControl]="tableIdForm" maxlength="4" />
+          <mat-error *ngIf="tableIdForm.hasError('required')">
+            Table id is required
+          </mat-error>
+          <mat-error *ngIf="tableIdForm.hasError('pattern')">
+            Table id is numeric
+          </mat-error>
+          <mat-error *ngIf="tableIdForm.hasError('exists')">
+            Table id should be unique
+          </mat-error>
         </mat-form-field>
         <div>
           Rotate:
@@ -103,7 +143,12 @@
         </div>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="onAddTable(true)">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onAddTable(true)"
+          [disabled]="tableIdForm.invalid"
+        >
           Add duplicate
         </button>
         <button mat-stroked-button color="warn" (click)="onDeleteTable()">

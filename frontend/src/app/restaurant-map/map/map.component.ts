@@ -16,7 +16,7 @@ export class MapComponent implements OnInit {
     this.tableService.getRooms().subscribe((data) => (this.rooms = data.rooms));
   }
 
-  onTableClick(id: string) {
+  onTableClick(id: number) {
     alert('Order for table ' + id);
     //todo: order view
   }

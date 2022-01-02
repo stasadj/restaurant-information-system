@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { TableService } from 'src/app/services/table.service';
 import { RestaurantTable } from '../RestaurantTable';
 import { RoomOrganization } from '../RoomOrganization';
+import {
+  AbstractControl,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-canvas',
@@ -9,37 +16,62 @@ import { RoomOrganization } from '../RoomOrganization';
   styleUrls: ['./canvas.component.less'],
 })
 export class CanvasComponent implements OnInit {
-  rooms: RoomOrganization[] = [{ id: 'Room1', tables: [] }];
+  rooms: RoomOrganization[] = [{ id: '', tables: [] }];
 
   currentTable?: RestaurantTable;
   currentRoomIndex: number = 0;
 
-  constructor(private tableService: TableService) {}
+  roomIdForm: FormControl;
+  tableIdForm: FormControl;
+
+  constructor(private tableService: TableService) {
+    this.roomIdForm = new FormControl('Room0', [
+      Validators.pattern('^[0-9 A-Za-z]*$'),
+      Validators.required,
+      this.roomIdValidator(),
+    ]);
+    this.tableIdForm = new FormControl('0', [
+      Validators.pattern('^[0-9]*$'),
+      Validators.required,
+      this.tableIdValidator(),
+    ]);
+  }
 
   ngOnInit(): void {
     this.tableService.getRooms().subscribe((data) => (this.rooms = data.rooms));
+
+    this.roomIdForm.valueChanges.subscribe(
+      (v: string) => (this.rooms[this.currentRoomIndex].id = v)
+    );
+    this.tableIdForm.valueChanges.subscribe((v: string) => {
+      if (this.currentTable && this.tableIdForm.valid)
+        this.currentTable.id = Number(v);
+    });
   }
 
   onSave() {
     this.tableService.saveRooms(this.rooms);
   }
 
-  onTableClick(id: string) {
+  onTableClick(id: number) {
+    if (this.tableIdForm.invalid || this.currentTable?.id === id) return;
+    if (this.currentTable) this.currentTable.status = '';
+
     this.currentTable = this.rooms[this.currentRoomIndex].tables.find(
       (x) => x.id === id
     );
-    console.log(this.currentTable);
-  }
-
-  tabChanged($event: any) {
-    this.currentRoomIndex = $event.index;
+    if (this.currentTable) {
+      this.currentTable.status = 'selected';
+      this.tableIdForm.setValue(id);
+    }
   }
 
   onAddTable(copy: boolean) {
+    if (this.currentTable) this.currentTable.status = '';
     let newTable =
       copy && this.currentTable
         ? {
-            id: `${Math.floor(Math.random() * 1000)}`,
+            id: 0,
             rotateValue: this.currentTable.rotateValue,
             size: { ...this.currentTable.size },
             radius: this.currentTable.radius,
@@ -47,32 +79,39 @@ export class CanvasComponent implements OnInit {
               x: this.currentTable.position.x + 10,
               y: this.currentTable.position.y + 10,
             },
-            status: '',
+            status: 'selected',
           }
         : {
-            id: `${Math.floor(Math.random() * 1000)}`,
+            id: 0,
             rotateValue: 0,
             size: { w: 100, h: 50 },
             radius: 20,
             position: { x: 0, y: 0 },
+            status: 'selected',
           };
+    newTable.id = Math.floor(Math.random() * 10000);
     this.rooms[this.currentRoomIndex].tables.push(newTable);
     this.currentTable = newTable;
+    this.tableIdForm.setValue(newTable.id);
+    this.tableIdForm.markAsTouched();
   }
 
   onDeleteTable() {
     let i = this.rooms[this.currentRoomIndex].tables.findIndex(
-      (x) => x.id === this.currentTable?.id
+      (x) => x === this.currentTable
     );
     this.rooms[this.currentRoomIndex].tables.splice(i, 1);
     this.currentTable = undefined;
+    this.tableIdForm.setValue(0);
   }
 
   onAddRoom() {
     this.rooms.push({
-      id: `Room ${this.rooms.length + 1}`,
+      id: '',
       tables: [],
     });
+    this.currentRoomIndex = this.rooms.length - 1;
+    this.roomIdForm.setValue('');
   }
 
   onDeleteRoom() {
@@ -95,5 +134,26 @@ export class CanvasComponent implements OnInit {
     };
     this.currentTable.size.h = this.currentTable.size.w;
     this.currentTable.size.w = h;
+  }
+
+  roomIdValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) return null;
+      return this.rooms.findIndex((r) => r.id === value) !== -1
+        ? { exists: true }
+        : null;
+    };
+  }
+  tableIdValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      const value = Number(control.value);
+      for (let room of this.rooms)
+        for (let table of room.tables)
+          if (table.id === value && table !== this.currentTable)
+            return { exists: true };
+      return null;
+    };
   }
 }

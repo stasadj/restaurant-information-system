@@ -8,7 +8,7 @@ import { RestaurantTable } from '../RestaurantTable';
 })
 export class TableComponent implements OnInit {
   @Input() table: RestaurantTable = {
-    id: '#0',
+    id: 0,
     rotateValue: 0,
     size: { w: 100, h: 100 },
     radius: 0,
@@ -17,7 +17,7 @@ export class TableComponent implements OnInit {
   };
   @Input() disableDrag: boolean = true;
 
-  @Output() clickEvent = new EventEmitter<string>();
+  @Output() clickEvent = new EventEmitter<number>();
 
   constructor() {}
 

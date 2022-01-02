@@ -19,7 +19,9 @@
       width: table.size.w + 'px',
       height: table.size.h + 'px',
       borderRadius: table.radius + 'px',
-      backgroundColor: table.status === 'a' ? 'green' : 'blue'
+      backgroundColor: table.status === 'a' ? 'green' : 'blue',
+      border:
+        table.status === 'selected' ? '5px green dashed' : 'solid 1px #ccc'
     }"
   >
     <b

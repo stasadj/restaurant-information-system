@@ -1,5 +1,5 @@
 export interface RestaurantTable {
-  id: string;
+  id: number;
   rotateValue: number;
   size: {
     w: number;
