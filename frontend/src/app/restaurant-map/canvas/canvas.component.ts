@@ -25,7 +25,7 @@ export class CanvasComponent implements OnInit {
   tableIdForm: FormControl;
 
   constructor(private tableService: TableService) {
-    this.roomIdForm = new FormControl('Room0', [
+    this.roomIdForm = new FormControl('', [
       Validators.pattern('^[0-9 A-Za-z]*$'),
       Validators.required,
       this.roomIdValidator(),
@@ -62,7 +62,7 @@ export class CanvasComponent implements OnInit {
     );
     if (this.currentTable) {
       this.currentTable.status = 'selected';
-      this.tableIdForm.setValue(id);
+      this.tableIdForm.setValue(id + '');
     }
   }
 
@@ -92,7 +92,7 @@ export class CanvasComponent implements OnInit {
     newTable.id = Math.floor(Math.random() * 10000);
     this.rooms[this.currentRoomIndex].tables.push(newTable);
     this.currentTable = newTable;
-    this.tableIdForm.setValue(newTable.id);
+    this.tableIdForm.setValue(newTable.id + '');
     this.tableIdForm.markAsTouched();
   }
 
@@ -100,9 +100,13 @@ export class CanvasComponent implements OnInit {
     let i = this.rooms[this.currentRoomIndex].tables.findIndex(
       (x) => x === this.currentTable
     );
+    if (i === -1) {
+      console.log('This table is in another room');
+      return;
+    }
     this.rooms[this.currentRoomIndex].tables.splice(i, 1);
     this.currentTable = undefined;
-    this.tableIdForm.setValue(0);
+    this.tableIdForm.setValue('0');
   }
 
   onAddRoom() {

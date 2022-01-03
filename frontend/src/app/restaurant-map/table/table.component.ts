@@ -1,3 +1,4 @@
+import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RestaurantTable } from '../RestaurantTable';
 
@@ -12,7 +13,7 @@ export class TableComponent implements OnInit {
     rotateValue: 0,
     size: { w: 100, h: 100 },
     radius: 0,
-    position: { x: 0, y: -100 },
+    position: { x: 0, y: 0 },
     status: '',
   };
   @Input() disableDrag: boolean = true;
@@ -25,8 +26,7 @@ export class TableComponent implements OnInit {
   onClick() {
     this.clickEvent.emit(this.table.id);
   }
-  dragEnd($event: any) {
+  dragEnd($event: { source: CdkDrag }) {
     this.table.position = $event.source.getFreeDragPosition();
-    console.log($event.source.getFreeDragPosition());
   }
 }

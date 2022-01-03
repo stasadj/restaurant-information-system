@@ -1,6 +1,10 @@
 <div>
   <div class="inline">
-    <mat-tab-group animationDuration="0ms" [(selectedIndex)]="currentRoomIndex">
+    <mat-tab-group
+      dynamicHeight
+      animationDuration="0ms"
+      [(selectedIndex)]="currentRoomIndex"
+    >
       <mat-tab
         *ngFor="let room of rooms"
         label="{{ room.id }}"
@@ -34,6 +38,7 @@
           color="primary"
           (click)="onSave()"
           [disabled]="roomIdForm.invalid || tableIdForm.invalid"
+          id="saveBtn"
         >
           Save all
         </button>
@@ -76,12 +81,17 @@
       </mat-card-actions>
     </mat-card>
 
-    <mat-card *ngIf="currentTable">
+    <mat-card *ngIf="currentTable" id="tableSettings">
       <mat-card-title>Table settings</mat-card-title>
       <mat-card-content>
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Table id</mat-label>
-          <input matInput [formControl]="tableIdForm" maxlength="4" />
+          <input
+            matInput
+            [formControl]="tableIdForm"
+            maxlength="4"
+            id="tableId"
+          />
           <mat-error *ngIf="tableIdForm.hasError('required')">
             Table id is required
           </mat-error>
@@ -101,6 +111,7 @@
             max="45"
             [displayWith]="formatDegrees"
             [(ngModel)]="currentTable.rotateValue"
+            id="rotateSlider"
           ></mat-slider>
           <button
             mat-icon-button
