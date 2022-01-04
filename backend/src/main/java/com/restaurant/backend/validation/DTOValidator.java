@@ -24,7 +24,7 @@ public class DTOValidator {
     }
 
     public static <T> void validate(T object) throws CustomConstraintViolationException {
-        Set<ConstraintViolation<T>> violations = validator.validate(object, Default.class);
+        Set<ConstraintViolation<T>> violations = validator.validate(object);
 
         if (!violations.isEmpty()) {
             StringBuilder sb = new StringBuilder();

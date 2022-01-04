@@ -2,6 +2,7 @@ package com.restaurant.backend.dto.table;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -16,5 +17,5 @@ public class RoomDTO {
     private String id;
 
     @NotNull(message = "Tables list must be present")
-    private List<TableDTO> tables;
+    private List<@Valid TableDTO> tables;
 }

@@ -8,7 +8,7 @@ import { RoomOrganization } from '../RoomOrganization';
   styleUrls: ['./map.component.less'],
 })
 export class MapComponent implements OnInit {
-  rooms: RoomOrganization[] = [{ id: 'Room1', tables: [] }];
+  rooms: RoomOrganization[] = [{ id: 'Room 0', tables: [] }];
 
   constructor(private tableService: TableService) {}
 

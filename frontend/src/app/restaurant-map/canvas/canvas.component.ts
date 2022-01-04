@@ -16,7 +16,7 @@ import {
   styleUrls: ['./canvas.component.less'],
 })
 export class CanvasComponent implements OnInit {
-  rooms: RoomOrganization[] = [{ id: '', tables: [] }];
+  rooms: RoomOrganization[] = [{ id: 'Room 0', tables: [] }];
 
   currentTable?: RestaurantTable;
   currentRoomIndex: number = 0;
@@ -25,7 +25,7 @@ export class CanvasComponent implements OnInit {
   tableIdForm: FormControl;
 
   constructor(private tableService: TableService) {
-    this.roomIdForm = new FormControl('', [
+    this.roomIdForm = new FormControl('Room', [
       Validators.pattern('^[0-9 A-Za-z]*$'),
       Validators.required,
       this.roomIdValidator(),

@@ -2,6 +2,7 @@ package com.restaurant.backend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restaurant.backend.dto.table.TableOrganizationDTO;
+import com.restaurant.backend.exception.BadRequestException;
 import com.restaurant.backend.validation.DTOValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
@@ -29,7 +30,7 @@ public class TableService {
         DTOValidator.validate(dto);
 
         if (orderService.getHasTablesTaken()) {
-        return false;
+            throw new BadRequestException("There are still unresolved orders");
         }
 
         ObjectMapper mapper = new ObjectMapper();

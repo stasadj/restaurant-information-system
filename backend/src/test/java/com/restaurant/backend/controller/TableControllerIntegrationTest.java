@@ -1,7 +1,5 @@
 package com.restaurant.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restaurant.backend.dto.table.TableOrganizationDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +31,30 @@ public class TableControllerIntegrationTest {
     }
 
     @Test
-    public void test() throws Exception {
-        // ObjectMapper mapper = new ObjectMapper();
+    public void testSet_OK() throws Exception {
         String json =
                 "{\"rooms\":[{\"id\": \"Room 1\", \"tables\": [ { \"id\": 1, \"rotateValue\": 0, \"size\": { \"w\": 150, \"h\": 50 }, \"radius\": 0, \"position\": { \"x\": 0, \"y\": 0 }}]}]}";
-        // TableOrganizationDTO dto = mapper.readValue(json, TableOrganizationDTO.class);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/table")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testSet_positionMissing() throws Exception {
+        String json =
+                "{\"rooms\":[{\"id\": \"Room 1\", \"tables\": [ { \"id\": 1, \"rotateValue\": 0, \"size\": { \"w\": 150, \"h\": 50 }, \"radius\": 0}]}]}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/table")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void testGet_OK() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/table"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
