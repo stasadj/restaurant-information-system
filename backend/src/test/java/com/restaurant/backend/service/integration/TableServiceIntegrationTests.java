@@ -3,7 +3,11 @@ package com.restaurant.backend.service.integration;
 import com.restaurant.backend.dto.table.*;
 import com.restaurant.backend.service.TableService;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,11 +19,12 @@ import java.util.List;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:test.properties")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TableServiceIntegrationTests {
     @Autowired
     private TableService tableService;
 
-    @Test
+    @Test @Order(1)
     public void testSet() {
         TableDTO table1 = new TableDTO(1, 45, new TableSizeDTO(50, 100), 10, new TablePositionDTO(40, 60));
         TableDTO table2 = new TableDTO(2, 0, new TableSizeDTO(50, 100), 10, new TablePositionDTO(140, 160));
@@ -29,7 +34,7 @@ public class TableServiceIntegrationTests {
         tableService.setNewTableOrganization(organizationDTO);
     }
 
-    @Test
+    @Test @Order(2)
     public void testGet() {
         TableOrganizationDTO organization = tableService.getTableOrganization();
         assertNotNull(organization);

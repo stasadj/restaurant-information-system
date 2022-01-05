@@ -73,16 +73,16 @@ public class Item {
     public ItemValue getItemValueAt(LocalDateTime dateTime) {
         ItemValue itemValueAt = null;
         for (ItemValue itemValue : itemValues)
-            if (itemValue.getFromDate().isBefore(dateTime)) {
+            if (!itemValue.getFromDate().isAfter(dateTime)) {
                 if (itemValueAt == null)
                     itemValueAt = itemValue;
-                else if (itemValueAt.getFromDate().isBefore(itemValue.getFromDate()))
+                else if (!itemValueAt.getFromDate().isAfter(itemValue.getFromDate()))
                     itemValueAt = itemValue;
             }
         return itemValueAt;
     }
 
-    public Item(Item source){
+    public Item(Item source) {
         this.setId(source.getId());
         this.setName(source.getName());
         this.setDescription(source.getDescription());
@@ -93,6 +93,5 @@ public class Item {
         this.setCategory(new Category(source.getCategory().getId(), source.getCategory().getName()));
         this.setTags(source.getTags().stream().map(tag -> new Tag(tag.getId(), tag.getName())).collect(Collectors.toList()));
         this.setItemValues(source.getItemValues().stream().map(val -> new ItemValue(val.getId(), val.getPurchasePrice(), val.getSellingPrice(), val.getFromDate(), this)).collect(Collectors.toList()));
-
     }
 }
