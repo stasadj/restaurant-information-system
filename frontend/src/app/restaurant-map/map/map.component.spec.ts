@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { TableService } from 'src/app/services/table.service';
+import { TableService } from 'src/app/services/table/table.service';
 
 import { MapComponent } from './map.component';
 import { DebugElement } from '@angular/core';

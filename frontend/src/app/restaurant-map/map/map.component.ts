@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TableService } from 'src/app/services/table.service';
-import { RoomOrganization } from '../RoomOrganization';
+import { TableService } from 'src/app/services/table/table.service';
+import { RoomOrganization } from '../../model/RoomOrganization';
 
 @Component({
   selector: 'app-map',

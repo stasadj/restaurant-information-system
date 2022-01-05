@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TableService } from 'src/app/services/table.service';
-import { RestaurantTable } from '../RestaurantTable';
-import { RoomOrganization } from '../RoomOrganization';
+import { TableService } from 'src/app/services/table/table.service';
+import { RestaurantTable } from '../../model/RestaurantTable';
+import { RoomOrganization } from '../../model/RoomOrganization';
 import {
   AbstractControl,
   FormControl,

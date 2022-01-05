@@ -1,6 +1,6 @@
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { RestaurantTable } from '../RestaurantTable';
+import { RestaurantTable } from '../../model/RestaurantTable';
 
 @Component({
   selector: 'app-table',
