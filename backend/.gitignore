@@ -33,9 +33,6 @@ build/
 .vscode/
 
 *#
-*.iml
-*.ipr
-*.iws
 *.jar
 *.sw?
 *~
@@ -43,15 +40,9 @@ build/
 .*.md.html
 .DS_Store
 .attach_pid*
-.classpath
-.factorypath
 .gradle
-.idea
 .metadata
-.project
 .recommenders
-.settings
-.springBeans
 .vscode
 /code
 MANIFEST.MF
@@ -73,5 +64,3 @@ target
 .flattened-pom.xml
 secrets.yml
 .gradletasknamecache
-.sts4-cache
-src/main/resources/public/*

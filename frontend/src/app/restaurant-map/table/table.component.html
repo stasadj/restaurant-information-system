@@ -1,0 +1,35 @@
+<div
+  class="box-draggable-wrapper"
+  cdkDragBoundary=".canvas-boundary"
+  cdkDrag
+  [cdkDragDisabled]="disableDrag"
+  (click)="onClick()"
+  [cdkDragFreeDragPosition]="table.position"
+  (cdkDragEnded)="dragEnd($event)"
+  [ngStyle]="{
+    width: table.size.w + 'px',
+    height: table.size.h + 'px',
+    cursor: disableDrag ? 'pointer' : 'move'
+  }"
+>
+  <div
+    class="table-in-restaurant"
+    [ngStyle]="{
+      transform: 'rotate(' + table.rotateValue + 'deg)',
+      width: table.size.w + 'px',
+      height: table.size.h + 'px',
+      borderRadius: table.radius + 'px',
+      backgroundColor: table.status === 'a' ? 'green' : 'blue',
+      border:
+        table.status === 'selected' ? '5px green dashed' : 'solid 1px #ccc'
+    }"
+  >
+    <b
+      [ngStyle]="{
+        transform: 'rotate(' + -table.rotateValue + 'deg)'
+      }"
+    >
+      {{ table.id }}
+    </b>
+  </div>
+</div>

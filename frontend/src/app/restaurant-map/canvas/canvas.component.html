@@ -1,0 +1,171 @@
+<div>
+  <div class="inline">
+    <mat-tab-group
+      dynamicHeight
+      animationDuration="0ms"
+      [(selectedIndex)]="currentRoomIndex"
+    >
+      <mat-tab
+        *ngFor="let room of rooms"
+        label="{{ room.id }}"
+        [disabled]="roomIdForm.invalid"
+      >
+        <div class="canvas-boundary">
+          <app-table
+            *ngFor="let table of room.tables"
+            [table]="table"
+            [disableDrag]="false"
+            (clickEvent)="onTableClick($event)"
+          ></app-table>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <div class="inline">
+    <mat-card>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onAddRoom()"
+          [disabled]="roomIdForm.invalid"
+        >
+          Add room
+        </button>
+        <button
+          mat-button
+          color="primary"
+          (click)="onSave()"
+          [disabled]="roomIdForm.invalid || tableIdForm.invalid"
+          id="saveBtn"
+        >
+          Save all
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-title>Room settings</mat-card-title>
+      <mat-card-content>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Room id</mat-label>
+          <input
+            matInput
+            [value]="rooms[currentRoomIndex].id"
+            [formControl]="roomIdForm"
+          />
+          <mat-error *ngIf="roomIdForm.hasError('required')">
+            Room id is required
+          </mat-error>
+          <mat-error *ngIf="roomIdForm.hasError('exists')">
+            Room id should be unique
+          </mat-error>
+          <mat-error *ngIf="roomIdForm.hasError('pattern')">
+            Room id is alphanumeric
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onAddTable(false)"
+          [disabled]="tableIdForm.invalid"
+        >
+          Add table
+        </button>
+        <button mat-stroked-button color="warn" (click)="onDeleteRoom()">
+          Delete room
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card *ngIf="currentTable" id="tableSettings">
+      <mat-card-title>Table settings</mat-card-title>
+      <mat-card-content>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Table id</mat-label>
+          <input
+            matInput
+            [formControl]="tableIdForm"
+            maxlength="4"
+            id="tableId"
+          />
+          <mat-error *ngIf="tableIdForm.hasError('required')">
+            Table id is required
+          </mat-error>
+          <mat-error *ngIf="tableIdForm.hasError('pattern')">
+            Table id is numeric
+          </mat-error>
+          <mat-error *ngIf="tableIdForm.hasError('exists')">
+            Table id should be unique
+          </mat-error>
+        </mat-form-field>
+        <div>
+          Rotate:
+          <mat-slider
+            class="rotate"
+            thumbLabel
+            min="-45"
+            max="45"
+            [displayWith]="formatDegrees"
+            [(ngModel)]="currentTable.rotateValue"
+            id="rotateSlider"
+          ></mat-slider>
+          <button
+            mat-icon-button
+            color="accent"
+            aria-label="rotate90"
+            (click)="rotate90()"
+          >
+            <mat-icon>rotate_90_degrees_ccw</mat-icon>
+          </button>
+        </div>
+        <div>
+          Width:
+          <mat-slider
+            thumbLabel
+            min="10"
+            max="200"
+            [displayWith]="formatPx"
+            [(ngModel)]="currentTable.size.w"
+          ></mat-slider>
+        </div>
+        <div>
+          Height:
+          <mat-slider
+            thumbLabel
+            min="10"
+            max="200"
+            [displayWith]="formatPx"
+            [(ngModel)]="currentTable.size.h"
+          ></mat-slider>
+        </div>
+        <div>
+          Radius:
+          <mat-slider
+            thumbLabel
+            min="0"
+            max="100"
+            [displayWith]="formatPx"
+            [(ngModel)]="currentTable.radius"
+          ></mat-slider>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onAddTable(true)"
+          [disabled]="tableIdForm.invalid"
+        >
+          Add duplicate
+        </button>
+        <button mat-stroked-button color="warn" (click)="onDeleteTable()">
+          Delete table
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
