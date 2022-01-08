@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Item } from '../../model/Item';
 
@@ -12,7 +12,7 @@ export class ItemService {
 
     constructor(private http: HttpClient) {}
   
-    getItems(): Observable<{ items: Item[] }> {
-      return this.http.get<{ items: Item[] }>(this.path);
+    getItems(): Observable<HttpResponse<Item[]>> {
+      return this.http.get<HttpResponse<Item[]>>(this.path);
     }
 }
