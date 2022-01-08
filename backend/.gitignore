@@ -64,3 +64,5 @@ target
 .flattened-pom.xml
 secrets.yml
 .gradletasknamecache
+
+src/main/resources/public/
