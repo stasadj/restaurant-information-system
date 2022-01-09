@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ public class OrderItemController {
 
     @PreAuthorize("hasAnyRole('BARMAN', 'COOK')")
     @PutMapping("/accept")
+    @SendTo("/topic/order-items")
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> acceptOrderItems(@AuthenticationPrincipal Staff staff,
                                                                                @Valid @RequestBody OrderItemIds orderItemIds) {
         DataWithMessage<List<OrderItem>> acceptedItems = orderItemService.acceptOrderItems(staff, orderItemIds.getIds());
@@ -36,6 +38,7 @@ public class OrderItemController {
 
     @PreAuthorize("hasAnyRole('BARMAN', 'COOK')")
     @PutMapping("/decline")
+    @SendTo("/topic/order-items")
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> declineOrderItems(@AuthenticationPrincipal Staff staff,
                                                                 @Valid @RequestBody OrderItemIds orderItemIds) {
         DataWithMessage<List<OrderItem>> declinedItems = orderItemService.declineOrderItems(staff, orderItemIds.getIds());
@@ -45,6 +48,7 @@ public class OrderItemController {
 
     @PreAuthorize("hasAnyRole('BARMAN', 'COOK')")
     @PutMapping("/mark-prepared")
+    @SendTo("/topic/order-items")
     public ResponseEntity<DataWithMessage<List<OrderItemDTO>>> markOrderItemsAsPrepared(@AuthenticationPrincipal Staff staff,
                                                                        @Valid @RequestBody OrderItemIds orderItemIds) {
         DataWithMessage<List<OrderItem>> preparedItems = orderItemService.prepareOrderItems(staff, orderItemIds.getIds());
@@ -54,6 +58,7 @@ public class OrderItemController {
 
     @PreAuthorize("hasRole('WAITER')")
     @DeleteMapping("/cancel")
+    @SendTo("/topic/cancelled-items")
     public ResponseEntity<DataWithMessage<List<Long>>> cancelOrderItem(@Valid @RequestBody OrderItemIds orderItemIds) {
         return new ResponseEntity<>(orderItemService.cancelOrderItems(orderItemIds.getIds()), HttpStatus.OK);
     }

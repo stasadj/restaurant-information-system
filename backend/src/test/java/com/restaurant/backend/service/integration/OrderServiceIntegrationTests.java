@@ -35,7 +35,7 @@ public class OrderServiceIntegrationTests {
 
     @Test
     public void create_tableHasAnOrder() {
-        OrderItemDTO itemDTO = new OrderItemDTO(null, 2, null, OrderStatus.PENDING, 1L, null, null);
+        OrderItemDTO itemDTO = new OrderItemDTO(null, 2, null, OrderStatus.PENDING, 1L, null, null, null);
         OrderDTO orderDTO = new OrderDTO(null, null, "note", 1, Collections.singletonList(itemDTO), 1L);
 
         assertThrows(BadRequestException.class, () -> {
@@ -45,32 +45,30 @@ public class OrderServiceIntegrationTests {
 
     @Test
     public void create() {
-        OrderItemDTO itemDTO = new OrderItemDTO(null, 2, null, OrderStatus.PENDING, 1L, null, null);
+        OrderItemDTO itemDTO = new OrderItemDTO(null, 2, null, OrderStatus.PENDING, 1L, null, null, null);
         OrderDTO orderDTO = new OrderDTO(null, null, "note", 4, Collections.singletonList(itemDTO), 1L);
 
-        List<Order> results = orderService.create(orderDTO);
+        Order result = orderService.create(orderDTO);
 
-        assertEquals(4, results.size());
-        assertEquals(4, results.get(3).getTableId());
-        assertEquals(1, results.get(3).getWaiter().getId());
-        assertEquals(OrderStatus.PENDING, results.get(3).getOrderItems().get(0).getOrderStatus());
+        assertEquals(4, result.getTableId());
+        assertEquals(1, result.getWaiter().getId());
+        assertEquals(OrderStatus.PENDING, result.getOrderItems().get(0).getOrderStatus());
     }
 
     @Test
     public void editOrder() {
-        OrderItemDTO itemDTO1 = new OrderItemDTO(4L, 2, 2L, OrderStatus.PENDING, 4L, null, null);
-        OrderItemDTO itemDTO2 = new OrderItemDTO(null, 1, null, OrderStatus.PENDING, 1L, null, null);
+        OrderItemDTO itemDTO1 = new OrderItemDTO(4L, 2, 2L, OrderStatus.PENDING, 4L, null, null, null);
+        OrderItemDTO itemDTO2 = new OrderItemDTO(null, 1, null, OrderStatus.PENDING, 1L, null, null, null);
         OrderDTO orderDTO = new OrderDTO(2L, null, "note edited", 2, Arrays.asList(itemDTO1, itemDTO2), 1L);
 
-        List<Order> results = orderService.editOrder(orderDTO);
+        Order result = orderService.editOrder(orderDTO);
 
-        assertEquals(3, results.size());
-        assertEquals(2, results.get(1).getTableId());
-        assertEquals(1, results.get(1).getWaiter().getId());
-        assertEquals("note edited", results.get(1).getNote());
-        assertEquals(2, results.get(1).getOrderItems().size());
-        assertEquals(2, results.get(1).getOrderItems().get(0).getAmount());
-        assertEquals(OrderStatus.PENDING, results.get(1).getOrderItems().get(1).getOrderStatus());
+        assertEquals(2, result.getTableId());
+        assertEquals(1, result.getWaiter().getId());
+        assertEquals("note edited", result.getNote());
+        assertEquals(2, result.getOrderItems().size());
+        assertEquals(2, result.getOrderItems().get(0).getAmount());
+        assertEquals(OrderStatus.PENDING, result.getOrderItems().get(1).getOrderStatus());
     }
 
     @Test

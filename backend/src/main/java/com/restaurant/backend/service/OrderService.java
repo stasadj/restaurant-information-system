@@ -45,7 +45,7 @@ public class OrderService {
         return orderRepository.findAllByWaiter_Id(id);
     }
 
-    public List<Order> create(OrderDTO order) throws NotFoundException, BadRequestException {
+    public Order create(OrderDTO order) throws NotFoundException, BadRequestException {
         boolean isDrink = false, isFood = false;
         Staff waiter = staffService.findOne(order.getWaiterId());
         Optional<Order> maybeOrder = orderRepository.findByTableId(order.getTableId());
@@ -68,10 +68,10 @@ public class OrderService {
         if (isFood)
             notificationService.createNotification("NEW ORDER", NotificationType.WAITER_COOK, newOrder);
 
-        return findAllForWaiter(order.getWaiterId());
+        return newOrder;
     }
 
-    public List<Order> editOrder(OrderDTO order) throws NotFoundException {
+    public Order editOrder(OrderDTO order) throws NotFoundException {
         Order editedOrder = findOne(order.getId());
         editedOrder.setNote(order.getNote());
 
@@ -86,9 +86,7 @@ public class OrderService {
                 orderItemService.save(editedOrderItem);
             }
         }
-        orderRepository.save(editedOrder);
-
-        return findAllForWaiter(order.getWaiterId());
+        return orderRepository.save(editedOrder);
     }
 
     public boolean getHasTablesTaken() {

@@ -67,7 +67,7 @@ public class OrderControllerIntegrationTest {
 
 	@WithMockUser(authorities = { "ROLE_WAITER" })
 	@Test
-	public void getAllOrdersForWaitert() throws Exception {
+	public void getAllOrdersForWaiter() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/order/all/" + "1"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
@@ -77,7 +77,7 @@ public class OrderControllerIntegrationTest {
 	@WithMockUser(authorities = { "ROLE_WAITER" })
 	@Test
 	public void createOrder_tableHasAnOrder() throws Exception {
-		OrderItemDTO itemDTO = new OrderItemDTO(1L, 2, null, OrderStatus.PENDING, 1L, null, null);
+		OrderItemDTO itemDTO = new OrderItemDTO(1L, 2, null, OrderStatus.PENDING, 1L, null, null, null);
 		OrderDTO orderDTO = new OrderDTO(null, null, "note", 1, Collections.singletonList(itemDTO), 1L);
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/order/create").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(orderDTO)))
@@ -87,30 +87,28 @@ public class OrderControllerIntegrationTest {
 	@WithMockUser(authorities = { "ROLE_WAITER" })
 	@Test
 	public void createOrder() throws Exception {
-		OrderItemDTO itemDTO = new OrderItemDTO(null, 2, null, OrderStatus.PENDING, 1L, null, null);
+		OrderItemDTO itemDTO = new OrderItemDTO(null, 2, null, OrderStatus.PENDING, 1L, null, null, null);
 		OrderDTO orderDTO = new OrderDTO(null, null, "note", 4, Collections.singletonList(itemDTO), 1L);
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/order/create").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(orderDTO))).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[3].tableId").value(4))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[3].orderItems[0].orderStatus").value("PENDING"));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.tableId").value(4))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems[0].orderStatus").value("PENDING"));
 	}
 
 	@WithMockUser(authorities = { "ROLE_WAITER" })
 	@Test
 	public void editOrderItems() throws Exception {
-		OrderItemDTO itemDTO1 = new OrderItemDTO(4L, 2, 2L, OrderStatus.PENDING, 4L, null, null);
-		OrderItemDTO itemDTO2 = new OrderItemDTO(null, 1, null, OrderStatus.PENDING, 1L, null, null);
+		OrderItemDTO itemDTO1 = new OrderItemDTO(4L, 2, 2L, OrderStatus.PENDING, 4L, null, null, null);
+		OrderItemDTO itemDTO2 = new OrderItemDTO(null, 1, null, OrderStatus.PENDING, 1L, null, null, null);
 		OrderDTO orderDTO = new OrderDTO(2L, null, "note edited", 2, Arrays.asList(itemDTO1, itemDTO2), 1L);
 		mockMvc.perform(MockMvcRequestBuilders.put("/api/order/edit").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(orderDTO))).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].tableId").value(2))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].waiterId").value(1))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].note").value("note edited"))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].orderItems", hasSize(2)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].orderItems[0].amount").value(2))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].orderItems[1].orderStatus").value("PENDING"));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.tableId").value(2))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.waiterId").value(1))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.note").value("note edited"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems", hasSize(2)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems[0].amount").value(2))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems[1].orderStatus").value("PENDING"));
 	}
 
 	@WithMockUser(authorities = { "ROLE_WAITER" })

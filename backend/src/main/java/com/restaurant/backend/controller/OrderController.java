@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,14 +35,16 @@ public class OrderController {
 
 	@PreAuthorize("hasRole('WAITER')")
 	@PostMapping("/create")
-	public ResponseEntity<List<OrderDTO>> createOrder(@RequestBody OrderDTO order) {
-		return new ResponseEntity<>(orderMapper.convertAll(orderService.create(order)), HttpStatus.OK);
+	@SendTo("/topic/orders")
+	public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO order) {
+		return new ResponseEntity<>(orderMapper.convert(orderService.create(order)), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('WAITER')")
 	@PutMapping("/edit")
-	public ResponseEntity<List<OrderDTO>> editOrderItems(@RequestBody OrderDTO order) {
-		return new ResponseEntity<>(orderMapper.convertAll(orderService.editOrder(order)), HttpStatus.OK);
+	@SendTo("/topic/orders")
+	public ResponseEntity<OrderDTO> editOrder(@RequestBody OrderDTO order) {
+		return new ResponseEntity<>(orderMapper.convert(orderService.editOrder(order)), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('WAITER')")
