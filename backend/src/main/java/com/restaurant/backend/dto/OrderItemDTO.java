@@ -29,7 +29,7 @@ public class OrderItemDTO {
     @NotNull(message = "Item id is missing.")
     private Long itemId;
 
-    private ItemNameDTO itemNameDTO;
+    private ItemNameDTO item;
 
     private Long cookId;
 

@@ -114,14 +114,14 @@ public class OrderControllerIntegrationTest {
 	@WithMockUser(authorities = { "ROLE_WAITER" })
 	@Test
 	public void finalizeOrder_orderItemNotReady() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/order/finalize/" + "1"))
+		mockMvc.perform(MockMvcRequestBuilders.delete("/api/order/finalize/" + "1"))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@WithMockUser(authorities = { "ROLE_WAITER" })
 	@Test
 	public void finalizeOrder() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/order/finalize/" + "3"))
+		mockMvc.perform(MockMvcRequestBuilders.delete("/api/order/finalize/" + "3"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)));
 	}
