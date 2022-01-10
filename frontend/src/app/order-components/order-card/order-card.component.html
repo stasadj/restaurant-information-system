@@ -1,0 +1,43 @@
+<mat-card>
+  <mat-card-title> Table {{ order.tableId }} </mat-card-title>
+  <mat-card-content>
+    <mat-selection-list [(ngModel)]="items" *ngIf="selectable; else elseBlock">
+      <mat-list-option
+        *ngFor="let oi of order.orderItems"
+        [value]="oi.item.name"
+        [disabled]="isBarman === (oi.item.type !== 'FOOD')"
+      >
+        <p>
+          <b>{{ oi.amount }}x </b> <i>{{ oi.item.name }}</i>
+        </p>
+      </mat-list-option>
+    </mat-selection-list>
+    <ng-template #elseBlock>
+      <mat-list>
+        <mat-list-item *ngFor="let oi of order.orderItems">
+          <p>
+            <b>{{ oi.amount }}x </b> <i>{{ oi.item.name }}</i>
+          </p>
+        </mat-list-item>
+      </mat-list>
+    </ng-template>
+  </mat-card-content>
+  <mat-card-actions *ngIf="selectable" align="end">
+    <div *ngIf="order.orderItems[0].orderStatus === 'PENDING'">
+      <button mat-raised-button color="primary" [disabled]="items.length === 0">
+        Decline
+      </button>
+      <button mat-raised-button color="primary" [disabled]="items.length === 0">
+        Accept
+      </button>
+    </div>
+    <button
+      *ngIf="order.orderItems[0].orderStatus === 'IN_PROGRESS'"
+      mat-raised-button
+      color="primary"
+      [disabled]="items.length === 0"
+    >
+      Mark prepared
+    </button>
+  </mat-card-actions>
+</mat-card>

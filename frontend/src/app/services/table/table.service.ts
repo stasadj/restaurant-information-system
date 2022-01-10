@@ -7,7 +7,7 @@ import { RoomOrganization } from '../../model/RoomOrganization';
   providedIn: 'root',
 })
 export class TableService {
-  private readonly path = '/api/table';
+  private readonly path: string = '/api/table';
 
   constructor(private http: HttpClient) {}
 

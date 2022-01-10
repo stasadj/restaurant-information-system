@@ -10,6 +10,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,9 +18,20 @@ import { CanvasComponent } from './restaurant-map/canvas/canvas.component';
 import { TableComponent } from './restaurant-map/table/table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapComponent } from './restaurant-map/map/map.component';
+import { TableOrderComponent } from './order-components/table-order/table-order.component';
+import { OrderBoardComponent } from './order-components/order-board/order-board.component';
+import { OrderCardComponent } from './order-components/order-card/order-card.component';
 
 @NgModule({
-  declarations: [AppComponent, CanvasComponent, TableComponent, MapComponent],
+  declarations: [
+    AppComponent,
+    CanvasComponent,
+    TableComponent,
+    MapComponent,
+    TableOrderComponent,
+    OrderBoardComponent,
+    OrderCardComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -35,6 +47,7 @@ import { MapComponent } from './restaurant-map/map/map.component';
     MatCardModule,
     MatIconModule,
     HttpClientModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

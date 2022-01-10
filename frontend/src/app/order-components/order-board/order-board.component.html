@@ -1,0 +1,65 @@
+<div class="flex-container">
+  <mat-card class="board-list">
+    <mat-card-title>Pending</mat-card-title>
+    <mat-card-content>
+      <div class="content">
+        <app-order-card
+          *ngFor="let order of orderBoard.pending"
+          [order]="order"
+          [selectable]="true"
+          [isBarman]="isBarman"
+        ></app-order-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="board-list">
+    <mat-card-title>Doing</mat-card-title>
+    <mat-card-content>
+      <div class="content">
+        <app-order-card
+          *ngFor="let order of orderBoard.inProgressMy"
+          [order]="order"
+          [selectable]="true"
+          [isBarman]="isBarman"
+        ></app-order-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="board-list">
+    <mat-card-title>Others doing</mat-card-title>
+    <mat-card-content>
+      <div class="content">
+        <app-order-card
+          *ngFor="let order of orderBoard.inProgressOther"
+          [order]="order"
+        ></app-order-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="board-list">
+    <mat-card-title>Ready</mat-card-title>
+    <mat-card-content>
+      <div class="content">
+        <app-order-card
+          *ngFor="let order of orderBoard.ready"
+          [order]="order"
+        ></app-order-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="board-list">
+    <mat-card-title>Declined</mat-card-title>
+    <mat-card-content>
+      <div class="content">
+        <app-order-card
+          *ngFor="let order of orderBoard.declined"
+          [order]="order"
+        ></app-order-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
