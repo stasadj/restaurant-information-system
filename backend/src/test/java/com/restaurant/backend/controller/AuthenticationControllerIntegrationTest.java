@@ -1,11 +1,8 @@
 package com.restaurant.backend.controller;
 
-import javax.servlet.http.Cookie;
-import javax.transaction.Transactional;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restaurant.backend.dto.requests.CredentialsDTO;
-
+import com.restaurant.backend.dto.responses.TokenDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,13 +25,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
-import static com.restaurant.backend.constants.AuthenticationServiceTestConstants.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static com.restaurant.backend.constants.AuthenticationServiceTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -65,7 +63,7 @@ public class AuthenticationControllerIntegrationTest {
                     .andReturn();
 
             MockHttpServletResponse response = result.getResponse();
-            checkForCookie(response);
+            getToken(response);
         } else {
             NestedServletException thrown = assertThrows(NestedServletException.class, () ->
                     mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
@@ -88,7 +86,7 @@ public class AuthenticationControllerIntegrationTest {
                     .andReturn();
 
             MockHttpServletResponse response = result.getResponse();
-            checkForCookie(response);
+            getToken(response);
         } else {
             NestedServletException thrown = assertThrows(NestedServletException.class, () ->
                     mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/pin-login")
@@ -109,21 +107,18 @@ public class AuthenticationControllerIntegrationTest {
                 .andReturn();
 
         MockHttpServletResponse response = result.getResponse();
-        checkForCookie(response);
+        String token = getToken(response);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/whoami")
-                        .cookie(getCookie(response)))
+                        .header("Authorization", "Bearer "+token))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"));
     }
 
-    private void checkForCookie(MockHttpServletResponse response) {
-        // If we have a cookie, we've successfully logged in.
-        assertNotNull(response.getCookie("accessToken"));
-    }
-
-    private Cookie getCookie(MockHttpServletResponse response) {
-        return response.getCookie("accessToken");
+    private String getToken(MockHttpServletResponse response) throws IOException {
+        var body = response.getContentAsByteArray();
+        var token= new ObjectMapper().readValue(body, TokenDTO.class);
+        return token.getToken();
     }
 
     /// Returns a collection of [Pin, Expected To Login]
