@@ -17,7 +17,7 @@ interface OrderBoard {
   styleUrls: ['./order-board.component.less'],
 })
 export class OrderBoardComponent implements OnInit {
-  @Input() isBarman = true;
+  isBarman = true;
   orderBoard: OrderBoard = {
     pending: [],
     inProgressMy: [],
@@ -25,12 +25,15 @@ export class OrderBoardComponent implements OnInit {
     declined: [],
     ready: [],
   };
-  userId = 2; //hardcoded
+  userId = 0;
   orders: Order[] = [];
 
   constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
+    this.userId = Number(localStorage.getItem('userId'));
+    this.isBarman = localStorage.getItem('role') === 'barman';
+
     this.orderService.connect();
     this.orderService.getAll().subscribe((d) => {
       this.orders = d ?? [];

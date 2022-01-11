@@ -62,8 +62,8 @@ public class OrderItemController {
     }
 
     @PreAuthorize("hasRole('WAITER')")
-    @DeleteMapping("/cancel")
-    public ResponseEntity<DataWithMessage<List<Long>>> cancelOrderItem(@Valid @RequestBody OrderItemIds orderItemIds) {
+    @PutMapping("/cancel")
+    public ResponseEntity<DataWithMessage<List<Long>>> cancelOrderItems(@Valid @RequestBody OrderItemIds orderItemIds) {
         var data = orderItemService.cancelOrderItems(orderItemIds.getIds());
         if (data.getData() != null)
             messagingTemplate.convertAndSend("/topic/cancelled-items", data.getData());

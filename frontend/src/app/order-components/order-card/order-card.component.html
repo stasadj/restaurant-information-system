@@ -1,11 +1,13 @@
 <mat-card>
-  <mat-card-title> Table {{ order.tableId }} </mat-card-title>
+  <mat-card-title class="order-title" align="center">
+    Table {{ order.tableId }}
+  </mat-card-title>
   <mat-card-content>
     <mat-selection-list [(ngModel)]="items" *ngIf="selectable; else elseBlock">
       <mat-list-option
         *ngFor="let oi of order.orderItems"
-        [value]="oi.item.name"
-        [disabled]="isBarman === (oi.item.type !== 'FOOD')"
+        [value]="oi.id"
+        [disabled]="isBarman !== (oi.item.type !== 'FOOD')"
       >
         <p>
           <b>{{ oi.amount }}x </b> <i>{{ oi.item.name }}</i>
@@ -22,12 +24,12 @@
       </mat-list>
     </ng-template>
   </mat-card-content>
-  <mat-card-actions *ngIf="selectable" align="end">
+  <mat-card-actions *ngIf="selectable && items.length > 0" align="end">
     <div *ngIf="order.orderItems[0].orderStatus === 'PENDING'">
-      <button mat-raised-button color="primary" [disabled]="items.length === 0">
+      <button mat-raised-button color="primary" (click)="onDecline()">
         Decline
       </button>
-      <button mat-raised-button color="primary" [disabled]="items.length === 0">
+      <button mat-raised-button color="primary" (click)="onAccept()">
         Accept
       </button>
     </div>
@@ -35,7 +37,7 @@
       *ngIf="order.orderItems[0].orderStatus === 'IN_PROGRESS'"
       mat-raised-button
       color="primary"
-      [disabled]="items.length === 0"
+      (click)="onPrepare()"
     >
       Mark prepared
     </button>

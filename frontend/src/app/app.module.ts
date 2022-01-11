@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -21,6 +21,8 @@ import { MapComponent } from './restaurant-map/map/map.component';
 import { TableOrderComponent } from './order-components/table-order/table-order.component';
 import { OrderBoardComponent } from './order-components/order-board/order-board.component';
 import { OrderCardComponent } from './order-components/order-card/order-card.component';
+import { AuthInterceptor } from './services/auth/auth.interceptor';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { OrderCardComponent } from './order-components/order-card/order-card.com
     TableOrderComponent,
     OrderBoardComponent,
     OrderCardComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,13 @@ import { OrderCardComponent } from './order-components/order-card/order-card.com
     HttpClientModule,
     MatListModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

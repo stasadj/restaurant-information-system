@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Order } from 'src/app/model/Order';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -12,7 +12,7 @@ import { OrderItem } from 'src/app/model/OrderItem';
 })
 export class OrderService {
   private readonly path: string = '/api/order';
-  private readonly wsPath: string = '/api/websocket';
+  private readonly wsPath: string = '/api/websocket?token=AAA';
   private stompClient: Stomp.Client;
 
   readonly orderSubject: Subject<Order> = new Subject();
@@ -65,96 +65,7 @@ export class OrderService {
   }
 
   getAll(): Observable<Order[]> {
-    //return this.http.get<HttpResponse<Order[]>>(`${this.path}/all`);
-    return of([
-      {
-        id: 1,
-        createdAt: new Date(),
-        note: 'note',
-        tableId: 1,
-        orderItems: [
-          {
-            id: 1,
-            amount: 2,
-            orderId: 1,
-            orderStatus: 'PENDING',
-            itemId: 1,
-            item: { name: 'gabagool', type: 'FOOD' },
-          },
-          {
-            id: 1,
-            amount: 2,
-            orderId: 1,
-            orderStatus: 'IN_PROGRESS',
-            itemId: 1,
-            item: { name: 'pizza ', type: 'FOOD' },
-            cookId: 2,
-          },
-          {
-            id: 1,
-            amount: 2,
-            orderId: 1,
-            orderStatus: 'PENDING',
-            itemId: 1,
-            item: { name: 'cheese slice', type: 'FOOD' },
-          },
-          {
-            id: 1,
-            amount: 2,
-            orderId: 1,
-            orderStatus: 'IN_PROGRESS',
-            itemId: 1,
-            item: {
-              name: 'aaaaaaaaa aabbbbbbb bbbbbbbbbbcc ccccccccc kkkkkkkkkk',
-              type: 'FOOD',
-            },
-          },
-          {
-            id: 1,
-            amount: 2,
-            orderId: 1,
-            orderStatus: 'DECLINED',
-            itemId: 1,
-            item: { name: 'no', type: 'FOOD' },
-          },
-        ],
-        waiterId: 1,
-      },
-      {
-        id: 2,
-        createdAt: new Date(),
-        note: 'note',
-        tableId: 2,
-        orderItems: [
-          {
-            id: 2,
-            amount: 2,
-            orderId: 2,
-            orderStatus: 'PENDING',
-            itemId: 1,
-            item: { name: 'puding', type: 'FOOD' },
-          },
-        ],
-        waiterId: 1,
-      },
-      {
-        id: 3,
-        createdAt: new Date(),
-        note: 'note',
-        tableId: 3,
-        orderItems: [
-          {
-            id: 3,
-            amount: 2,
-            orderId: 3,
-            orderStatus: 'PENDING',
-            itemId: 1,
-            item: { name: 'beer', type: 'DRINK' },
-          },
-        ],
-        waiterId: 1,
-      },
-    ]);
+    return this.http.get<Order[]>(`${this.path}/all`);
   }
 
   getAllForWaiter(id: number): Observable<HttpResponse<Order[]>> {

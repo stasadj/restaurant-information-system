@@ -265,7 +265,7 @@ public final class OrderItemControllerIntegrationTest {
         OrderItemIds ids = new OrderItemIds(List.of(9L, 1L));
         ObjectMapper mapper = new ObjectMapper();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/order-items/cancel")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/cancel")
                         .cookie(cookie)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
@@ -282,7 +282,7 @@ public final class OrderItemControllerIntegrationTest {
         OrderItemIds ids = new OrderItemIds(List.of(5L, 1L));
         ObjectMapper mapper = new ObjectMapper();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/order-items/cancel")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/cancel")
                         .cookie(cookie)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))

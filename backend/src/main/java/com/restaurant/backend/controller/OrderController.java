@@ -23,7 +23,7 @@ public class OrderController {
 
 	private final SimpMessagingTemplate messagingTemplate;
 
-	@PreAuthorize("hasRole('WAITER')")
+	@PreAuthorize("hasAnyRole('BARMAN', 'COOK', 'WAITER')")
 	@GetMapping("/all")
 	public ResponseEntity<List<OrderDTO>> getAllOrders() {
 		return new ResponseEntity<>(orderMapper.convertAll(orderService.findAll()), HttpStatus.OK);

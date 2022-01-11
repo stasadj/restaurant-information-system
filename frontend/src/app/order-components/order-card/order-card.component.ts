@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Order } from 'src/app/model/Order';
+import { OrderItemService } from 'src/app/services/order-item/order-item.service';
 
 @Component({
   selector: 'app-order-card',
@@ -25,9 +26,19 @@ export class OrderCardComponent implements OnInit {
   };
   @Input() selectable = false;
   @Input() isBarman = false;
-  items: any[] = [];
+  items: number[] = [];
 
-  constructor() {}
+  constructor(private orderItemService: OrderItemService) {}
 
   ngOnInit(): void {}
+
+  onAccept(): void {
+    this.orderItemService.acceptOrderItems(this.items);
+  }
+  onDecline(): void {
+    this.orderItemService.declineOrderItems(this.items);
+  }
+  onPrepare(): void {
+    this.orderItemService.markOrderItemsAsPrepared(this.items);
+  }
 }
