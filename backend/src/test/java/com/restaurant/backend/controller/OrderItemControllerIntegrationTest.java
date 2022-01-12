@@ -1,23 +1,12 @@
 package com.restaurant.backend.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-import javax.transaction.Transactional;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restaurant.backend.domain.OrderItem;
 import com.restaurant.backend.domain.enums.OrderStatus;
 import com.restaurant.backend.dto.requests.OrderItemIds;
+import com.restaurant.backend.dto.responses.TokenDTO;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.service.OrderItemService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,6 +24,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:test.properties")
@@ -49,7 +47,7 @@ public final class OrderItemControllerIntegrationTest {
 
     private MockMvc mockMvc;
 
-    private Cookie cookie;
+    private String token;
 
     @BeforeEach
     public void setup() {
@@ -62,7 +60,9 @@ public final class OrderItemControllerIntegrationTest {
                         .content(pin.toString()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-        cookie = result.getResponse().getCookie("accessToken");
+
+        var body = result.getResponse().getContentAsByteArray();
+        token = new ObjectMapper().readValue(body, TokenDTO.class).getToken();
     }
 
     @ParameterizedTest
@@ -72,7 +72,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put(url)
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -102,7 +102,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/accept")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -121,7 +121,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/accept")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -140,7 +140,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/accept")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -158,7 +158,7 @@ public final class OrderItemControllerIntegrationTest {
         OrderItemIds ids = new OrderItemIds(List.of(9L, 1L));
         ObjectMapper mapper = new ObjectMapper();
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/decline")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -176,7 +176,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/decline")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -194,7 +194,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/decline")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -212,7 +212,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/mark-prepared")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -230,7 +230,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/mark-prepared")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -248,7 +248,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/mark-prepared")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -266,7 +266,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/cancel")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -283,7 +283,7 @@ public final class OrderItemControllerIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/order-items/cancel")
-                        .cookie(cookie)
+                        .header("Authorization", "Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(ids)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
