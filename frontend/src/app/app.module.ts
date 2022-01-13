@@ -1,18 +1,14 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './services/auth/auth.interceptor';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatInputModule } from '@angular/material/input';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
 
 import { AppRoutingModule } from './app-routing.module';
+//import { AngularMaterialModule } from './angular-material.module';
+
 import { AppComponent } from './app.component';
 import { CanvasComponent } from './restaurant-map/canvas/canvas.component';
 import { TableComponent } from './restaurant-map/table/table.component';
@@ -21,8 +17,23 @@ import { MapComponent } from './restaurant-map/map/map.component';
 import { TableOrderComponent } from './order-components/table-order/table-order.component';
 import { OrderBoardComponent } from './order-components/order-board/order-board.component';
 import { OrderCardComponent } from './order-components/order-card/order-card.component';
-import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { LoginComponent } from './login/login.component';
+import { OrderNotificationsComponent } from './order-components/order-notifications/order-notifications.component';
+import { WaiterPageComponent } from './pages/waiter-page/waiter-page.component';
+import { CookPageComponent } from './pages/cook-page/cook-page.component';
+
+import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatInputModule } from '@angular/material/input';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ToastrModule } from 'ngx-toastr';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +45,10 @@ import { LoginComponent } from './login/login.component';
     OrderBoardComponent,
     OrderCardComponent,
     LoginComponent,
+    OrderNotificationsComponent,
+    WaiterPageComponent,
+    CookPageComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,16 +56,19 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
-    MatTabsModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    HttpClientModule,
+    CommonModule,
+    MatTabsModule,
     MatSliderModule,
     MatInputModule,
     MatGridListModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    HttpClientModule,
     MatListModule,
+    MatDialogModule,
   ],
   providers: [
     {

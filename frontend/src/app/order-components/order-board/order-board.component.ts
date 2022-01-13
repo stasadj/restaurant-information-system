@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Order } from 'src/app/model/Order';
 import { OrderItem } from 'src/app/model/OrderItem';
 import { OrderService } from 'src/app/services/order/order.service';
@@ -16,7 +16,7 @@ interface OrderBoard {
   templateUrl: './order-board.component.html',
   styleUrls: ['./order-board.component.less'],
 })
-export class OrderBoardComponent implements OnInit {
+export class OrderBoardComponent implements OnInit, OnDestroy {
   isBarman = true;
   orderBoard: OrderBoard = {
     pending: [],
@@ -46,6 +46,12 @@ export class OrderBoardComponent implements OnInit {
     this.orderService.cancelledItemsSubject.subscribe((o) =>
       this.receiveCancelled(o)
     );
+  }
+  ngOnDestroy(): void {
+    this.orderService.disconnect();
+    this.orderService.orderSubject.unsubscribe();
+    this.orderService.orderItemsSubject.unsubscribe();
+    this.orderService.cancelledItemsSubject.unsubscribe();
   }
 
   receiveOrder(order: Order) {

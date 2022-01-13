@@ -12,7 +12,7 @@ import { OrderItem } from 'src/app/model/OrderItem';
 })
 export class OrderService {
   private readonly path: string = '/api/order';
-  private readonly wsPath: string = '/api/websocket?token=AAA';
+  private readonly wsPath: string = '/api/websocket';
   private stompClient: Stomp.Client;
 
   readonly orderSubject: Subject<Order> = new Subject();
