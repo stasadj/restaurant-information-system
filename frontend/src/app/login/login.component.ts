@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 
 @Component({
@@ -12,6 +13,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   username: string = '';
   password: string = '';
   pin: number = 0;
+  private subscriptions = new Subscription();
 
   constructor(
     private auth: AuthService,
@@ -20,13 +22,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.auth.loggedUser.subscribe((user) => {
+    let s = this.auth.loggedUser.subscribe((user) => {
       if (user) this.router.navigate([`/${user.role}`]);
       else this.toastr.error('Incorrect');
     });
+    this.subscriptions.add(s);
   }
   ngOnDestroy(): void {
-    this.auth.loggedUser.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   onLogin() {
@@ -35,9 +38,5 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onPinLogin() {
     this.auth.pinLogin(this.pin);
-  }
-
-  onLogout() {
-    this.auth.logout();
   }
 }

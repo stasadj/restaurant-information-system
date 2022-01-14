@@ -32,8 +32,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
 import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     WaiterPageComponent,
     CookPageComponent,
     NotFoundComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +73,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     MatIconModule,
     MatListModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
+    MatTableModule,
   ],
   providers: [
     {

@@ -41,14 +41,19 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Order> findAllForWaiter(Long id) {
-        return orderRepository.findAllByWaiter_Id(id);
+    public Optional<Order> findByTableId(Integer tableId) {
+        return orderRepository.findByTableId(tableId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findAllForWaiter(Long waiterId) {
+        return orderRepository.findAllByWaiter_Id(waiterId);
     }
 
     public Order create(OrderDTO order) throws NotFoundException, BadRequestException {
         boolean isDrink = false, isFood = false;
         Staff waiter = staffService.findOne(order.getWaiterId());
-        Optional<Order> maybeOrder = orderRepository.findByTableId(order.getTableId());
+        Optional<Order> maybeOrder = findByTableId(order.getTableId());
         if (maybeOrder.isPresent())
             throw new BadRequestException(String.format("Table #%d already has an order.", order.getTableId()));
 

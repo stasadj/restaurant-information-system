@@ -1,2 +1,6 @@
-<app-order-notifications></app-order-notifications>
-<app-map (tableClickEvent)="onTableClick($event)"></app-map>
+<div class="flex-container">
+  <app-order-notifications
+    (clickEvent)="onTableClick($event)"
+  ></app-order-notifications>
+  <app-map (tableClickEvent)="onTableClick($event)"></app-map>
+</div>

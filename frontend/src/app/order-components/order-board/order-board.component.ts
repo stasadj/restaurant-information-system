@@ -1,4 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Order } from 'src/app/model/Order';
 import { OrderItem } from 'src/app/model/OrderItem';
 import { OrderService } from 'src/app/services/order/order.service';
@@ -18,15 +19,10 @@ interface OrderBoard {
 })
 export class OrderBoardComponent implements OnInit, OnDestroy {
   isBarman = true;
-  orderBoard: OrderBoard = {
-    pending: [],
-    inProgressMy: [],
-    inProgressOther: [],
-    declined: [],
-    ready: [],
-  };
+  orderBoard?: OrderBoard;
   userId = 0;
   orders: Order[] = [];
+  private subscriptions = new Subscription();
 
   constructor(private orderService: OrderService) {}
 
@@ -35,23 +31,30 @@ export class OrderBoardComponent implements OnInit, OnDestroy {
     this.isBarman = localStorage.getItem('role') === 'barman';
 
     this.orderService.connect();
-    this.orderService.getAll().subscribe((d) => {
-      this.orders = d ?? [];
-      this.arrange();
-    });
-    this.orderService.orderSubject.subscribe((o) => this.receiveOrder(o));
-    this.orderService.orderItemsSubject.subscribe((o) =>
-      this.receiveOrderItems(o)
+    let c = this.orderService.connected$.subscribe(() =>
+      this.orderService.getAll().subscribe((d) => {
+        this.orders = d ?? [];
+        this.arrange();
+      })
     );
-    this.orderService.cancelledItemsSubject.subscribe((o) =>
-      this.receiveCancelled(o)
+    this.subscriptions.add(c);
+    this.subscriptions.add(
+      this.orderService.orderSubject.subscribe((o) => this.receiveOrder(o))
+    );
+    this.subscriptions.add(
+      this.orderService.orderItemsSubject.subscribe((o) =>
+        this.receiveOrderItems(o)
+      )
+    );
+    this.subscriptions.add(
+      this.orderService.cancelledItemsSubject.subscribe((o) =>
+        this.receiveCancelled(o)
+      )
     );
   }
   ngOnDestroy(): void {
     this.orderService.disconnect();
-    this.orderService.orderSubject.unsubscribe();
-    this.orderService.orderItemsSubject.unsubscribe();
-    this.orderService.cancelledItemsSubject.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   receiveOrder(order: Order) {

@@ -1,3 +1,21 @@
-<div>
-  <div *ngFor="let n of notifications">{{ n.text }}</div>
-</div>
+<mat-card>
+  <mat-card-title>Notifications</mat-card-title>
+  <mat-card-content class="content">
+    <mat-list *ngIf="notifications; else loading">
+      <mat-list-item
+        class="notification"
+        *ngFor="let n of notifications"
+        (click)="onClick(n.tableId)"
+      >
+        <div mat-line>Table {{ n.tableId }}</div>
+        <div mat-line>{{ n.text }}</div>
+        <div mat-line align="right">
+          {{ n.dateTime | date: "HH:mm" }}
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <ng-template #loading>
+      <mat-spinner></mat-spinner>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

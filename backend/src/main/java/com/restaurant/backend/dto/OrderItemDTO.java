@@ -21,7 +21,6 @@ public class OrderItemDTO {
     @NotNull(message = "Amount is missing.")
     private Integer amount;
 
-    @NotNull(message = "Order id is missing.")
     private Long orderId;
 
     private OrderStatus orderStatus;

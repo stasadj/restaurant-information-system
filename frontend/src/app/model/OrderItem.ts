@@ -1,10 +1,10 @@
 export interface OrderItem {
-  id: number;
+  id?: number;
   amount: number;
-  orderId: number;
-  orderStatus: string;
+  orderId?: number;
+  orderStatus?: string;
   itemId: number;
-  item: { name: string; type: string };
+  item: { name: string; type?: string };
   cookId?: number;
   barmanId?: number;
 }

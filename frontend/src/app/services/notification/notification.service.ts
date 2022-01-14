@@ -11,13 +11,13 @@ import { Notification } from 'src/app/model/Notification';
 export class NotificationService {
   private readonly wsPath: string = '/api/websocket';
   private readonly path: string = '/api/notifications';
-  private stompClient: Stomp.Client;
+  private stompClient?: Stomp.Client;
 
   readonly notificationSubject: Subject<Notification> = new Subject();
 
-  constructor(private http: HttpClient) {
-    this.stompClient = Stomp.over(new SockJS(this.wsPath));
-  }
+  readonly connected$: Subject<void> = new Subject();
+
+  constructor(private http: HttpClient) {}
 
   getAllForWaiter(): Observable<Notification[]> {
     const id = localStorage.getItem('userId');
@@ -30,16 +30,20 @@ export class NotificationService {
     const role = localStorage.getItem('role');
     this.stompClient.connect(
       {},
-      () =>
-        this.stompClient.subscribe(`/topic/${role}`, (m) =>
+      () => {
+        this.stompClient?.subscribe(`/topic/${role}`, (m) =>
           this.onMessageReceived(m)
-        ),
+        );
+        this.connected$.next();
+      },
       this.errorCallBack
     );
   }
 
   disconnect() {
-    this.stompClient?.disconnect(() => console.log('Disconnected'));
+    this.stompClient?.disconnect(() => {
+      console.log('Disconnected');
+    });
   }
 
   errorCallBack(error: any) {

@@ -18,6 +18,8 @@ export class WaiterPageComponent implements OnInit {
         tableId: id,
       },
       disableClose: true,
+      width: '70%',
+      height: '70%',
     });
 
     dialogRef.afterClosed().subscribe((result) => {

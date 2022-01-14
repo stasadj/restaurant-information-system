@@ -13,15 +13,15 @@ import { OrderItem } from 'src/app/model/OrderItem';
 export class OrderService {
   private readonly path: string = '/api/order';
   private readonly wsPath: string = '/api/websocket';
-  private stompClient: Stomp.Client;
+  private stompClient?: Stomp.Client;
 
   readonly orderSubject: Subject<Order> = new Subject();
   readonly orderItemsSubject: Subject<OrderItem[]> = new Subject();
   readonly cancelledItemsSubject: Subject<number[]> = new Subject();
 
-  constructor(private http: HttpClient) {
-    this.stompClient = Stomp.over(new SockJS(this.wsPath));
-  }
+  readonly connected$: Subject<void> = new Subject();
+
+  constructor(private http: HttpClient) {}
 
   connect() {
     console.log('Initialize WebSocket connection');
@@ -29,15 +29,16 @@ export class OrderService {
     this.stompClient.connect(
       {},
       () => {
-        this.stompClient.subscribe('/topic/orders', (m) =>
+        this.stompClient?.subscribe('/topic/orders', (m) =>
           this.onOrderReceived(m)
         );
-        this.stompClient.subscribe('/topic/order-items', (m) =>
+        this.stompClient?.subscribe('/topic/order-items', (m) =>
           this.onOrderItemsReceived(m)
         );
-        this.stompClient.subscribe('/topic/cancelled-items', (m) =>
+        this.stompClient?.subscribe('/topic/cancelled-items', (m) =>
           this.onCancelledItemsReceived(m)
         );
+        this.connected$.next();
       },
       this.errorCallBack
     );
@@ -70,6 +71,10 @@ export class OrderService {
 
   getAllForWaiter(id: number): Observable<HttpResponse<Order[]>> {
     return this.http.get<HttpResponse<Order[]>>(`${this.path}/all/${id}`);
+  }
+
+  getForTable(tableId: number): Observable<Order | undefined> {
+    return this.http.get<Order | undefined>(`${this.path}/table/${tableId}`);
   }
 
   createOrder(order: Order) {

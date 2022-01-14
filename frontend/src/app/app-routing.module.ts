@@ -11,6 +11,10 @@ const routes: Routes = [
     component: CookPageComponent,
   },
   {
+    path: 'barman',
+    component: CookPageComponent,
+  },
+  {
     path: 'waiter',
     component: WaiterPageComponent,
   },

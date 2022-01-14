@@ -1,4 +1,4 @@
-<div class="flex-container">
+<div *ngIf="orderBoard; else loading" class="flex-container">
   <mat-card class="board-list">
     <mat-card-title>Pending</mat-card-title>
     <mat-card-content>
@@ -63,3 +63,7 @@
     </mat-card-content>
   </mat-card>
 </div>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

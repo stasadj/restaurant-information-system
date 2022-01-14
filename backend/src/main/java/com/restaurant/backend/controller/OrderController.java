@@ -30,9 +30,17 @@ public class OrderController {
 	}
 
 	@PreAuthorize("hasRole('WAITER')")
-	@GetMapping("/all/{id}")
-	public ResponseEntity<List<OrderDTO>> getAllOrdersForWaiter(@PathVariable("id") Long id) {
-		return new ResponseEntity<>(orderMapper.convertAll(orderService.findAllForWaiter(id)), HttpStatus.OK);
+	@GetMapping("/all/{waiterId}")
+	public ResponseEntity<List<OrderDTO>> getAllOrdersForWaiter(@PathVariable("waiterId") Long waiterId) {
+		return new ResponseEntity<>(orderMapper.convertAll(orderService.findAllForWaiter(waiterId)), HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('WAITER')")
+	@GetMapping("/table/{tableId}")
+	public ResponseEntity<OrderDTO> getForTable(@PathVariable("tableId") Integer tableId) {
+		var o = orderService.findByTableId(tableId);
+		return o.map(order -> new ResponseEntity<>(orderMapper.convert(order), HttpStatus.OK))
+				.orElseGet(() -> new ResponseEntity<>(null, HttpStatus.OK));
 	}
 
 	@PreAuthorize("hasRole('WAITER')")

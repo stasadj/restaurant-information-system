@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    @Query("SELECT n FROM Notification n WHERE n.order.waiter.id = :waiterId AND n.deleted = false")
+    @Query("SELECT n FROM Notification n WHERE n.order.waiter.id = :waiterId AND (n.type=1 OR n.type=3) AND n.deleted = false")
     List<Notification> findAllForWaiter(Long waiterId);
 }
