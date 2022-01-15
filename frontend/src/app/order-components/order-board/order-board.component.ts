@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { Order } from 'src/app/model/Order';
 import { OrderItem } from 'src/app/model/OrderItem';
+import { NotificationService } from 'src/app/services/notification/notification.service';
 import { OrderService } from 'src/app/services/order/order.service';
 
 interface OrderBoard {
@@ -24,13 +26,18 @@ export class OrderBoardComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   private subscriptions = new Subscription();
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private notifiationService: NotificationService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.userId = Number(localStorage.getItem('userId'));
     this.isBarman = localStorage.getItem('role') === 'barman';
 
     this.orderService.connect();
+    this.notifiationService.connect();
     let c = this.orderService.connected$.subscribe(() =>
       this.orderService.getAll().subscribe((d) => {
         this.orders = d ?? [];
@@ -51,8 +58,19 @@ export class OrderBoardComponent implements OnInit, OnDestroy {
         this.receiveCancelled(o)
       )
     );
+    this.subscriptions.add(
+      this.notifiationService.finalizedSubject.subscribe((id) =>
+        this.receiveFinalized(id)
+      )
+    );
+    this.subscriptions.add(
+      this.notifiationService.notificationSubject.subscribe((n) =>
+        this.toastr.info(n.text)
+      )
+    );
   }
   ngOnDestroy(): void {
+    this.notifiationService.disconnect();
     this.orderService.disconnect();
     this.subscriptions.unsubscribe();
   }
@@ -87,6 +105,13 @@ export class OrderBoardComponent implements OnInit, OnDestroy {
         }
       }
     if (itemsIds.length > 0) this.arrange();
+  }
+
+  receiveFinalized(id: number) {
+    let i = this.orders.findIndex((o) => o.id === id);
+    if (i !== -1) this.orders.splice(i, 1);
+    i = this.orderBoard?.ready.findIndex((o) => o.id === id) ?? -1;
+    if (i !== -1) this.orderBoard?.ready.splice(i, 1);
   }
 
   arrange() {

@@ -35,6 +35,11 @@ export class OrderNotificationsComponent implements OnInit, OnDestroy {
         this.receiveNotification(n)
       )
     );
+    this.subscriptions.add(
+      this.notificationService.finalizedSubject.subscribe((id) =>
+        this.deleteNotifications(id)
+      )
+    );
   }
   ngOnDestroy(): void {
     this.notificationService.disconnect();
@@ -44,6 +49,10 @@ export class OrderNotificationsComponent implements OnInit, OnDestroy {
   receiveNotification(notification: Notification) {
     if (localStorage.getItem('userId') !== notification.waiterId + '') return;
     this.notifications?.push(notification);
+  }
+
+  deleteNotifications(id: number) {
+    this.notifications = this.notifications?.filter((n) => n.orderId !== id);
   }
 
   onClick(tableId: number) {

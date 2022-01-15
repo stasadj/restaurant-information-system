@@ -76,19 +76,31 @@ public class OrderService {
         return newOrder;
     }
 
-    public Order editOrder(OrderDTO order) throws NotFoundException {
-        Order editedOrder = findOne(order.getId());
-        editedOrder.setNote(order.getNote());
+    public Order editOrder(OrderDTO orderDTO) throws NotFoundException {
+        Order editedOrder = findOne(orderDTO.getId());
+        editedOrder.setNote(orderDTO.getNote());
 
-        for (OrderItemDTO orderItem : order.getOrderItems()) {
-            if (orderItem.getId() == null) {
-                Item item = itemService.findOne(orderItem.getItemId());
-                OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
+        for (OrderItemDTO orderItemDTO : orderDTO.getOrderItems()) {
+            if (orderItemDTO.getId() == null) {
+                Item item = itemService.findOne(orderItemDTO.getItemId());
+                OrderItem newOrderItem = new OrderItem(orderItemDTO.getAmount(), editedOrder, OrderStatus.PENDING, item);
                 orderItemService.save(newOrderItem);
-            } else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
-                OrderItem editedOrderItem = orderItemService.findOne(orderItem.getId());
-                editedOrderItem.setAmount(orderItem.getAmount());
-                orderItemService.save(editedOrderItem);
+            } else {
+                OrderItem editedOrderItem = orderItemService.findOne(orderItemDTO.getId());
+                if (editedOrderItem.getAmount().intValue() == orderItemDTO.getAmount().intValue()) continue;
+                if (editedOrderItem.getOrderStatus() == OrderStatus.PENDING) {
+                    editedOrderItem.setAmount(orderItemDTO.getAmount());
+                    orderItemService.save(editedOrderItem);
+                } else if (editedOrderItem.getAmount() < orderItemDTO.getAmount()) {
+                    OrderItem newOrderItem = new OrderItem(orderItemDTO.getAmount() - editedOrderItem.getAmount(),
+                            editedOrder, OrderStatus.PENDING, editedOrderItem.getItem());
+                    orderItemService.save(newOrderItem);
+                } else {
+                    editedOrder.setNote(editedOrder.getNote() +
+                            String.format("\nTried to decrease amount of order item #%d ('%s') to %d.",
+                                    editedOrderItem.getId(), editedOrderItem.getItem().getName(), orderItemDTO.getAmount()));
+                }
+
             }
         }
         return orderRepository.save(editedOrder);
