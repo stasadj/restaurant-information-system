@@ -64,9 +64,6 @@ public class OrderItemService {
             orderItemRepository.save(orderItem);
             acceptedItems.add(orderItem);
         }
-
-        // maybe notify everyone so that accepted items disappear from the list
-
         String message = messageBuilder.toString();
         return new DataWithMessage<>(acceptedItems, message);
     }
@@ -101,9 +98,6 @@ public class OrderItemService {
                     orderItem.getOrder()
             );
         }
-
-        // maybe notify everyone so that declined items disappear from the list
-
         String message = messageBuilder.toString();
         return new DataWithMessage<>(declinedItems, message);
     }

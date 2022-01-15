@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TableService } from 'src/app/services/table/table.service';
 import { RoomOrganization } from '../../model/RoomOrganization';
 
@@ -10,6 +10,8 @@ import { RoomOrganization } from '../../model/RoomOrganization';
 export class MapComponent implements OnInit {
   rooms: RoomOrganization[] = [{ id: 'Room 0', tables: [] }];
 
+  @Output() tableClickEvent = new EventEmitter<number>();
+
   constructor(private tableService: TableService) {}
 
   ngOnInit(): void {
@@ -17,7 +19,6 @@ export class MapComponent implements OnInit {
   }
 
   onTableClick(id: number) {
-    alert('Order for table ' + id);
-    //todo: order view
+    this.tableClickEvent.emit(id);
   }
 }

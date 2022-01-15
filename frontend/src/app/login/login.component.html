@@ -1,0 +1,16 @@
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>username</mat-label>
+    <input matInput [(ngModel)]="username" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>password</mat-label>
+    <input matInput [(ngModel)]="password" />
+  </mat-form-field>
+  <button mat-raised-button (click)="onLogin()">Login</button>
+  <mat-form-field appearance="fill">
+    <mat-label>pin</mat-label>
+    <input matInput [(ngModel)]="pin" type="number" min="0" max="9999" />
+  </mat-form-field>
+  <button mat-raised-button (click)="onPinLogin()">Pin login</button>
+</div>

@@ -2,28 +2,23 @@ package com.restaurant.backend.service.integration;
 
 import com.restaurant.backend.dto.requests.CredentialsDTO;
 import com.restaurant.backend.service.AuthenticationService;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ProviderNotFoundException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
-import static com.restaurant.backend.constants.AuthenticationServiceTestConstants.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.transaction.Transactional;
+import static com.restaurant.backend.constants.AuthenticationServiceTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -36,40 +31,25 @@ public class AuthenticationServiceIntegrationTests {
 
     @ParameterizedTest
     @MethodSource("passwordCredentials")
-    public void login_passwordUser_parameterized(CredentialsDTO credentials, Boolean expectedToLogin) throws Exception {
-        MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-
+    public void login_passwordUser_parameterized(CredentialsDTO credentials, Boolean expectedToLogin) {
         if (expectedToLogin) {
-            authenticationService.login(credentials, mockResponse);
+            String token = authenticationService.login(credentials);
         } else {
             assertThrows(BadCredentialsException.class, () -> {
-                authenticationService.login(credentials, mockResponse);
+                String token = authenticationService.login(credentials);
             });
         }
-        checkForCookie(expectedToLogin, mockResponse);
     }
 
     @ParameterizedTest
     @MethodSource("pinCredentials")
-    public void login_pinUser_parameterized(String pin, Boolean expectedToLogin) throws Exception {
-        MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-
+    public void login_pinUser_parameterized(String pin, Boolean expectedToLogin) {
         if (expectedToLogin) {
-            authenticationService.login(pin, mockResponse);
+            String token = authenticationService.login(pin);
         } else {
             assertThrows(ProviderNotFoundException.class, () -> {
-                authenticationService.login(pin, mockResponse);
+                String token = authenticationService.login(pin);
             });
-        }
-        checkForCookie(expectedToLogin, mockResponse);
-    }
-
-    private void checkForCookie(Boolean expectedToLogin, MockHttpServletResponse response) {
-        // If we have a cookie, we've successfully logged in.
-        if (expectedToLogin) {
-            assertNotNull(response.getCookie("accessToken"));
-        } else {
-            assertNull(response.getCookie("accessToken"));
         }
     }
 

@@ -1,6 +1,7 @@
 package com.restaurant.backend.dto;
 
 import com.restaurant.backend.domain.enums.OrderStatus;
+import com.restaurant.backend.dto.responses.ItemNameDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +21,14 @@ public class OrderItemDTO {
     @NotNull(message = "Amount is missing.")
     private Integer amount;
 
-    @NotNull(message = "Order id is missing.")
     private Long orderId;
 
     private OrderStatus orderStatus;
 
     @NotNull(message = "Item id is missing.")
     private Long itemId;
+
+    private ItemNameDTO item;
 
     private Long cookId;
 

@@ -47,7 +47,7 @@ public class OrderServiceUnitTest {
     @Test
     public void create_tableHasAnOrder() {
         List<OrderItemDTO> items = new ArrayList<>();
-        OrderItemDTO item = new OrderItemDTO(1L, 2, 1L, OrderStatus.PENDING, 1L, null, null);
+        OrderItemDTO item = new OrderItemDTO(1L, 2, 1L, OrderStatus.PENDING, 1L, null, null, null);
         items.add(item);
         OrderDTO orderDTO = new OrderDTO(1L, LocalDateTime.now(), "note", 1, items, 1L);
 
@@ -60,7 +60,7 @@ public class OrderServiceUnitTest {
     public void create() {
         Waiter waiter = generateWaiter();
         List<OrderItemDTO> items = new ArrayList<>();
-        OrderItemDTO itemDTO = new OrderItemDTO(1L, 2, 1L, OrderStatus.PENDING, 1L, null, null);
+        OrderItemDTO itemDTO = new OrderItemDTO(1L, 2, 1L, OrderStatus.PENDING, 1L, null, null, null);
         items.add(itemDTO);
         OrderDTO orderDTO = new OrderDTO(1L, LocalDateTime.now(), "note", 1, items, 1L);
 
@@ -74,11 +74,10 @@ public class OrderServiceUnitTest {
         when(orderService.findAllForWaiter(eq(orderDTO.getWaiterId()))).thenReturn(Collections.singletonList(order));
         doNothing().when(orderItemService).save(any(OrderItem.class));
 
-        List<Order> results = orderService.create(orderDTO);
+        Order result = orderService.create(orderDTO);
 
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(0).getTableId());
-        assertSame(waiter, results.get(0).getWaiter());
+        assertEquals(1, result.getTableId());
+        assertSame(waiter, result.getWaiter());
 
         verify(staffService, times(1)).findOne(anyLong());
         verify(orderRepository, times(1)).findByTableId(anyInt());
@@ -90,8 +89,8 @@ public class OrderServiceUnitTest {
     @Test
     public void editOrder() {
         List<OrderItemDTO> itemsEdited = new ArrayList<>();
-        OrderItemDTO item1 = new OrderItemDTO(1L, 2, 1L, OrderStatus.PENDING, 1L, null, null);
-        OrderItemDTO item2 = new OrderItemDTO(null, 2, 1L, OrderStatus.PENDING, 1L, null, null);
+        OrderItemDTO item1 = new OrderItemDTO(1L, 2, 1L, OrderStatus.PENDING, 1L, null, null, null);
+        OrderItemDTO item2 = new OrderItemDTO(null, 2, 1L, OrderStatus.PENDING, 1L, null, null, null);
         itemsEdited.add(item1);
         itemsEdited.add(item2);
         OrderDTO orderDTO = new OrderDTO(1L, LocalDateTime.now(), "note", 1, itemsEdited, 1L);
