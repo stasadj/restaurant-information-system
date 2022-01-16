@@ -36,8 +36,8 @@ export class TableOrderComponent implements OnInit {
     { id: 3, name: 'Mushroom risotto', price: 1300, a: 0 },
     { id: 4, name: 'Peach ice tea', price: 130, a: 0 },
   ];
+
   constructor(
-    public dialogRef: MatDialogRef<TableOrderComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { tableId: number },
     private orderService: OrderService,
     private orderItemService: OrderItemService,
@@ -49,9 +49,6 @@ export class TableOrderComponent implements OnInit {
       this.order = d;
       this.noOrder = !d;
       this.calcTotal();
-      this.canBeFinalized =
-        !!this.order?.id &&
-        this.order.orderItems.every((oi) => oi.orderStatus === 'READY');
     });
   }
 
@@ -72,8 +69,12 @@ export class TableOrderComponent implements OnInit {
   }) {
     if (!orderItem.amount) return;
     if (!this.order) this.initOrder();
-    let eoi = this.order?.orderItems.find((oi) => oi.itemId === orderItem.id);
-    if (eoi) eoi.amount = orderItem.amount;
+    let existingItem = this.order?.orderItems.find(
+      (oi) =>
+        oi.itemId === orderItem.id &&
+        (!oi.orderStatus || oi.orderStatus === 'PENDING')
+    );
+    if (existingItem) existingItem.amount += orderItem.amount;
     else
       this.order?.orderItems.push({
         itemId: orderItem.id,
@@ -85,9 +86,11 @@ export class TableOrderComponent implements OnInit {
     this.calcTotal();
   }
 
-  cancelItem(itemId: number) {
+  cancelItem(orderItemId: number, itemId: number) {
     let i =
-      this.order?.orderItems.findIndex((oi) => oi.itemId === itemId) ?? -1;
+      this.order?.orderItems.findIndex(
+        (oi) => oi.id === orderItemId && oi.itemId === itemId
+      ) ?? -1;
     if (i === -1) return;
     let oi = this.order?.orderItems[i];
     if (oi?.orderStatus === 'IN_PROGRESS' || oi?.orderStatus === 'READY')
@@ -98,29 +101,32 @@ export class TableOrderComponent implements OnInit {
         else {
           this.order?.orderItems.splice(i, 1);
           this.table?.renderRows();
+          this.calcTotal();
         }
       });
     } else {
       this.order?.orderItems.splice(i, 1);
       this.table?.renderRows();
+      this.calcTotal();
     }
-    this.calcTotal();
   }
 
   createOrder() {
     if (this.order && this.order.orderItems.length > 0)
       this.orderService.createOrder(this.order).subscribe((o) => {
         this.order = o;
+        this.toastr.success('Order is created');
       });
-    //this.dialogRef.close();
+    this.edited = false;
   }
 
   updateOrder() {
     if (this.order && this.order.id && this.order.orderItems.length > 0)
       this.orderService.editOrder(this.order).subscribe((o) => {
         this.order = o;
+        this.toastr.success('Order is updated');
       });
-    //this.dialogRef.close();
+    this.edited = false;
   }
 
   finalizeOrder() {
@@ -140,5 +146,8 @@ export class TableOrderComponent implements OnInit {
       this.order?.orderItems
         .map((oi) => oi.amount * (oi.item.price ?? 0))
         .reduce((acc, value) => acc + value, 0) ?? 0;
+    this.canBeFinalized =
+      !!this.order?.id &&
+      this.order.orderItems.every((oi) => oi.orderStatus === 'READY');
   }
 }

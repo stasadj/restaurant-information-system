@@ -50,12 +50,12 @@
                   orderItem.orderStatus !== 'IN_PROGRESS' &&
                   orderItem.orderStatus !== 'READY'
                 "
-                (click)="cancelItem(orderItem.itemId)"
+                (click)="cancelItem(orderItem.id, orderItem.itemId)"
               >
                 <mat-icon>cancel</mat-icon>
               </button>
             </td>
-            <td mat-footer-cell *matFooterCellDef>-</td>
+            <td mat-footer-cell *matFooterCellDef></td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -64,15 +64,26 @@
         </table>
         <mat-form-field class="note-field" appearance="fill">
           <mat-label>Note</mat-label>
-          <textarea matInput [(ngModel)]="order.note"></textarea>
+          <textarea
+            matInput
+            [(ngModel)]="order.note"
+            (ngModelChange)="edited = true"
+          ></textarea>
         </mat-form-field>
       </div>
     </mat-tab>
     <mat-tab label="MENU">
       <h2>Dummy menu</h2>
       <div *ngFor="let item of dummyMenu">
-        {{ item.id }} {{ item.name }}
-        <input matInput [(ngModel)]="item.a" type="number" min="0" max="9999" />
+        {{ item.id }} {{ item.name }} {{ item.price }}din
+        <input
+          matInput
+          style="width: 30px"
+          [(ngModel)]="item.a"
+          type="number"
+          min="0"
+          max="9999"
+        />
         <button
           mat-button
           (click)="
@@ -92,15 +103,15 @@
 </div>
 <div mat-dialog-actions align="end">
   <button
-    mat-button
+    mat-raised-button
     color="primary"
-    *ngIf="order && !order.id"
+    *ngIf="order && !order.id && order.orderItems.length > 0"
     (click)="createOrder()"
   >
     Send order
   </button>
   <button
-    mat-button
+    mat-raised-button
     color="primary"
     *ngIf="order && order.id && edited"
     (click)="updateOrder()"
@@ -108,14 +119,14 @@
     Update order
   </button>
   <button
-    mat-button
+    mat-raised-button
     color="primary"
     *ngIf="canBeFinalized"
     (click)="finalizeOrder()"
   >
     Finalize order
   </button>
-  <button mat-button color="primary" [mat-dialog-close]="data.tableId">
+  <button mat-raised-button color="primary" [mat-dialog-close]="data.tableId">
     Close
   </button>
 </div>
