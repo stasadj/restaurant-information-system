@@ -14,12 +14,6 @@ import { CanvasComponent } from './restaurant-map/canvas/canvas.component';
 import { TableComponent } from './restaurant-map/table/table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapComponent } from './restaurant-map/map/map.component';
-<<<<<<< HEAD
-import { ItemComponent } from './itemTest/item/item/item.component';
-
-@NgModule({
-  declarations: [AppComponent, CanvasComponent, TableComponent, MapComponent, ItemComponent],
-=======
 import { TableOrderComponent } from './order-components/table-order/table-order.component';
 import { OrderBoardComponent } from './order-components/order-board/order-board.component';
 import { OrderCardComponent } from './order-components/order-card/order-card.component';
@@ -60,7 +54,6 @@ import { HeaderComponent } from './header/header.component';
     NotFoundComponent,
     HeaderComponent,
   ],
->>>>>>> develop
   imports: [
     BrowserModule,
     AppRoutingModule,

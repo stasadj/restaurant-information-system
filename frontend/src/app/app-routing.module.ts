@@ -8,31 +8,33 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { WaiterPageComponent } from './pages/waiter-page/waiter-page.component';
 
 const routes: Routes = [
-  {
-    path: 'cook',
-    component: CookPageComponent,
-  },
-  {
-    path: 'barman',
-    component: CookPageComponent,
-  },
-  {
-    path: 'waiter',
-    component: WaiterPageComponent,
-  },
-  { path: 'login', component: LoginComponent },
-  { path: '**', component: NotFoundComponent },
+    {
+        path: 'cook',
+        component: CookPageComponent,
+    },
+    {
+        path: 'barman',
+        component: CookPageComponent,
+    },
+    {
+        path: 'waiter',
+        component: WaiterPageComponent,
+    },
+    { path: 'login', component: LoginComponent },
 
-  {
-    path: "item-test",
-    pathMatch: "full",
-    component: ItemComponent
-    
-}
+    {
+        path: "item-test",
+        pathMatch: "full",
+        component: ItemComponent
+
+    },
+    { path: '**', component: NotFoundComponent },
+
+
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
