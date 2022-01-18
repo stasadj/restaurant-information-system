@@ -67,6 +67,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // Keep authentication open but close all other requests.
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/table").permitAll()  // for testing
+                .antMatchers("/api/item/**").permitAll()  // for testing
                 .antMatchers("/api/h2-console/**").permitAll().anyRequest()
                 .authenticated().and().cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),

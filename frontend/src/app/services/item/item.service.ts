@@ -13,6 +13,6 @@ export class ItemService {
     constructor(private http: HttpClient) {}
   
     getItems(): Observable<HttpResponse<Item[]>> {
-      return this.http.get<HttpResponse<Item[]>>(this.path);
+      return this.http.get<HttpResponse<Item[]>>(this.path + "/all");
     }
 }

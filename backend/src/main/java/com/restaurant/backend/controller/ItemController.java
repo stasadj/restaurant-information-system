@@ -49,8 +49,8 @@ public class ItemController {
     }
 
     @ResponseBody
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('MANAGER')")
+    @GetMapping("/all") 
+    //@PreAuthorize("hasRole('MANAGER')") //for testing frontend
     public ResponseEntity<List<ItemDTO>> getAll() {
         LOG.info("Client requested the get all items method.");
         return new ResponseEntity<>(itemMapper.convertAll(itemService.getAll()), HttpStatus.OK);

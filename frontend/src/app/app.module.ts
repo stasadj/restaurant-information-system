@@ -17,9 +17,10 @@ import { CanvasComponent } from './restaurant-map/canvas/canvas.component';
 import { TableComponent } from './restaurant-map/table/table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapComponent } from './restaurant-map/map/map.component';
+import { ItemComponent } from './itemTest/item/item/item.component';
 
 @NgModule({
-  declarations: [AppComponent, CanvasComponent, TableComponent, MapComponent],
+  declarations: [AppComponent, CanvasComponent, TableComponent, MapComponent, ItemComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
