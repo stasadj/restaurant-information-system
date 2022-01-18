@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-title>Items</mat-card-title>
+    <mat-card-content class="content">
+        <mat-list *ngIf="items; else loading">
+          <app-item-card
+            *ngFor="let item of items"
+            [item]=item
+          >
+          </app-item-card>
+        </mat-list>
+        <ng-template #loading>
+          <mat-spinner></mat-spinner>
+        </ng-template>
+      </mat-card-content>
+
+  </mat-card>

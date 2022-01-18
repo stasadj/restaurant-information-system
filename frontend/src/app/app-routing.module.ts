@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ItemComponent } from './itemTest/item/item/item.component';
+import { ItemsComponent } from './/item-components/items/items.component';
 
 import { LoginComponent } from './login/login.component';
 import { CookPageComponent } from './pages/cook-page/cook-page.component';
@@ -25,7 +25,7 @@ const routes: Routes = [
     {
         path: "item-test",
         pathMatch: "full",
-        component: ItemComponent
+        component: ItemsComponent
 
     },
     { path: '**', component: NotFoundComponent },
