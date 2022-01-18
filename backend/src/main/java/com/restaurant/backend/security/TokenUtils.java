@@ -1,22 +1,16 @@
 package com.restaurant.backend.security;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Optional;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import com.restaurant.backend.domain.User;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Component
 public class TokenUtils {
@@ -39,7 +33,7 @@ public class TokenUtils {
     public static final String USER_TYPE_PASSWORD = "password_user";
     public static final String USER_TYPE_PIN = "pin_user";
 
-    private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+    private final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     private JwtBuilder getBaseJWTTokenBuilder(String subject) {
         return Jwts.builder().setIssuer(APP_NAME).setSubject(subject).setAudience(AUDIENCE_WEB).setIssuedAt(new Date())
@@ -116,12 +110,10 @@ public class TokenUtils {
     }
 
     public String getToken(HttpServletRequest request) {
-        Cookie[] maybeCookies = request.getCookies();
-        String cookieName = "accessToken";
-
-        return Optional.ofNullable(maybeCookies).flatMap(
-                cookies -> Arrays.stream(cookies).filter(cookie -> cookieName.equals(cookie.getName())).findAny())
-                .map(cookie -> cookie.getValue()).orElse(null);
+        String authHeader = request.getHeader(AUTH_HEADER);
+        if (authHeader != null && authHeader.startsWith("Bearer "))
+            return authHeader.substring(7);
+        return null;
     }
 
     private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {

@@ -13,6 +13,8 @@ public class NotificationDTO {
     protected LocalDateTime dateTime;
     protected NotificationType type;
     protected Long orderId;
+    protected Integer tableId;
+    protected Long waiterId;
 
     public NotificationDTO(Notification notification) {
         id = notification.getId();
@@ -20,5 +22,7 @@ public class NotificationDTO {
         dateTime = notification.getDateTime();
         type = notification.getType();
         orderId = notification.getOrder().getId();
+        tableId = notification.getOrder().getTableId();
+        waiterId = notification.getOrder().getWaiter().getId();
     }
 }

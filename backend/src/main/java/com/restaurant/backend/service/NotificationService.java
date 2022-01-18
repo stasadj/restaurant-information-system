@@ -26,6 +26,10 @@ public class NotificationService {
         return notificationRepository.findAll();
     }
 
+    public List<Notification> getAllForWaiter(Long waiterId) {
+        return notificationRepository.findAllForWaiter(waiterId);
+    }
+
     public void createNotification(String text, NotificationType type, Order order) {
         Notification notification = new Notification();
         notification.setText(text);
@@ -44,12 +48,10 @@ public class NotificationService {
                 break;
             case COOK_WAITER:
             case BARMAN_WAITER:
-                messagingTemplate.convertAndSendToUser(order.getWaiter().getUsername(),
-                        "/queue/waiter", new NotificationDTO(notification));
+                messagingTemplate.convertAndSend("/topic/waiter", new NotificationDTO(notification));
                 break;
             default:
                 break;
         }
     }
-
 }

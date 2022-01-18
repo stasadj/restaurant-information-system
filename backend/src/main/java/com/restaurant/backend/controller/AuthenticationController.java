@@ -1,26 +1,22 @@
 package com.restaurant.backend.controller;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import com.restaurant.backend.domain.User;
-import com.restaurant.backend.dto.requests.CredentialsDTO;
 import com.restaurant.backend.dto.UserDTO;
+import com.restaurant.backend.dto.requests.CredentialsDTO;
+import com.restaurant.backend.dto.responses.TokenDTO;
 import com.restaurant.backend.service.AuthenticationService;
 import com.restaurant.backend.support.UserMapper;
-
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import lombok.AllArgsConstructor;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -33,22 +29,19 @@ public class AuthenticationController {
     private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public void login(@Valid @RequestBody CredentialsDTO credentials, HttpServletResponse response) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody CredentialsDTO credentials) {
         LOG.debug("Received request for login");
-        authenticationService.login(credentials, response);
+        String token = authenticationService.login(credentials);
         LOG.debug("Authentication passed");
+        return new ResponseEntity<>(new TokenDTO(token), HttpStatus.OK);
     }
 
     @PostMapping("/pin-login")
-    public void pinLogin(@RequestBody String pin, HttpServletResponse response) {
+    public ResponseEntity<TokenDTO> pinLogin(@RequestBody String pin) {
         LOG.debug("Received request for login");
-        authenticationService.login(pin, response);
+        String token = authenticationService.login(pin);
         LOG.debug("Authentication passed");
-    }
-
-    @PostMapping("/logout")
-    public void logout(HttpServletResponse response) {
-        authenticationService.logout(response);
+        return new ResponseEntity<>(new TokenDTO(token), HttpStatus.OK);
     }
 
     @GetMapping("/whoami")

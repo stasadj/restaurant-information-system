@@ -1,6 +1,9 @@
 INSERT INTO user (first_name, last_name, email, username, password, phone_number, role, monthly_wage, pin, deleted) VALUES
   ('Jeff', 'Goldblum', 'jeffgoldbloom@somedomain.blum', 'jeff.goldblum','$2y$10$t4NZP3qGGdzGakospEzFHOPQngmjvi7dZeZSiwfiNz.1rv/smO0Ce', '123goldblum456', 'admin', NULL, NULL, false),
-  ('Will', 'Smith', 'will@somedomain.smith', NULL, NULL, '12345678', 'waiter', 340, 1234, false),
+  ('Will', 'Waiter', 'will@somedomain.smith', NULL, NULL, '12345678', 'waiter', 340, 1234, false),
+  ('Bob', 'Waiter', 'will@somedomain.smith', NULL, NULL, '12345678', 'waiter', 340, 5678, false),
+  ('Will', 'Cook', 'will@somedomain.smith', NULL, NULL, '12345678', 'cook', 340, 1111, false),
+  ('Will', 'Barman', 'will@somedomain.smith', NULL, NULL, '12345678', 'barman', 340, 2222, false),
   ('Morgan', 'Freeman', 'morgan@somedomain.freeman', 'morgan', '$2y$10$t4NZP3qGGdzGakospEzFHOPQngmjvi7dZeZSiwfiNz.1rv/smO0Ce', '12345678', 'manager', 1340, NULL, false);
 
 INSERT INTO category (name) VALUES
@@ -31,15 +34,15 @@ INSERT INTO item_values (from_date, purchase_price, selling_price, item_id) VALU
 
 -- Had to comment this part, because table organization can only be changed if there are no orders
 
---INSERT INTO restaurant_order (created_at, note, table_id, waiter_id) VALUES
---  ('2021-11-14', 'note 1', 1, 2),
---  ('2021-11-14', 'note 2', 2, 2);
---
---INSERT INTO order_item (amount, status, cook_id, barman_id, item_id, order_id) VALUES
---  (1, 0, null, null, 1, 1),
---  (2, 0, null, null, 2, 1),
---  (1, 0, null, null, 3, 1),
---  (3, 0, null, null, 4, 2);
+INSERT INTO restaurant_order (created_at, note, table_id, waiter_id) VALUES
+  ('2021-11-14', 'note 1', 1, 2),
+  ('2021-11-14', 'note 2', 2, 2);
+
+INSERT INTO order_item (amount, status, cook_id, barman_id, item_id, order_id) VALUES
+  (1, 0, null, null, 1, 1),
+  (2, 0, null, null, 2, 1),
+  (1, 0, null, null, 3, 1),
+  (3, 0, null, null, 4, 2);
 
 INSERT INTO order_record (amount, item_value_id, created_at) VALUES
   (1, 1, '2021-11-21'),
