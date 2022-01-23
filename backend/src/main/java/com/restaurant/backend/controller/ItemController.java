@@ -98,7 +98,7 @@ public class ItemController {
 
     @ResponseBody
     @PutMapping("/edit")
-    @PreAuthorize("hasRole('MANAGER')")
+    //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> editItem(@Validated(EditInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to edit item.");
         return new ResponseEntity<>(itemMapper.convert(itemService.editItem(itemDTO)), HttpStatus.OK);

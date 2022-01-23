@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, ObservedValueOf } from 'rxjs';
 import { Item } from '../../model/Item';
 
 @Injectable({
@@ -26,5 +26,9 @@ export class ItemService {
 
     delete(item : Item) {
         return this.http.delete(this.path + "/" + item.id);
+    }
+
+    edit(item : Item) : Observable<Item>{
+        return this.http.put<Item>(this.path + "/edit", item);
     }
 }

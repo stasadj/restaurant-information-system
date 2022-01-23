@@ -38,7 +38,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 import { ItemsComponent } from './item-components/items/items.component';
-import { ItemCardComponent } from './item-components/item-card/item-card/item-card.component';
+import { EditDialog, ItemCardComponent } from './item-components/item-card/item-card/item-card.component';
 import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-page.component';
 
 @NgModule({
@@ -58,7 +58,8 @@ import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-
     HeaderComponent,
     ItemsComponent,
     ItemCardComponent,
-    ManagerPageComponent
+    ManagerPageComponent,
+    EditDialog
   ],
   imports: [
     BrowserModule,
