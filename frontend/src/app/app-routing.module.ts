@@ -23,7 +23,7 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent },
 
     {
-        path: "item-test",
+        path: "items",
         pathMatch: "full",
         component: ItemsComponent
 

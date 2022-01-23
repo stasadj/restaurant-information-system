@@ -14,7 +14,9 @@
 
     </mat-card-content>
     <mat-card-actions>
+        <button mat-button  *ngIf="!item.inMenu" style="background-color: darkgreen; color: white;" (click)="onAddToMenu()"> ADD TO MENU</button>
+        <button mat-button  *ngIf="item.inMenu" style="background-color: darkred; color: white;" (click)="onRemoveFromMenu()"> REMOVE FROM MENU</button>
         <button mat-button>EDIT</button>
-        <button mat-button style="color: darkred;">DELETE</button>
+        <button mat-button style="color: darkred;" align="end">DELETE</button>
     </mat-card-actions>
 </mat-card>

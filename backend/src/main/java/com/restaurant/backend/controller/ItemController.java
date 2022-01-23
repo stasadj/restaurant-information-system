@@ -65,7 +65,7 @@ public class ItemController {
 
     @ResponseBody
     @PutMapping("/add-to-menu/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> addToMenu(@PathVariable Long id) {
         LOG.info("Client requested the add item to menu.");
         return new ResponseEntity<>(itemMapper.convert(itemService.addToMenu(id)), HttpStatus.OK);
@@ -73,7 +73,7 @@ public class ItemController {
 
     @ResponseBody
     @PutMapping("/remove-from-menu/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    //@PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> removeFromMenu(@PathVariable Long id) {
         LOG.info("Client requested the remove item from menu.");
         return new ResponseEntity<>(itemMapper.convert(itemService.removeFromMenu(id)), HttpStatus.OK);

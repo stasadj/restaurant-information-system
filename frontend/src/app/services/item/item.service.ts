@@ -15,4 +15,12 @@ export class ItemService {
     getItems(): Observable<Item[]> {
       return this.http.get<Item[]>(this.path + "/all");
     }
+
+    addToMenu(item : Item): Observable<Item> {
+        return this.http.put<Item>(this.path + "/add-to-menu/" + item.id, null);
+    }
+
+    removeFromMenu(item : Item): Observable<Item> {
+        return this.http.put<Item>(this.path + "/remove-from-menu/" + item.id, null);
+    }
 }
