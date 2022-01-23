@@ -39,6 +39,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 import { ItemsComponent } from './item-components/items/items.component';
 import { ItemCardComponent } from './item-components/item-card/item-card/item-card.component';
+import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-page.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ItemCardComponent } from './item-components/item-card/item-card/item-ca
     NotFoundComponent,
     HeaderComponent,
     ItemsComponent,
-    ItemCardComponent
+    ItemCardComponent,
+    ManagerPageComponent
   ],
   imports: [
     BrowserModule,

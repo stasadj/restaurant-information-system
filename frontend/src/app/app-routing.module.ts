@@ -4,6 +4,7 @@ import { ItemsComponent } from './/item-components/items/items.component';
 
 import { LoginComponent } from './login/login.component';
 import { CookPageComponent } from './pages/cook-page/cook-page.component';
+import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-page.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { WaiterPageComponent } from './pages/waiter-page/waiter-page.component';
 
@@ -20,14 +21,12 @@ const routes: Routes = [
         path: 'waiter',
         component: WaiterPageComponent,
     },
+    {
+        path: 'manager',
+        component: ManagerPageComponent,
+    },
     { path: 'login', component: LoginComponent },
 
-    {
-        path: "items",
-        pathMatch: "full",
-        component: ItemsComponent
-
-    },
     { path: '**', component: NotFoundComponent },
 
 
