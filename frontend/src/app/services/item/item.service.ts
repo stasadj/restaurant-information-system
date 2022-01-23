@@ -23,4 +23,8 @@ export class ItemService {
     removeFromMenu(item : Item): Observable<Item> {
         return this.http.put<Item>(this.path + "/remove-from-menu/" + item.id, null);
     }
+
+    delete(item : Item) {
+        return this.http.delete(this.path + "/" + item.id);
+    }
 }

@@ -4,41 +4,54 @@ import { ItemType } from 'src/app/model/ItemType';
 import { ItemService } from 'src/app/services/item/item.service';
 
 @Component({
-  selector: 'app-item-card',
-  templateUrl: './item-card.component.html',
-  styleUrls: ['./item-card.component.less']
+    selector: 'app-item-card',
+    templateUrl: './item-card.component.html',
+    styleUrls: ['./item-card.component.less']
 })
 export class ItemCardComponent implements OnInit {
 
     @Input() item: Item = {
         id: 0,
         name: '',
-        category: {id:0, name:""},
+        category: { id: 0, name: "" },
         description: '',
         imageURL: '',
         tags: [],
         inMenu: false,
         itemType: ItemType.FOOD,
-        currentItemValue: {id:0, purchasePrice:0, sellingPrice:0, fromDate: new Date()},
+        currentItemValue: { id: 0, purchasePrice: 0, sellingPrice: 0, fromDate: new Date() },
         deleted: false
     };
-  constructor(private itemService: ItemService) { }
 
-  onAddToMenu(){
-      this.itemService.addToMenu(this.item).subscribe((res) => {
-          this.item = res;
-      });
+    @Input() refreshDataCallback = () => {
 
-  }
+    };
 
-  onRemoveFromMenu(){
-    this.itemService.removeFromMenu(this.item).subscribe((res) => {
-        this.item = res;
-    });
+    constructor(private itemService: ItemService) { }
 
-}
+    onAddToMenu() {
+        this.itemService.addToMenu(this.item).subscribe((res) => {
+            this.item = res;
+        });
 
-  ngOnInit(): void {
-  }
+    }
+
+    onRemoveFromMenu() {
+        this.itemService.removeFromMenu(this.item).subscribe((res) => {
+            this.item = res;
+        });
+
+    }
+
+    onDelete() {
+        //todo add Are you sure? modal window
+        this.itemService.delete(this.item).subscribe((res) => {
+            this.refreshDataCallback()
+        });
+
+    }
+
+    ngOnInit(): void {
+    }
 
 }

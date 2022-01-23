@@ -81,7 +81,7 @@ public class ItemController {
 
     @ResponseBody
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    // @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         LOG.info("Client requested to delete item.");
         itemService.delete(id);
