@@ -103,7 +103,7 @@ public class OrderServiceUnitTest {
         when(orderItemService.findOne(eq(1L))).thenReturn(new OrderItem(){{setAmount(1);}});
         doNothing().when(orderItemService).save(any(OrderItem.class));
 
-        orderService.editOrder(orderDTO);
+        orderService.editOrder(null, orderDTO);  // change null
 
         verify(itemService, times(1)).findOne(anyLong());
         verify(orderItemService, times(2)).save(any(OrderItem.class));

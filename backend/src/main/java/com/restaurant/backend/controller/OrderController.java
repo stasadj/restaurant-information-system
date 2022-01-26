@@ -1,6 +1,7 @@
 package com.restaurant.backend.controller;
 
 import com.restaurant.backend.domain.OrderRecord;
+import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.dto.OrderDTO;
 import com.restaurant.backend.service.OrderService;
 import com.restaurant.backend.support.OrderMapper;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,16 +54,25 @@ public class OrderController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('WAITER')")
-	@PutMapping("/edit")
-	public ResponseEntity<OrderDTO> editOrder(@RequestBody OrderDTO order) {
-		var data = orderMapper.convertIncludingPrice(orderService.editOrder(order));
+	@PreAuthorize("hasRole('BARMAN')")
+	@PostMapping("/create-bar")
+	public ResponseEntity<OrderDTO> createBarOrder(@RequestBody OrderDTO order) {
+		var data = orderMapper.convertIncludingPrice(orderService.createBarOrder(order));
 		if (data != null)
 			messagingTemplate.convertAndSend("/topic/orders", data);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('WAITER')")
+	@PutMapping("/edit")
+	public ResponseEntity<OrderDTO> editOrder(@AuthenticationPrincipal Staff staff, @RequestBody OrderDTO order) {
+		var data = orderMapper.convertIncludingPrice(orderService.editOrder(staff, order));
+		if (data != null)
+			messagingTemplate.convertAndSend("/topic/orders", data);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
 	@DeleteMapping("/finalize/{id}")
 	public ResponseEntity<List<OrderRecord>> finalizeOrder(@PathVariable("id") Long id) {
 		var records = orderService.finalizeOrder(id);
