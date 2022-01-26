@@ -36,4 +36,8 @@ export class ItemService {
     changeItemPrice(itemValue : ItemValue) : Observable<ItemValue>{
         return this.http.post<ItemValue>(this.path + "/change-price", itemValue);
     }
+
+    create(item : Item) : Observable<Item>{
+        return this.http.post<Item>(this.path + "/create", item);
+    }
 }

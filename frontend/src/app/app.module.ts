@@ -41,6 +41,7 @@ import { ItemsComponent } from './item-components/items/items.component';
 import { EditDialog, ItemCardComponent } from './item-components/item-card/item-card/item-card.component';
 import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-page.component';
 import {MatSelectModule} from '@angular/material/select';
+import { CreateItemComponent } from './item-components/create-item/create-item/create-item.component';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import {MatSelectModule} from '@angular/material/select';
     ItemsComponent,
     ItemCardComponent,
     ManagerPageComponent,
-    EditDialog
+    EditDialog,
+    CreateItemComponent
   ],
   imports: [
     BrowserModule,

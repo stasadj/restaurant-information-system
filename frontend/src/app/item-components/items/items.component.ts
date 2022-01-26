@@ -19,6 +19,7 @@ export class ItemsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        console.log("here");
         this.itemService.getItems().subscribe((res) => {
             this.items = res;
         });

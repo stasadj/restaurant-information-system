@@ -90,7 +90,7 @@ public class ItemController {
 
     @ResponseBody
     @PostMapping("/create")
-    @PreAuthorize("hasRole('MANAGER')")
+    // @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@Validated(CreateInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
         return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO)), HttpStatus.OK);

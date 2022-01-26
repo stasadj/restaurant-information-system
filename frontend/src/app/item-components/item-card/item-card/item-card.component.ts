@@ -120,7 +120,7 @@ export class EditDialog {
     }
 
     ngOnInit(): void {
-        this.categoryService.getItems().subscribe(res => {
+        this.categoryService.getCategories().subscribe(res => {
             this.categories = res;
         })
     }
@@ -156,7 +156,7 @@ export class EditDialog {
             this.dialogRef.close(this.editItem);
         }
         else {
-            console.log("missing form data!");
+            console.log("missing/invalid form data!");
         }
 
 
