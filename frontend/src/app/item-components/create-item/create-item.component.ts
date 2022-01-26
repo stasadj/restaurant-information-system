@@ -25,20 +25,21 @@ export class CreateItemComponent implements OnInit {
         deleted: false
     };
 
-    public categories : Category[] = []
+    public categories: Category[] = []
 
     @Input() onItemCreated = () => {
 
     };
 
-    constructor(private itemService : ItemService, private categoryService: CategoryService) { }
+    constructor(private itemService: ItemService, private categoryService: CategoryService) { }
 
 
 
     ngOnInit(): void {
         this.categoryService.getCategories().subscribe(res => {
             this.categories = res;
-        })    }
+        })
+    }
 
     onSaveClick(): void {
 
@@ -56,8 +57,8 @@ export class CreateItemComponent implements OnInit {
                 this.onItemCreated();
             });
 
-            
-            
+
+
         }
         else {
             console.log("missing/invalid form data!");
