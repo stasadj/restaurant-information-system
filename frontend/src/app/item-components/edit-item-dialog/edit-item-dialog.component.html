@@ -1,0 +1,44 @@
+<style>
+    .mat-form-field {
+        margin: 20px;
+    }
+</style>
+
+<h1 mat-dialog-title>Edit {{data.name}}</h1>
+<div mat-dialog-content class="container" style="padding: 30px">
+
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput  [(ngModel)]="editItem.name">
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput [(ngModel)]="editItem.description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Category</mat-label>
+    <mat-select [compareWith]="compareObjects" [(ngModel)]="editItem.category"> 
+      <mat-option *ngFor="let category of categories" [value]="category">
+        {{category.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Purchase price</mat-label>
+    <input type="number" matInput [(ngModel)]="editItem.currentItemValue.purchasePrice">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Selling price</mat-label>
+    <input type="number" matInput [(ngModel)]="editItem.currentItemValue.sellingPrice">
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+</div>

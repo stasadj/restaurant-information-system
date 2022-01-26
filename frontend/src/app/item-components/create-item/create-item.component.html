@@ -1,0 +1,40 @@
+
+<div class="container">
+    <mat-card-title>Create new item</mat-card-title>
+    <mat-card-content class="content">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="newItem.name">
+        </mat-form-field>
+
+
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput [(ngModel)]="newItem.description"></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Category</mat-label>
+            <mat-select [compareWith]="compareObjects" [(ngModel)]="newItem.category">
+                <mat-option *ngFor="let category of categories" [value]="category">
+                    {{category.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Purchase price</mat-label>
+            <input type="number" matInput [(ngModel)]="newItem.currentItemValue.purchasePrice">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Selling price</mat-label>
+            <input type="number" matInput [(ngModel)]="newItem.currentItemValue.sellingPrice">
+        </mat-form-field>
+
+    </mat-card-content>
+    <div mat-card-actions>
+        <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+    </div>
+
+</div>

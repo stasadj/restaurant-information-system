@@ -26,11 +26,12 @@ INSERT INTO item (name, category_id, description, image_url, in_menu, type, dele
   ('DeletedItem', 4, 'Deleted item description', NULL, true, 1, true);
 
 INSERT INTO item_values (from_date, purchase_price, selling_price, item_id) VALUES
-  ('2021-11-11', 100.00, 1000.00, 1),
-  ('2021-11-11', 120.00, 1200.00, 2),
-  ('2021-11-11', 130.00, 1300.00, 3),
-  ('2021-11-11', 13.00, 130.00, 4),
-  ('2021-11-11', 66.00, 660.00, 5);
+  ('2021-11-11', 600.00, 1000.00, 1),
+  ('2021-11-11', 700.00, 1200.00, 2),
+  ('2021-11-11', 600.00, 1300.00, 3),
+  ('2021-11-11', 150.00, 660.00, 4),
+  ('2021-11-11', 1000.00, 2500.00, 5);
+
 
 -- Had to comment this part, because table organization can only be changed if there are no orders
 
