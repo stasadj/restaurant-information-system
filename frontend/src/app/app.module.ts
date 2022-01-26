@@ -40,61 +40,61 @@ import { HeaderComponent } from './header/header.component';
 import { ItemsComponent } from './item-components/items/items.component';
 import { EditDialog, ItemCardComponent } from './item-components/item-card/item-card.component';
 import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-page.component';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { CreateItemComponent } from './item-components/create-item/create-item.component';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CanvasComponent,
-    TableComponent,
-    MapComponent,
-    TableOrderComponent,
-    OrderBoardComponent,
-    OrderCardComponent,
-    LoginComponent,
-    OrderNotificationsComponent,
-    WaiterPageComponent,
-    CookPageComponent,
-    NotFoundComponent,
-    HeaderComponent,
-    ItemsComponent,
-    ItemCardComponent,
-    ManagerPageComponent,
-    EditDialog,
-    CreateItemComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DragDropModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    HttpClientModule,
-    CommonModule,
-    MatTabsModule,
-    MatSliderModule,
-    MatInputModule,
-    MatGridListModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatListModule,
-    MatDialogModule,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    MatSelectModule
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        CanvasComponent,
+        TableComponent,
+        MapComponent,
+        TableOrderComponent,
+        OrderBoardComponent,
+        OrderCardComponent,
+        LoginComponent,
+        OrderNotificationsComponent,
+        WaiterPageComponent,
+        CookPageComponent,
+        NotFoundComponent,
+        HeaderComponent,
+        ItemsComponent,
+        ItemCardComponent,
+        ManagerPageComponent,
+        EditDialog,
+        CreateItemComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        DragDropModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        HttpClientModule,
+        CommonModule,
+        MatTabsModule,
+        MatSliderModule,
+        MatInputModule,
+        MatGridListModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatListModule,
+        MatDialogModule,
+        MatProgressSpinnerModule,
+        MatTableModule,
+        MatSelectModule
+    ],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+    ],
+    bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ItemsComponent } from './/item-components/items/items.component';
-
 import { LoginComponent } from './login/login.component';
 import { CookPageComponent } from './pages/cook-page/cook-page.component';
 import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-page.component';
