@@ -1,0 +1,8 @@
+<mat-tab-group>
+    <mat-tab label="Available Items">
+        <app-items [items]=items [onDataChanged]="fetchData"></app-items>
+    </mat-tab>
+    <mat-tab label="New item">
+        <app-create-item [onItemCreated]="fetchData"></app-create-item>
+    </mat-tab>
+</mat-tab-group>

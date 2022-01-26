@@ -1,0 +1,24 @@
+<mat-card class="item-card">
+    <mat-card-header>
+        <div mat-card-avatar class="header-image"></div>
+        <mat-card-title>
+            {{item.name}}
+        </mat-card-title>
+        <mat-card-subtitle>{{item.itemType}} - {{item.category.name}} </mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+            class="meal-image-placeholder" alt="Photo of a meal">
+    <mat-card-content>
+        <h2>{{item.description}}</h2>
+        <h3>Tags: {{item.tags}}</h3>
+        <h4 style="text-align: right;">Purchase price: {{item.currentItemValue.purchasePrice}},00 RSD</h4>
+        <h3 style="text-align: right;">Selling price: {{item.currentItemValue.sellingPrice}},00 RSD</h3>
+
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button  *ngIf="!item.inMenu" style="background-color: darkgreen; color: white;" (click)="onAddToMenu()"> ADD TO MENU</button>
+        <button mat-button  *ngIf="item.inMenu" style="background-color: darkred; color: white;" (click)="onRemoveFromMenu()"> REMOVE FROM MENU</button>
+        <button mat-button (click)="openDialog()">EDIT</button>
+        <button mat-button style="color: darkred;" align="end" (click)="onDelete()" >DELETE</button>
+    </mat-card-actions>
+</mat-card>
