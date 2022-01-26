@@ -77,21 +77,15 @@ export class OrderService {
     return this.http.get<Order | undefined>(`${this.path}/table/${tableId}`);
   }
 
-  createOrder(order: Order) {
-    this.http
-      .post(`${this.path}/create`, order)
-      .subscribe((d) => console.log('Saved'));
+  createOrder(order: Order): Observable<Order> {
+    return this.http.post<Order>(`${this.path}/create`, order);
   }
 
-  editOrder(order: Order) {
-    this.http
-      .put(`${this.path}/edit`, order)
-      .subscribe((d) => console.log('Saved'));
+  editOrder(order: Order): Observable<Order> {
+    return this.http.put<Order>(`${this.path}/edit`, order);
   }
 
-  finalizeOrder(id: number) {
-    this.http
-      .delete(`${this.path}/finalize/${id}`)
-      .subscribe((d) => console.log('Finalized'));
+  finalizeOrder(id: number): Observable<any[]> {
+    return this.http.delete<any[]>(`${this.path}/finalize/${id}`);
   }
 }

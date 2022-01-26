@@ -76,19 +76,62 @@ public class OrderService {
         return newOrder;
     }
 
-    public Order editOrder(OrderDTO order) throws NotFoundException {
-        Order editedOrder = findOne(order.getId());
-        editedOrder.setNote(order.getNote());
+    public Order createBarOrder(OrderDTO order) throws NotFoundException, BadRequestException {
+        Staff barman = staffService.findOne(order.getWaiterId());
+        Optional<Order> maybeOrder = findByTableId(order.getTableId());
+        if (maybeOrder.isPresent())
+            throw new BadRequestException(String.format("Table #%d already has an order.", order.getTableId()));
+
+        Order newOrder = orderRepository.save(new Order(LocalDateTime.now(), order.getNote(), order.getTableId(), null));
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
-            if (orderItem.getId() == null) {
-                Item item = itemService.findOne(orderItem.getItemId());
-                OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), editedOrder, OrderStatus.PENDING, item);
+            Item item = itemService.findOne(orderItem.getItemId());
+            OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.IN_PROGRESS, item);
+            newOrderItem.setBarman((Barman) barman);
+            orderItemService.save(newOrderItem);
+            newOrder.getOrderItems().add(newOrderItem);
+        }
+        return newOrder;
+    }
+
+    public Order editOrder(Staff staff, OrderDTO orderDTO) throws NotFoundException {
+        Order editedOrder = findOne(orderDTO.getId());
+        editedOrder.setNote(orderDTO.getNote());
+        boolean isBarOrder = editedOrder.getWaiter() == null;
+        boolean isBarman = staff instanceof Barman;
+        if (!isBarOrder && isBarman)
+            return editedOrder;  // barman can edit only bar orders
+
+        for (OrderItemDTO orderItemDTO : orderDTO.getOrderItems()) {
+            if (orderItemDTO.getId() == null) {
+                Item item = itemService.findOne(orderItemDTO.getItemId());
+                if (item.getItemType() == ItemType.FOOD && isBarOrder) continue;
+                OrderItem newOrderItem = new OrderItem(orderItemDTO.getAmount(), editedOrder, OrderStatus.PENDING, item);
+                if (isBarman) {
+                    newOrderItem.setBarman((Barman) staff);
+                    newOrderItem.setOrderStatus(OrderStatus.IN_PROGRESS);
+                }
                 orderItemService.save(newOrderItem);
-            } else if (orderItem.getOrderStatus() == OrderStatus.PENDING) {
-                OrderItem editedOrderItem = orderItemService.findOne(orderItem.getId());
-                editedOrderItem.setAmount(orderItem.getAmount());
-                orderItemService.save(editedOrderItem);
+            } else {
+                OrderItem editedOrderItem = orderItemService.findOne(orderItemDTO.getId());
+                if (editedOrderItem.getAmount().intValue() == orderItemDTO.getAmount().intValue()) continue;
+                if (editedOrderItem.getOrderStatus() == OrderStatus.PENDING) {
+                    editedOrderItem.setAmount(orderItemDTO.getAmount());
+                    orderItemService.save(editedOrderItem);
+                } else if (editedOrderItem.getAmount() < orderItemDTO.getAmount()) {
+                    OrderItem newOrderItem = new OrderItem(orderItemDTO.getAmount() - editedOrderItem.getAmount(),
+                            editedOrder, OrderStatus.PENDING, editedOrderItem.getItem());
+                    if (isBarman) {
+                        newOrderItem.setBarman((Barman) staff);
+                        newOrderItem.setOrderStatus(OrderStatus.IN_PROGRESS);
+                    }
+                    orderItemService.save(newOrderItem);
+                } else {
+                    editedOrder.setNote(editedOrder.getNote() +
+                            String.format("\nTried to decrease amount of order item #%d ('%s') to %d.",
+                                    editedOrderItem.getId(), editedOrderItem.getItem().getName(), orderItemDTO.getAmount()));
+                }
+
             }
         }
         return orderRepository.save(editedOrder);

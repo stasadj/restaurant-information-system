@@ -4,7 +4,7 @@ export interface OrderItem {
   orderId?: number;
   orderStatus?: string;
   itemId: number;
-  item: { name: string; type?: string };
+  item: { name: string; type?: string; price?: number };
   cookId?: number;
   barmanId?: number;
 }

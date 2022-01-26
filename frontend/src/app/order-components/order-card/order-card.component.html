@@ -2,6 +2,7 @@
   <mat-card-title class="order-title" align="center">
     Table {{ order.tableId }}
   </mat-card-title>
+  <mat-card-subtitle>{{ order.createdAt | date: "HH:mm" }}</mat-card-subtitle>
   <mat-card-content>
     <mat-selection-list [(ngModel)]="items" *ngIf="selectable; else elseBlock">
       <mat-list-option
@@ -23,6 +24,9 @@
         </mat-list-item>
       </mat-list>
     </ng-template>
+    <div *ngIf="selectable && order.note" class="note">
+      {{ order.note }}
+    </div>
   </mat-card-content>
   <mat-card-actions *ngIf="selectable && items.length > 0" align="end">
     <div *ngIf="order.orderItems[0].orderStatus === 'PENDING'">

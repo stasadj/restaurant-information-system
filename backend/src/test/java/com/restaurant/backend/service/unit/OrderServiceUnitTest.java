@@ -100,16 +100,17 @@ public class OrderServiceUnitTest {
         when(orderRepository.findById(eq(orderDTO.getId()))).thenReturn(Optional.of(order));
         when(itemService.findOne(eq(item1.getItemId()))).thenReturn(new Item());
         when(itemService.findOne(eq(item2.getItemId()))).thenReturn(new Item());
-        when(orderItemService.findOne(eq(1L))).thenReturn(new OrderItem());
+        when(orderItemService.findOne(eq(1L))).thenReturn(new OrderItem(){{setAmount(1);}});
         doNothing().when(orderItemService).save(any(OrderItem.class));
 
-        orderService.editOrder(orderDTO);
+        orderService.editOrder(null, orderDTO);  // change null
 
         verify(itemService, times(1)).findOne(anyLong());
         verify(orderItemService, times(2)).save(any(OrderItem.class));
         verify(orderItemService, times(1)).findOne(anyLong());
         verify(orderRepository, times(1)).save(any(Order.class));
     }
+    // need to write additional tests for editOrder
 
     @Test
     public void finalizeOrder_orderItemNotReady() {

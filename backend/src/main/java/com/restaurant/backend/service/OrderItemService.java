@@ -127,10 +127,11 @@ public class OrderItemService {
             orderItemRepository.save(orderItem);
             preparedItems.add(orderItem);
 
-            notificationService.createNotification("Order item #"+id+" is PREPARED.",
-                    type == ItemType.DRINK ? NotificationType.BARMAN_WAITER : NotificationType.COOK_WAITER,
-                    orderItem.getOrder()
-            );
+            if (orderItem.getOrder().getWaiter() != null)  // if not bar-order
+                notificationService.createNotification("Order item #" + id + " is PREPARED.",
+                        type == ItemType.DRINK ? NotificationType.BARMAN_WAITER : NotificationType.COOK_WAITER,
+                        orderItem.getOrder()
+                );
         }
         String message = messageBuilder.toString();
         return new DataWithMessage<>(preparedItems, message);

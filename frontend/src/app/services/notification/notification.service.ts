@@ -14,6 +14,7 @@ export class NotificationService {
   private stompClient?: Stomp.Client;
 
   readonly notificationSubject: Subject<Notification> = new Subject();
+  readonly finalizedSubject: Subject<number> = new Subject();
 
   readonly connected$: Subject<void> = new Subject();
 
@@ -33,6 +34,9 @@ export class NotificationService {
       () => {
         this.stompClient?.subscribe(`/topic/${role}`, (m) =>
           this.onMessageReceived(m)
+        );
+        this.stompClient?.subscribe('/topic/finalized-order', (m) =>
+          this.onFinalizedOrder(m)
         );
         this.connected$.next();
       },
@@ -55,5 +59,8 @@ export class NotificationService {
 
   private onMessageReceived(message: Stomp.Message) {
     this.notificationSubject.next(JSON.parse(message.body));
+  }
+  private onFinalizedOrder(message: Stomp.Message) {
+    this.finalizedSubject.next(Number(message.body));
   }
 }

@@ -37,4 +37,8 @@ public class CategoryService implements GenericService<Category> {
             categoryRepository.deleteById(id);
         // else cannot be deleted
     }
+
+    public List<Category> getDrinkCategories() {
+        return categoryRepository.getDrinkCategories();
+    }
 }
