@@ -1,9 +1,5 @@
 <h1 mat-dialog-title>Edit {{data.name}}</h1>
 <div mat-dialog-content style="padding:20px">
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>Favorite Animal</mat-label>
-    <input matInput [(ngModel)]="data.animal">
-  </mat-form-field> -->
 
   <mat-form-field style="margin: 20px;">
     <mat-label>Name</mat-label>
@@ -14,6 +10,15 @@
   <mat-form-field style="margin: 20px;">
     <mat-label>Description</mat-label>
     <textarea matInput [(ngModel)]="editItem.description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Category</mat-label>
+    <mat-select [compareWith]="compareObjects" [(ngModel)]="editItem.category"> 
+      <mat-option *ngFor="let category of categories" [value]="category">
+        {{category.name}}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
 
   

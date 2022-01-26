@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
+
+import { Category } from 'src/app/model/Category';
 import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
+import { CategoryService } from 'src/app/services/category/category.service';
 import { ItemService } from 'src/app/services/item/item.service';
 
 @Component({
@@ -63,13 +66,14 @@ export class ItemCardComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                console.log(this.item);
                 this.itemService.edit(result).subscribe(res => {
                     this.item = res;
                 })
             }
         });
     }
+
+
 
 }
 
@@ -80,9 +84,11 @@ export class ItemCardComponent implements OnInit {
 export class EditDialog {
 
     public editItem: Item;
+    public categories: Category[] = [];
 
     constructor(
         public dialogRef: MatDialogRef<EditDialog>,
+        private categoryService : CategoryService,
 
         @Inject(MAT_DIALOG_DATA) public data: Item = {
             id: 0,
@@ -100,12 +106,18 @@ export class EditDialog {
         this.editItem = { ...data }
     }
 
+    ngOnInit(): void {
+        this.categoryService.getItems().subscribe(res => {
+            this.categories = res;
+        })
+    }
+
     onCancelClick(): void {
         this.dialogRef.close();
     }
 
     onSaveClick(): void {
-        if (this.editItem.name && this.editItem.description) {
+        if (this.editItem.name && this.editItem.description && this.editItem.category) {
             this.dialogRef.close(this.editItem);
             return;
         }
@@ -113,4 +125,8 @@ export class EditDialog {
         console.log("invalid form data!");
 
     }
+
+    compareObjects(o1: any, o2: any): boolean {
+        return o1.name === o2.name && o1.id === o2.id;
+      }
 }
