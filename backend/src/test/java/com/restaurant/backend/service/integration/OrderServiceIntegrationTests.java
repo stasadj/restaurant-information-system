@@ -61,7 +61,7 @@ public class OrderServiceIntegrationTests {
         OrderItemDTO itemDTO2 = new OrderItemDTO(null, 1, null, OrderStatus.PENDING, 1L, null, null, null);
         OrderDTO orderDTO = new OrderDTO(2L, null, "note edited", 2, Arrays.asList(itemDTO1, itemDTO2), 1L);
 
-        Order result = orderService.editOrder(orderDTO);
+        Order result = orderService.editOrder(null, orderDTO); // change null
 
         assertEquals(2, result.getTableId());
         assertEquals(1, result.getWaiter().getId());

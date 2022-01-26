@@ -40,4 +40,10 @@ public class CategoryController {
         categoryService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @ResponseBody
+    @GetMapping("/drink")
+    public ResponseEntity<List<CategoryDTO>> getDrinkCategories() {
+        return new ResponseEntity<>(categoryService.getDrinkCategories().stream().map(CategoryDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+    }
 }
