@@ -5,7 +5,7 @@
           <app-item-card
             *ngFor="let item of items"
             [item]=item
-            [refreshDataCallback]="refreshData"
+            [onItemDeleted]="onDataChanged"
           >
           </app-item-card>
         </mat-list>

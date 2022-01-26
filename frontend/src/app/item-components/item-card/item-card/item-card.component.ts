@@ -29,7 +29,7 @@ export class ItemCardComponent implements OnInit {
         deleted: false
     };
 
-    @Input() refreshDataCallback = () => {
+    @Input() onItemDeleted = () => {
 
     };
 
@@ -53,7 +53,7 @@ export class ItemCardComponent implements OnInit {
     onDelete() {
         //todo add Are you sure? modal window
         this.itemService.delete(this.item).subscribe((res) => {
-            this.refreshDataCallback()
+            this.onItemDeleted()
         });
 
     }

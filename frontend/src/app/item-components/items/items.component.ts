@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Item } from 'src/app/model/Item';
 import { ItemService } from 'src/app/services/item/item.service';
 
@@ -9,20 +9,20 @@ import { ItemService } from 'src/app/services/item/item.service';
 })
 export class ItemsComponent implements OnInit {
 
-    items: Item[] = [];
+    @Input() items: Item[] = [];
+
+    @Input() onDataChanged = () => {
+
+    };
+
     constructor(private itemService: ItemService) { }
 
-    refreshData = () => {
-        this.itemService.getItems().subscribe((res) => {
-            this.items = res;
-        });
-    }
 
     ngOnInit(): void {
-        console.log("here");
-        this.itemService.getItems().subscribe((res) => {
-            this.items = res;
-        });
+        // console.log("here");
+        // this.itemService.getItems().subscribe((res) => {
+        //     this.items = res;
+        // });
 
     }
 

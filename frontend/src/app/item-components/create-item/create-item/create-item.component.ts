@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Category } from 'src/app/model/Category';
 import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
@@ -27,8 +27,13 @@ export class CreateItemComponent implements OnInit {
 
     public categories : Category[] = []
 
+    @Input() onItemCreated = () => {
+
+    };
 
     constructor(private itemService : ItemService, private categoryService: CategoryService) { }
+
+
 
     ngOnInit(): void {
         this.categoryService.getCategories().subscribe(res => {
@@ -48,6 +53,7 @@ export class CreateItemComponent implements OnInit {
 
             this.itemService.create(this.newItem).subscribe(res => {
                 console.log(res);
+                this.onItemCreated();
             });
 
             
