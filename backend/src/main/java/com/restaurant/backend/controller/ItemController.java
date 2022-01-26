@@ -106,7 +106,7 @@ public class ItemController {
 
     @ResponseBody
     @PostMapping("/change-price")
-    @PreAuthorize("hasRole('MANAGER')")
+    // @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemValueDTO> changeItemPrice(@Valid @RequestBody ChangePriceDTO changePriceDTO) {
         LOG.info("Client requested to change item price.");
         return new ResponseEntity<>(new ItemValueDTO(itemService.changeItemPrice(changePriceDTO)), HttpStatus.OK);

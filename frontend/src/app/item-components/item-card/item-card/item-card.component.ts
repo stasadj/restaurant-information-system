@@ -4,6 +4,8 @@ import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA, MatDialogClo
 import { Category } from 'src/app/model/Category';
 import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
+import { ItemValue } from 'src/app/model/ItemValue';
+
 import { CategoryService } from 'src/app/services/category/category.service';
 import { ItemService } from 'src/app/services/item/item.service';
 
@@ -61,13 +63,24 @@ export class ItemCardComponent implements OnInit {
 
     openDialog(): void {
         const dialogRef = this.dialog.open(EditDialog, {
-            data: { ... this.item },
+            data: JSON.parse(JSON.stringify(this.item))
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.itemService.edit(result).subscribe(res => {
-                    this.item = res;
+        dialogRef.afterClosed().subscribe(itemForSave => {
+            if (itemForSave) {
+                this.itemService.edit(itemForSave).subscribe(savedItem => {
+                    this.item = savedItem;
+
+                    if (itemForSave.currentItemValue.itemId) {
+                        //changing price only if itemId is set (Look at ChangeItemDTO and ItemValueDTO difference)
+                        console.log("changing price")
+                        this.itemService.changeItemPrice(itemForSave.currentItemValue).subscribe(newValue => {
+                            this.item.currentItemValue = newValue;
+                            console.log(this.item);
+                        })
+                    }
+
+
                 })
             }
         });
@@ -88,7 +101,7 @@ export class EditDialog {
 
     constructor(
         public dialogRef: MatDialogRef<EditDialog>,
-        private categoryService : CategoryService,
+        private categoryService: CategoryService,
 
         @Inject(MAT_DIALOG_DATA) public data: Item = {
             id: 0,
@@ -103,7 +116,7 @@ export class EditDialog {
             deleted: false
         }
     ) {
-        this.editItem = { ...data }
+        this.editItem = JSON.parse(JSON.stringify(data)) // new object because we want to be able to compare old and new values
     }
 
     ngOnInit(): void {
@@ -117,16 +130,39 @@ export class EditDialog {
     }
 
     onSaveClick(): void {
-        if (this.editItem.name && this.editItem.description && this.editItem.category) {
+
+        let newPurchasePrice = this.editItem.currentItemValue.purchasePrice;
+        let newSellingPrice = this.editItem.currentItemValue.sellingPrice;
+
+        let oldPurchasePrice = this.data.currentItemValue.purchasePrice;
+        let oldSellingPrice = this.data.currentItemValue.sellingPrice;
+
+        if (this.editItem.name && this.editItem.description && this.editItem.category && newPurchasePrice && newSellingPrice) {
+            if (newPurchasePrice != oldPurchasePrice || newSellingPrice != oldSellingPrice) {
+                console.log("creating new item value")
+                if (newPurchasePrice <= 0 || newSellingPrice <= 0) {
+                    console.log("invalid price data!");
+                    return;
+                }
+
+                let newValue: ItemValue = {
+                    itemId: this.editItem.id,
+                    purchasePrice: this.editItem.currentItemValue.purchasePrice,
+                    sellingPrice: this.editItem.currentItemValue.sellingPrice,
+
+                }
+                this.editItem.currentItemValue = newValue;
+            }
             this.dialogRef.close(this.editItem);
-            return;
+        }
+        else {
+            console.log("missing form data!");
         }
 
-        console.log("invalid form data!");
 
     }
 
     compareObjects(o1: any, o2: any): boolean {
         return o1.name === o2.name && o1.id === o2.id;
-      }
+    }
 }

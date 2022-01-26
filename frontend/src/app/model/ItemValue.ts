@@ -1,6 +1,7 @@
 export interface ItemValue {
-    id: number;
+    id?: number;
     purchasePrice: number;
     sellingPrice: number;
-    fromDate: Date;
+    fromDate?: Date;
+    itemId? : number;
   }
