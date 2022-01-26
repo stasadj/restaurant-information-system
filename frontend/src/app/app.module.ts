@@ -38,10 +38,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 import { ItemsComponent } from './item-components/items/items.component';
-import { EditDialog, ItemCardComponent } from './item-components/item-card/item-card/item-card.component';
+import { EditDialog, ItemCardComponent } from './item-components/item-card/item-card.component';
 import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-page.component';
 import {MatSelectModule} from '@angular/material/select';
-import { CreateItemComponent } from './item-components/create-item/create-item/create-item.component';
+import { CreateItemComponent } from './item-components/create-item/create-item.component';
 
 
 @NgModule({
