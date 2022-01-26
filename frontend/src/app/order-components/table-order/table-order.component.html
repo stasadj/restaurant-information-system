@@ -1,4 +1,7 @@
-<h1 mat-dialog-title>Order for Table {{ data.tableId }}</h1>
+<h1 mat-dialog-title>
+  {{ order && !order.waiterId ? "Bar order" : "Order" }} for Table
+  {{ data.tableId }}
+</h1>
 <div mat-dialog-content style="height: calc(100% - 96px)">
   <mat-tab-group>
     <mat-tab label="ORDER">
@@ -48,7 +51,8 @@
                 mat-icon-button
                 *ngIf="
                   orderItem.orderStatus !== 'IN_PROGRESS' &&
-                  orderItem.orderStatus !== 'READY'
+                  orderItem.orderStatus !== 'READY' &&
+                  !isBarman
                 "
                 (click)="cancelItem(orderItem.id, orderItem.itemId)"
               >
@@ -72,7 +76,7 @@
         </mat-form-field>
       </div>
     </mat-tab>
-    <mat-tab label="MENU">
+    <mat-tab label="MENU" [disabled]="isBarman && order && order.waiterId">
       <h2>Dummy menu</h2>
       <div *ngFor="let item of dummyMenu">
         {{ item.id }} {{ item.name }} {{ item.price }}din

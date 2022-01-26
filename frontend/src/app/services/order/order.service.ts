@@ -81,6 +81,10 @@ export class OrderService {
     return this.http.post<Order>(`${this.path}/create`, order);
   }
 
+  createBarOrder(order: Order): Observable<Order> {
+    return this.http.post<Order>(`${this.path}/create-bar`, order);
+  }
+
   editOrder(order: Order): Observable<Order> {
     return this.http.put<Order>(`${this.path}/edit`, order);
   }

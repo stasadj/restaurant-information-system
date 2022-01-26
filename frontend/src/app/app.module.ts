@@ -38,6 +38,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 import { HandleErrorInterceptor } from './interceptors/error.interceptor';
+import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { HandleErrorInterceptor } from './interceptors/error.interceptor';
     CookPageComponent,
     NotFoundComponent,
     HeaderComponent,
+    BarmanPageComponent,
   ],
   imports: [
     BrowserModule,

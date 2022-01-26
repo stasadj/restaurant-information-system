@@ -93,9 +93,10 @@ public class OrderItemService {
             orderItemRepository.save(orderItem);
             declinedItems.add(orderItem);
 
-            notificationService.createNotification("Order item #"+id+" is DECLINED.",
-                    type == ItemType.DRINK ? NotificationType.BARMAN_WAITER : NotificationType.COOK_WAITER,
-                    orderItem.getOrder()
+            if (orderItem.getOrder().getWaiter() != null)  // if not bar-order
+                notificationService.createNotification("Order item #"+id+" is DECLINED.",
+                        type == ItemType.DRINK ? NotificationType.BARMAN_WAITER : NotificationType.COOK_WAITER,
+                        orderItem.getOrder()
             );
         }
         String message = messageBuilder.toString();
