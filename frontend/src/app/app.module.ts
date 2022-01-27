@@ -49,6 +49,7 @@ import { HandleErrorInterceptor } from './interceptors/error.interceptor';
 import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
 import { GuestPageComponent } from './pages/guest-page/guest-page.component';
 import { CategoryFilterComponent } from './guest-menu-components/category-filter/category-filter.component';
+import { ItemSearchComponent } from './guest-menu-components/item-search/item-search.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { CategoryFilterComponent } from './guest-menu-components/category-filter
         EditItemDialog,
         CreateItemComponent,
         GuestPageComponent,
-        CategoryFilterComponent
+        CategoryFilterComponent,
+        ItemSearchComponent
     ],
     imports: [
         BrowserModule,
