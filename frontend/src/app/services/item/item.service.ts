@@ -5,39 +5,45 @@ import { Item } from '../../model/Item';
 import { ItemValue } from 'src/app/model/ItemValue';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemService {
+  private readonly path = '/api/item';
 
-    private readonly path = '/api/item';
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) {}
-  
-    getItems(): Observable<Item[]> {
-      return this.http.get<Item[]>(this.path + "/all");
-    }
+  getItems(): Observable<Item[]> {
+    return this.http.get<Item[]>(this.path + '/all');
+  }
 
-    addToMenu(item : Item): Observable<Item> {
-        return this.http.put<Item>(this.path + "/add-to-menu/" + item.id, null);
-    }
+  getMenuItems(): Observable<Item[]> {
+    return this.http.get<Item[]>(this.path + '/in-menu');
+  }
 
-    removeFromMenu(item : Item): Observable<Item> {
-        return this.http.put<Item>(this.path + "/remove-from-menu/" + item.id, null);
-    }
+  addToMenu(item: Item): Observable<Item> {
+    return this.http.put<Item>(this.path + '/add-to-menu/' + item.id, null);
+  }
 
-    delete(item : Item) {
-        return this.http.delete(this.path + "/" + item.id);
-    }
+  removeFromMenu(item: Item): Observable<Item> {
+    return this.http.put<Item>(
+      this.path + '/remove-from-menu/' + item.id,
+      null
+    );
+  }
 
-    edit(item : Item) : Observable<Item>{
-        return this.http.put<Item>(this.path + "/edit", item);
-    }
+  delete(item: Item) {
+    return this.http.delete(this.path + '/' + item.id);
+  }
 
-    changeItemPrice(itemValue : ItemValue) : Observable<ItemValue>{
-        return this.http.post<ItemValue>(this.path + "/change-price", itemValue);
-    }
+  edit(item: Item): Observable<Item> {
+    return this.http.put<Item>(this.path + '/edit', item);
+  }
 
-    create(item : Item) : Observable<Item>{
-        return this.http.post<Item>(this.path + "/create", item);
-    }
+  changeItemPrice(itemValue: ItemValue): Observable<ItemValue> {
+    return this.http.post<ItemValue>(this.path + '/change-price', itemValue);
+  }
+
+  create(item: Item): Observable<Item> {
+    return this.http.post<Item>(this.path + '/create', item);
+  }
 }
