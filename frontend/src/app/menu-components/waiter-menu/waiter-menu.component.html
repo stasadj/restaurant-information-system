@@ -1,0 +1,77 @@
+<div class="menu-wrapper">
+  <mat-card class="category-list">
+    <mat-card-title> Categories </mat-card-title>
+    <mat-card-content class="scrollable-content">
+      <mat-selection-list
+        [multiple]="false"
+        [(ngModel)]="selectedCategoryId"
+        (selectionChange)="onCategoryChanged()"
+      >
+        <mat-list-option
+          *ngFor="let category of categories"
+          [value]="category.id"
+        >
+          {{ category.name }}
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="item-list" *ngIf="selectedCategoryId.length > 0">
+    <mat-card-title> {{ title }} </mat-card-title>
+    <mat-card-content class="scrollable-content">
+      <table mat-table [dataSource]="menuItems">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Item name</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let item">
+            {{ item.currentItemValue.sellingPrice }}
+          </td>
+        </ng-container>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (click)="selectedItem = row"
+        ></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="item-card" *ngIf="selectedItem">
+    <mat-card-title> {{ selectedItem.name }} </mat-card-title>
+    <mat-card-content>
+      <img
+        src="{{ selectedItem.imageURL }}"
+        width="100"
+        height="100"
+        style="float: left"
+      />
+      <p>{{ selectedItem.description }}</p>
+      <mat-chip-list>
+        <mat-chip *ngFor="let tag of selectedItem.tags">
+          {{ tag.name }}
+        </mat-chip>
+      </mat-chip-list>
+      <p>
+        <b>{{ selectedItem.currentItemValue.sellingPrice }} din</b>
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <div align="end">
+        <button (click)="minus()" class="amount-btn">-</button>
+        <input [value]="amount" disabled />
+        <button (click)="plus()" class="amount-btn">+</button>
+        <button mat-flat-button color="accent" (click)="onAdd()" align="end">
+          Add to order
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

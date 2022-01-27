@@ -76,31 +76,15 @@
         </mat-form-field>
       </div>
     </mat-tab>
-    <mat-tab label="MENU" [disabled]="isBarman && order && order.waiterId">
-      <h2>Dummy menu</h2>
-      <div *ngFor="let item of dummyMenu">
-        {{ item.id }} {{ item.name }} {{ item.price }}din
-        <input
-          matInput
-          style="width: 30px"
-          [(ngModel)]="item.a"
-          type="number"
-          min="0"
-          max="9999"
-        />
-        <button
-          mat-button
-          (click)="
-            addToOrder({
-              id: item.id,
-              name: item.name,
-              amount: item.a,
-              price: item.price
-            })
-          "
-        >
-          add
-        </button>
+    <mat-tab
+      label="MENU"
+      [disabled]="isBarman && order && order.id && order.waiterId"
+    >
+      <div class="menu" *ngIf="order || noOrder">
+        <app-waiter-menu
+          [isBarOrder]="isBarman || (order && !order.waiterId)"
+          (addEvent)="addToOrder($event)"
+        ></app-waiter-menu>
       </div>
     </mat-tab>
   </mat-tab-group>
