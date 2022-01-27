@@ -10,23 +10,27 @@ import { CategoryService } from 'src/app/services/category/category.service';
   styleUrls: ['./guest-page.component.less'],
 })
 export class GuestPageComponent implements OnInit {
-    public items: Item[] = [];
-    public categories: Category[] = [];
-    constructor(private itemService: ItemService, private categoryService: CategoryService,) { }
+  public items: Item[] = [];
+  public categories: Category[] = [];
+  constructor(
+    private itemService: ItemService,
+    private categoryService: CategoryService
+  ) {}
 
-    fetchData = () => {
-        this.itemService.getItems().subscribe((res) => {
-            this.items = res;
-        });
-    }
+  fetchData = () => {
+    this.itemService.getMenuItems().subscribe((res) => {
+      this.items = res;
+    });
+  };
 
-    ngOnInit(): void {
-        this.itemService.getItems().subscribe((res) => {
-            this.items = res;
-        })
-        this.categoryService.getCategories().subscribe((res) => {
-            this.categories = res;
-            console.log(res);
-        })
-    }
+  ngOnInit(): void {
+    this.itemService.getMenuItems().subscribe((res) => {
+      this.items = res;
+      console.log(res);
+    });
+    this.categoryService.getCategories().subscribe((res) => {
+      this.categories = res;
+      console.log(res);
+    });
+  }
 }
