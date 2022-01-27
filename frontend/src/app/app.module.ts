@@ -46,6 +46,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CreateItemComponent } from './item-components/create-item/create-item.component';
 import { HandleErrorInterceptor } from './interceptors/error.interceptor';
 import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
+import { GuestPageComponent } from './pages/guest-page/guest-page.component';
 
 
 @NgModule({
@@ -68,7 +69,8 @@ import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
         ItemCardComponent,
         ManagerPageComponent,
         EditItemDialog,
-        CreateItemComponent
+        CreateItemComponent,
+        GuestPageComponent
     ],
     imports: [
         BrowserModule,
