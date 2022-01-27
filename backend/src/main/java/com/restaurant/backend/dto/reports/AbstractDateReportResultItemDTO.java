@@ -8,4 +8,5 @@ import lombok.EqualsAndHashCode;
 public abstract class AbstractDateReportResultItemDTO extends AbstractReportResultItemDTO {
     private String type;
     public abstract LocalDate getApproximateDate();
+    public abstract String getLabel();
 }

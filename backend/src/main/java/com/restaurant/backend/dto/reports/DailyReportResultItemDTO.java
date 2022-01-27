@@ -18,4 +18,9 @@ public class DailyReportResultItemDTO extends AbstractDateReportResultItemDTO {
     public LocalDate getApproximateDate() {
         return date;
     }
+
+    @Override
+    public String getLabel() {
+        return date.toString();
+    }
 }

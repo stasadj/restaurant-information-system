@@ -22,4 +22,9 @@ public class QuarterlyReportResultItemDTO extends AbstractDateReportResultItemDT
     public LocalDate getApproximateDate() {
         return LocalDate.ofYearDay(year.getValue(), (quarter.getValue() - 1) * 13 + 1);
     }
+
+    @Override
+    public String getLabel() {
+        return year.toString().concat(" - ").concat(quarter.label);
+    }
 }
