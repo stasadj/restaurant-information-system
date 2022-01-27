@@ -35,6 +35,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { ToastrModule } from 'ngx-toastr';
+import { ChartModule } from 'angular2-chartjs';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 
@@ -46,6 +47,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { CreateItemComponent } from './item-components/create-item/create-item.component';
 import { HandleErrorInterceptor } from './interceptors/error.interceptor';
 import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
+import { ChartComponent } from './report/chart/chart.component';
+import { ReportBoardComponent } from './report/report-board/report-board.component';
+import { ChartDataPipe } from './pipes/chart-data/chart-data.pipe';
+import { DateSerializePipe } from './pipes/date-serialize/date-serialize.pipe';
 
 
 @NgModule({
@@ -68,7 +73,11 @@ import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
         ItemCardComponent,
         ManagerPageComponent,
         EditItemDialog,
-        CreateItemComponent
+        CreateItemComponent,
+        ChartComponent,
+        ReportBoardComponent,
+        ChartDataPipe,
+        DateSerializePipe
     ],
     imports: [
         BrowserModule,
@@ -91,7 +100,8 @@ import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
         MatDialogModule,
         MatProgressSpinnerModule,
         MatTableModule,
-        MatSelectModule
+        MatSelectModule,
+        ChartModule
     ],
     providers: [
       {
@@ -104,6 +114,8 @@ import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
         useClass: HandleErrorInterceptor,
         multi: true,
       },
+      ChartDataPipe,
+      DateSerializePipe
     ],
     bootstrap: [AppComponent],
 })
