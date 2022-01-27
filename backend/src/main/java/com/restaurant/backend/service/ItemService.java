@@ -21,6 +21,7 @@ import com.restaurant.backend.validation.DTOValidator;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
 import com.restaurant.backend.validation.interfaces.EditInfo;
 
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
@@ -136,7 +137,8 @@ public class ItemService {
 
         
         //setting unique image file name based on id from database
-        String newFileName = "image" + savedItem.getId();
+        String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String newFileName = "image" + savedItem.getId() + "." + fileExtension;
         savedItem.setImageURL(newFileName);
         savedItem = itemRepository.save(savedItem);
 

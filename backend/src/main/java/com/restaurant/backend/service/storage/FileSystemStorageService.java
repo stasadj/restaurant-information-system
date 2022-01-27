@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import com.restaurant.backend.exception.StorageException;
 import com.restaurant.backend.exception.StorageFileNotFoundException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -60,8 +59,7 @@ public class FileSystemStorageService implements StorageService {
                 throw new StorageException("Failed to store empty file.");
             }
 
-            String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-            newName += "." + extension;
+
 
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(newName))
