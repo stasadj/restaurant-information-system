@@ -50,6 +50,8 @@ import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
 import { GuestPageComponent } from './pages/guest-page/guest-page.component';
 import { CategoryFilterComponent } from './guest-menu-components/category-filter/category-filter.component';
 import { ItemSearchComponent } from './guest-menu-components/item-search/item-search.component';
+import { GuestMenuItemComponent } from './guest-menu-components/guest-menu-item/guest-menu-item.component';
+import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-menu.component';
 
 
 @NgModule({
@@ -75,7 +77,9 @@ import { ItemSearchComponent } from './guest-menu-components/item-search/item-se
         CreateItemComponent,
         GuestPageComponent,
         CategoryFilterComponent,
-        ItemSearchComponent
+        ItemSearchComponent,
+        GuestMenuItemComponent,
+        GuestMenuComponent
     ],
     imports: [
         BrowserModule,
