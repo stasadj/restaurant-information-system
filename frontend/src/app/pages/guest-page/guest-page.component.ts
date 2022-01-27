@@ -12,6 +12,7 @@ import { CategoryService } from 'src/app/services/category/category.service';
 export class GuestPageComponent implements OnInit {
   public items: Item[] = [];
   public categories: Category[] = [];
+  public selectedCategoryId: number = 1;
   constructor(
     private itemService: ItemService,
     private categoryService: CategoryService
@@ -32,5 +33,9 @@ export class GuestPageComponent implements OnInit {
       this.categories = res;
       console.log(res);
     });
+  }
+
+  handleCategoryChange(id: number): void {
+    this.selectedCategoryId = id;
   }
 }

@@ -1,5 +1,9 @@
 <mat-chip-list>
-  <mat-chip *ngFor="let category of categories" color="warn">{{
-    category.name
-  }}</mat-chip>
+  <mat-chip
+    *ngFor="let category of categories"
+    color="accent"
+    [selected]="category.id == selectedCategoryId"
+    (click)="onCategoryChange(category.id)"
+    >{{ category.name }}</mat-chip
+  >
 </mat-chip-list>

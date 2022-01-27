@@ -8,6 +8,10 @@ import { Category } from 'src/app/model/Category';
 })
 export class CategoryFilterComponent implements OnInit {
   @Input() categories: Category[] = [];
+  @Input() selectedCategoryId: number = 1;
+  @Input() onCategoryChange: Function = () => {};
+
+  constructor() {}
 
   ngOnInit(): void {}
 }

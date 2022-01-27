@@ -1,7 +1,10 @@
 <mat-grid-list cols="1" rowHeight="100:4">
   <mat-grid-tile
-    ><app-category-filter [categories]="categories"></app-category-filter
+    ><app-category-filter
+      [categories]="categories"
+      [onCategoryChange]="handleCategoryChange"
+    ></app-category-filter
   ></mat-grid-tile>
   <mat-grid-tile><app-item-search></app-item-search></mat-grid-tile>
 </mat-grid-list>
-<app-guest-menu></app-guest-menu>
+<app-guest-menu [items]="items"></app-guest-menu>
