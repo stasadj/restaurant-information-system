@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
@@ -14,6 +15,7 @@ import com.restaurant.backend.dto.requests.ChangePriceDTO;
 import com.restaurant.backend.exception.CustomConstraintViolationException;
 import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.ItemRepository;
+import com.restaurant.backend.service.storage.FileSystemStorageService;
 import com.restaurant.backend.support.ItemMapper;
 import com.restaurant.backend.validation.DTOValidator;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
@@ -23,6 +25,7 @@ import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 
@@ -35,6 +38,7 @@ public class ItemService {
     private final CategoryService categoryService;
     private final EntityManager entityManager;
     private final ItemMapper itemMapper;
+    private final FileSystemStorageService storageService;
 
     public List<Item> getAll() {
         // Retrieves undeleted items
@@ -88,6 +92,9 @@ public class ItemService {
     }
 
     public Item create(@Validated(CreateInfo.class) ItemDTO itemDTO) throws NotFoundException {
+
+        DTOValidator.validate(itemDTO, CreateInfo.class);
+
         Item item = itemMapper.convertToDomain(itemDTO);
         item.setId(null);
         item.setDeleted(false); // initially false
@@ -106,6 +113,38 @@ public class ItemService {
         itemValueService.create(initialItemValue);
 
         return item;
+    }
+
+    public Item create(@Validated(CreateInfo.class) ItemDTO itemDTO, MultipartFile file) {
+        Item item = itemMapper.convertToDomain(itemDTO);
+        item.setId(null);
+        item.setDeleted(false); // initially false
+
+        item.setCategory(categoryService.findOne(item.getCategory().getId())); 
+
+        List<Tag> tags = new ArrayList<>();
+        item.getTags().forEach(tag -> tags.add(tagService.findOne(tag.getId())));
+
+        item.setTags(tags);
+
+        Item savedItem = itemRepository.save(item);
+
+        ItemValue initialItemValue = item.getItemValues().get(0); // getting the only item value
+        initialItemValue.setFromDate(LocalDateTime.now()); // current date as from date
+        initialItemValue.setItem(savedItem);
+        itemValueService.create(initialItemValue);
+
+        
+        //setting unique image file name based on id from database
+        String newFileName = "image" + savedItem.getId();
+        savedItem.setImageURL(newFileName);
+        savedItem = itemRepository.save(savedItem);
+
+        //saving image to file system here
+        storageService.store(file, newFileName);
+
+        return item;
+
     }
 
     public Item editItem(@Validated(EditInfo.class) ItemDTO changedItemDTO) throws NotFoundException, CustomConstraintViolationException {
@@ -143,4 +182,6 @@ public class ItemService {
 
         return itemValueService.create(newValue);
     }
+
+
 }

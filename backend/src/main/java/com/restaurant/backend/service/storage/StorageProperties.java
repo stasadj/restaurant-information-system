@@ -8,7 +8,7 @@ public class StorageProperties {
 	/**
 	 * Folder location for storing files
 	 */
-	private String location = "resources/static/upload-dir";
+	private String location = System.getProperty("user.dir") + "/src/main/resources/public/static/upload-dir";
 
 	public String getLocation() {
 		return location;

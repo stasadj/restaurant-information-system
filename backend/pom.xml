@@ -186,6 +186,13 @@
 			<version>2.4.4</version>
 		</dependency>
 
+        <!-- Easier work with files   -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
 
 	</dependencies>
 

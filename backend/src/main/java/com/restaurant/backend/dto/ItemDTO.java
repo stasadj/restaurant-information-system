@@ -11,8 +11,6 @@ import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
 import com.restaurant.backend.validation.interfaces.EditInfo;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -105,8 +105,7 @@ public class ItemController {
     public ResponseEntity<ItemDTO> create(@RequestPart("item") @Valid @Validated(CreateInfo.class) ItemDTO itemDTO,
     @RequestPart("file") MultipartFile file) {
         LOG.info("Client requested to create new item.");
-        System.out.println(file.getOriginalFilename() + " ---- ");
-        return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO, file)), HttpStatus.OK);
     }
 
     @ResponseBody
