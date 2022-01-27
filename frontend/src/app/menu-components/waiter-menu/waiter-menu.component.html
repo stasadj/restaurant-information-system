@@ -65,10 +65,16 @@
     </mat-card-content>
     <mat-card-actions>
       <div align="end">
-        <button (click)="minus()" class="amount-btn">-</button>
+        <button id="minus-btn" (click)="minus()" class="amount-btn">-</button>
         <input [value]="amount" disabled />
-        <button (click)="plus()" class="amount-btn">+</button>
-        <button mat-flat-button color="accent" (click)="onAdd()" align="end">
+        <button id="plus-btn" (click)="plus()" class="amount-btn">+</button>
+        <button
+          id="add-btn"
+          mat-flat-button
+          color="accent"
+          (click)="onAdd()"
+          align="end"
+        >
           Add to order
         </button>
       </div>

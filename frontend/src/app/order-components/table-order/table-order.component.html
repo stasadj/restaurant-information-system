@@ -5,7 +5,7 @@
 <div mat-dialog-content style="height: calc(100% - 96px)">
   <mat-tab-group>
     <mat-tab label="ORDER">
-      <h1 *ngIf="noOrder">No order at the moment</h1>
+      <h1 id="no-order-txt" *ngIf="noOrder">No order at the moment</h1>
       <div *ngIf="order">
         <table mat-table [dataSource]="order.orderItems">
           <ng-container matColumnDef="id">
@@ -91,6 +91,7 @@
 </div>
 <div mat-dialog-actions align="end">
   <button
+    id="create-btn"
     mat-raised-button
     color="primary"
     *ngIf="order && !order.id && order.orderItems.length > 0"
@@ -99,6 +100,7 @@
     Send order
   </button>
   <button
+    id="update-btn"
     mat-raised-button
     color="primary"
     *ngIf="order && order.id && edited"
@@ -107,6 +109,7 @@
     Update order
   </button>
   <button
+    id="finalize-btn"
     mat-raised-button
     color="primary"
     *ngIf="canBeFinalized"
@@ -114,7 +117,12 @@
   >
     Finalize order
   </button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data.tableId">
+  <button
+    id="close-btn"
+    mat-raised-button
+    color="primary"
+    [mat-dialog-close]="data.tableId"
+  >
     Close
   </button>
 </div>
