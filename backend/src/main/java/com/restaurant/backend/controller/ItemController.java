@@ -26,14 +26,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/item", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/item", produces = MediaType.APPLICATION_JSON_VALUE) 
 public class ItemController {
     private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 
@@ -93,6 +96,16 @@ public class ItemController {
     // @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@Validated(CreateInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
+        return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO)), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/createWithFile", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    @ResponseBody
+    // @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<ItemDTO> create(@RequestPart("item") @Valid @Validated(CreateInfo.class) ItemDTO itemDTO,
+    @RequestPart("file") MultipartFile file) {
+        LOG.info("Client requested to create new item.");
+        System.out.println(file.getOriginalFilename() + " ---- ");
         return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO)), HttpStatus.OK);
     }
 

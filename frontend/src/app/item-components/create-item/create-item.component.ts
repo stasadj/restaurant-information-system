@@ -1,4 +1,6 @@
+import { ɵNoopAnimationStyleNormalizer } from '@angular/animations/browser';
 import { Component, Input, OnInit } from '@angular/core';
+import { create } from 'domain';
 import { Category } from 'src/app/model/Category';
 import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
@@ -25,6 +27,9 @@ export class CreateItemComponent implements OnInit {
         deleted: false
     };
 
+    public fileName : any;
+    public file : any;
+
     public categories: Category[] = []
 
     @Input() onItemCreated = () => {
@@ -41,7 +46,12 @@ export class CreateItemComponent implements OnInit {
         })
     }
 
-    onSaveClick(): void {
+    onChange(event: any) {
+        this.file = event.target.files[0];
+    }
+  
+
+     async onSaveClick(): Promise<any> {
 
         let purchasePrice = this.newItem.currentItemValue.purchasePrice;
         let sellingPrice = this.newItem.currentItemValue.sellingPrice;
@@ -51,13 +61,14 @@ export class CreateItemComponent implements OnInit {
                 console.log("invalid price data!");
                 return;
             }
+            
+            // this.itemService.create(this.newItem, this.file).subscribe((res) => {
+            //     console.log(res);
+            //     this.onItemCreated();
+            // });
 
-            this.itemService.create(this.newItem).subscribe(res => {
-                console.log(res);
-                this.onItemCreated();
-            });
-
-
+            let createdItem = await this.itemService.create(this.newItem, this.file);
+            this.onItemCreated();
 
         }
         else {
