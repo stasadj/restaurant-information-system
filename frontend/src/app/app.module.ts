@@ -37,6 +37,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { ItemsComponent } from './item-components/items/items.component';
 import { ItemCardComponent } from './item-components/item-card/item-card.component';
@@ -47,6 +48,7 @@ import { CreateItemComponent } from './item-components/create-item/create-item.c
 import { HandleErrorInterceptor } from './interceptors/error.interceptor';
 import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
 import { GuestPageComponent } from './pages/guest-page/guest-page.component';
+import { CategoryFilterComponent } from './guest-menu-components/category-filter/category-filter.component';
 
 
 @NgModule({
@@ -70,7 +72,8 @@ import { GuestPageComponent } from './pages/guest-page/guest-page.component';
         ManagerPageComponent,
         EditItemDialog,
         CreateItemComponent,
-        GuestPageComponent
+        GuestPageComponent,
+        CategoryFilterComponent
     ],
     imports: [
         BrowserModule,
@@ -93,7 +96,8 @@ import { GuestPageComponent } from './pages/guest-page/guest-page.component';
         MatDialogModule,
         MatProgressSpinnerModule,
         MatTableModule,
-        MatSelectModule
+        MatSelectModule,
+        MatChipsModule,
     ],
     providers: [
       {

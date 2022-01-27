@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Item } from 'src/app/model/Item';
+import { Category } from 'src/app/model/Category';
 import { ItemService } from 'src/app/services/item/item.service';
+import { CategoryService } from 'src/app/services/category/category.service';
 
 @Component({
   selector: 'app-guest-page',
@@ -9,7 +11,8 @@ import { ItemService } from 'src/app/services/item/item.service';
 })
 export class GuestPageComponent implements OnInit {
     public items: Item[] = [];
-    constructor(private itemService: ItemService) { }
+    public categories: Category[] = [];
+    constructor(private itemService: ItemService, private categoryService: CategoryService,) { }
 
     fetchData = () => {
         this.itemService.getItems().subscribe((res) => {
@@ -20,6 +23,10 @@ export class GuestPageComponent implements OnInit {
     ngOnInit(): void {
         this.itemService.getItems().subscribe((res) => {
             this.items = res;
+        })
+        this.categoryService.getCategories().subscribe((res) => {
+            this.categories = res;
+            console.log(res);
         })
     }
 }
