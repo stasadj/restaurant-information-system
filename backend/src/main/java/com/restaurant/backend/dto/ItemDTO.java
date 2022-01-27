@@ -51,5 +51,4 @@ public class ItemDTO {
 
     protected Boolean deleted;
 
-    private MultipartFile imageFile;
 }

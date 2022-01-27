@@ -38,7 +38,7 @@ export class ItemService {
         return this.http.post<ItemValue>(this.path + "/change-price", itemValue);
     }
 
-    async create(item: Item, file: File): Promise<Item> {
+    create(item: Item, file: File): Observable<Item>{
 
         const formData = new FormData();
         formData.append("file", file, file.name);
@@ -46,13 +46,12 @@ export class ItemService {
             type: "application/json"
         }));
 
-        let response =  await axios.post(
-            this.path + "/createWithFile",
-            formData,
-            {headers: { "Content-Type": "multipart/form-data" }
-        })
+        // !!! do not set Content-type multipart/form-data manually
+        // The browser will automatically set both the multipart/form-data AND the boundary necessary for proper backend parsing 
+        // let headers = new HttpHeaders();
+        // headers = headers.set('Content-Type', 'multipart/form-data');
 
-        return response.data;
+        return this.http.post<Item>(this.path + "/createWithFile", formData);
 
 
 

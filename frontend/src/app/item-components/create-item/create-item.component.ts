@@ -16,14 +16,14 @@ export class CreateItemComponent implements OnInit {
 
     public newItem: Item = {
         id: NaN,
-        name: '',
-        category: { id: 0, name: "" },
-        description: '',
+        name: 'a',
+        category: { id: 1, name: "appetizer" },
+        description: 'a',
         imageURL: '',
         tags: [],
         inMenu: false,
         itemType: ItemType.FOOD,
-        currentItemValue: { id: 0, purchasePrice: 0, sellingPrice: 0, fromDate: new Date() },
+        currentItemValue: { id: 0, purchasePrice: 10, sellingPrice: 10, fromDate: new Date() },
         deleted: false
     };
 
@@ -51,7 +51,7 @@ export class CreateItemComponent implements OnInit {
     }
   
 
-     async onSaveClick(): Promise<any> {
+    onSaveClick(): void {
 
         let purchasePrice = this.newItem.currentItemValue.purchasePrice;
         let sellingPrice = this.newItem.currentItemValue.sellingPrice;
@@ -61,14 +61,12 @@ export class CreateItemComponent implements OnInit {
                 console.log("invalid price data!");
                 return;
             }
-            
-            // this.itemService.create(this.newItem, this.file).subscribe((res) => {
-            //     console.log(res);
-            //     this.onItemCreated();
-            // });
 
-            let createdItem = await this.itemService.create(this.newItem, this.file);
-            this.onItemCreated();
+            this.itemService.create(this.newItem, this.file).subscribe((res) => {
+                this.onItemCreated();
+            })
+
+            
 
         }
         else {
