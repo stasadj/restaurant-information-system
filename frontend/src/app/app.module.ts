@@ -45,6 +45,7 @@ import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-
 import { MatSelectModule } from '@angular/material/select';
 import { CreateItemComponent } from './item-components/create-item/create-item.component';
 import { HandleErrorInterceptor } from './interceptors/error.interceptor';
+import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { HandleErrorInterceptor } from './interceptors/error.interceptor';
         OrderNotificationsComponent,
         WaiterPageComponent,
         CookPageComponent,
+        BarmanPageComponent,
         NotFoundComponent,
         HeaderComponent,
         ItemsComponent,

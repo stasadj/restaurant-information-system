@@ -6,5 +6,5 @@ export interface Order {
   note?: string;
   tableId: number;
   orderItems: OrderItem[];
-  waiterId: number;
+  waiterId?: number;
 }

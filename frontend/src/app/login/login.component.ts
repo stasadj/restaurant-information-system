@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
@@ -13,6 +14,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   password: string = '';
   pin: number = 0;
   private subscriptions = new Subscription();
+  form: FormGroup = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+  });
+  error: string = '';
+
+  submit() {}
 
   constructor(private auth: AuthService, private router: Router) {}
 

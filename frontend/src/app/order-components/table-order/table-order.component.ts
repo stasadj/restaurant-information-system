@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Order } from 'src/app/model/Order';
@@ -18,6 +18,7 @@ export class TableOrderComponent implements OnInit {
   edited: boolean = false;
   total: number = 0;
   canBeFinalized: boolean = false;
+  isBarman: boolean = true;
 
   @ViewChild(MatTable) table?: MatTable<OrderItem>;
 
@@ -45,6 +46,7 @@ export class TableOrderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isBarman = localStorage.getItem('role') === 'barman';
     this.orderService.getForTable(this.data.tableId).subscribe((d) => {
       this.order = d;
       this.noOrder = !d;
@@ -112,11 +114,20 @@ export class TableOrderComponent implements OnInit {
   }
 
   createOrder() {
-    if (this.order && this.order.orderItems.length > 0)
-      this.orderService.createOrder(this.order).subscribe((o) => {
-        this.order = o;
-        this.toastr.success('Order is created');
-      });
+    if (this.order && this.order.orderItems.length > 0) {
+      if (this.isBarman)
+        this.orderService.createBarOrder(this.order).subscribe((o) => {
+          this.order = o;
+          this.calcTotal();
+          this.toastr.success('Bar order is created');
+        });
+      else
+        this.orderService.createOrder(this.order).subscribe((o) => {
+          this.order = o;
+          this.calcTotal();
+          this.toastr.success('Order is created');
+        });
+    }
     this.edited = false;
   }
 
@@ -124,6 +135,7 @@ export class TableOrderComponent implements OnInit {
     if (this.order && this.order.id && this.order.orderItems.length > 0)
       this.orderService.editOrder(this.order).subscribe((o) => {
         this.order = o;
+        this.calcTotal();
         this.toastr.success('Order is updated');
       });
     this.edited = false;
@@ -148,6 +160,7 @@ export class TableOrderComponent implements OnInit {
         .reduce((acc, value) => acc + value, 0) ?? 0;
     this.canBeFinalized =
       !!this.order?.id &&
-      this.order.orderItems.every((oi) => oi.orderStatus === 'READY');
+      this.order.orderItems.every((oi) => oi.orderStatus === 'READY') &&
+      !(!!this.order.waiterId && this.isBarman);
   }
 }
