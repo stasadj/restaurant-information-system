@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class FrontendRedirectFilter extends OncePerRequestFilter {
     private final Logger LOGGER = LoggerFactory.getLogger(FrontendRedirectFilter.class);
 
-    private final String REGEX = "(?!/h2-console|/actuator|/api|/_nuxt|/index\\.html|/200\\.html|/favicon\\.ico|/sw\\.js|/static).*$";
+    private final String REGEX = "(?!/h2-console|/actuator|/api|/_nuxt|/index\\.html|/200\\.html|/favicon\\.ico|/sw\\.js|/static|/build).*$";
     private final Pattern pattern = Pattern.compile(REGEX);
 
     @Override
