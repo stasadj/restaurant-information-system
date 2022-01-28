@@ -38,7 +38,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
-import { MatChipsModule } from '@angular/material/chips';
 
 import { ItemsComponent } from './item-components/items/items.component';
 import { ItemCardComponent } from './item-components/item-card/item-card.component';
@@ -54,72 +53,6 @@ import { ItemSearchComponent } from './guest-menu-components/item-search/item-se
 import { GuestMenuItemComponent } from './guest-menu-components/guest-menu-item/guest-menu-item.component';
 import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-menu.component';
 import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
-
-
-@NgModule({
-    declarations: [
-        AppComponent,
-        CanvasComponent,
-        TableComponent,
-        MapComponent,
-        TableOrderComponent,
-        OrderBoardComponent,
-        OrderCardComponent,
-        LoginComponent,
-        OrderNotificationsComponent,
-        WaiterPageComponent,
-        CookPageComponent,
-        BarmanPageComponent,
-        NotFoundComponent,
-        HeaderComponent,
-        ItemsComponent,
-        ItemCardComponent,
-        ManagerPageComponent,
-        EditItemDialog,
-        CreateItemComponent,
-        GuestPageComponent,
-        CategoryFilterComponent,
-        ItemSearchComponent,
-        GuestMenuItemComponent,
-        GuestMenuComponent
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        DragDropModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot(),
-        HttpClientModule,
-        CommonModule,
-        MatTabsModule,
-        MatSliderModule,
-        MatInputModule,
-        MatGridListModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatListModule,
-        MatDialogModule,
-        MatProgressSpinnerModule,
-        MatTableModule,
-        MatSelectModule,
-        MatChipsModule,
-    ],
-    providers: [
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthInterceptor,
-        multi: true,
-      },
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: HandleErrorInterceptor,
-        multi: true,
-      },
-    ],
-    bootstrap: [AppComponent],
 
 @NgModule({
   declarations: [
@@ -143,6 +76,11 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
     EditItemDialog,
     CreateItemComponent,
     WaiterMenuComponent,
+    GuestPageComponent,
+    CategoryFilterComponent,
+    ItemSearchComponent,
+    GuestMenuItemComponent,
+    GuestMenuComponent,
   ],
   imports: [
     BrowserModule,
