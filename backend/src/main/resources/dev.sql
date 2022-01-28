@@ -23,7 +23,7 @@ INSERT INTO item (name, category_id, description, in_menu, type, deleted, image_
   ('Chicken tikka masala', 2, 'Roasted marinated chicken in spiced curry sauce', true, 0, false, 'image2.png'),
   ('Mushroom risotto', 2, 'Rice dish cooked with three kinds of mushroom, butter, white wine, onion and cheese', false, 0, false, 'image3.png'),
   ('Peach ice tea', 4, 'Cold ice tea sweetened with honey', true, 1, false, 'image4.png'),
-  ('DeletedItem', 4, 'Deleted item description', true, 1, true, 'image5.png');
+  ('DeletedItem', 4, 'Deleted item description', true, 1, true, 'default_image.png');
 
 INSERT INTO item_tags (item_id, tags_id) VALUES 
     (1, 2),

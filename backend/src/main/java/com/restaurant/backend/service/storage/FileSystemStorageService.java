@@ -1,5 +1,6 @@
 package com.restaurant.backend.service.storage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -112,7 +113,24 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        File directory = new File(rootLocation.toString());
+        File[] files = directory.listFiles();
+
+        for (File f : files) {
+            boolean delete = true;
+            for (int i = 1; i < 6; i++){
+                if (f.getName().startsWith("image" + i)){
+                    delete = false;
+                }
+            }
+            if (f.getName().startsWith("default_image")){
+                delete = false;
+            }
+
+            if (delete){
+                f.delete();
+            }
+        }
     }
 
     @Override
