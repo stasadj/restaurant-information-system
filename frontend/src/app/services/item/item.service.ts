@@ -16,6 +16,16 @@ export class ItemService {
     return this.http.get<Item[]>(this.path + '/all');
   }
 
+  getMenuItems(): Observable<Item[]> {
+    return this.http.get<Item[]>(this.path + '/in-menu');
+  }
+
+  searchMenuItems(categoryId: number, searchInput: string): Observable<Item[]> {
+    return this.http.get<Item[]>(
+      `${this.path}/search?categoryId=${categoryId}&searchInput=${searchInput}`
+    );
+  }
+
   addToMenu(item: Item): Observable<Item> {
     return this.http.put<Item>(this.path + '/add-to-menu/' + item.id, null);
   }

@@ -59,6 +59,11 @@ import { CapitalizeWordsPipe } from './pipes/text/capitalize-words/capitalize-wo
 import { RemoveSpecialCharsPipe } from './pipes/text/remove-special-chars/remove-special-chars.pipe';
 import { ReportItemTableComponent } from './report/report-item-table/report-item-table.component';
 import { FillItemNetincomePipe } from './pipes/table-data/fill-item-netincome/fill-item-netincome.pipe';
+import { GuestPageComponent } from './pages/guest-page/guest-page.component';
+import { CategoryFilterComponent } from './guest-menu-components/category-filter/category-filter.component';
+import { ItemSearchComponent } from './guest-menu-components/item-search/item-search.component';
+import { GuestMenuItemComponent } from './guest-menu-components/guest-menu-item/guest-menu-item.component';
+import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-menu.component';
 import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
 
 @NgModule({
@@ -92,7 +97,12 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
     RemoveSpecialCharsPipe,
     ReportItemTableComponent,
     FillItemNetincomePipe,
-    WaiterMenuComponent
+    WaiterMenuComponent,
+    GuestPageComponent,
+    CategoryFilterComponent,
+    ItemSearchComponent,
+    GuestMenuItemComponent,
+    GuestMenuComponent,
   ],
   imports: [
     BrowserModule,

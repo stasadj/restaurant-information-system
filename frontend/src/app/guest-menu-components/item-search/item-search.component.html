@@ -1,0 +1,15 @@
+<form>
+  <mat-form-field appearance="standard">
+    <mat-label>Search menu items</mat-label>
+    <input
+      matInput
+      name="search"
+      placeholder="Ex. Pizza"
+      [(ngModel)]="searchInput"
+    />
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="onSearch(searchInput)">
+    Search
+  </button>
+  <form></form>
+</form>
