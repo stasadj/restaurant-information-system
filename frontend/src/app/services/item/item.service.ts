@@ -36,6 +36,20 @@ export class ItemService {
     changeItemPrice(itemValue: ItemValue): Observable<ItemValue> {
         return this.http.post<ItemValue>(this.path + "/change-price", itemValue);
     }
+  
+    getMenuItems(): Observable<Item[]> {
+      return this.http.get<Item[]>(this.path + '/in-menu');
+    }
+
+    searchMenuItems(categoryId: number, searchInput: string): Observable<Item[]> {
+      return this.http.get<Item[]>(
+        `${this.path}/search?categoryId=${categoryId}&searchInput=${searchInput}`
+      );
+    }
+
+    addToMenu(item: Item): Observable<Item> {
+      return this.http.put<Item>(this.path + '/add-to-menu/' + item.id, null);
+    }
 
     create(item: Item, file: File): Observable<Item> {
 

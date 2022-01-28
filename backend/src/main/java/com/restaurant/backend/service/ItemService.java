@@ -186,5 +186,8 @@ public class ItemService {
         return itemValueService.create(newValue);
     }
 
-
+    
+    public List<Item> searchMenuItems(Long categoryId, String searchInput) {
+        return itemRepository.searchMenuItems(categoryId, searchInput);
+    }
 }

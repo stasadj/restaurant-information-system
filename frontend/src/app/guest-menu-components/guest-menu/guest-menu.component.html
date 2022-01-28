@@ -1,0 +1,7 @@
+<mat-list>
+  <mat-grid-list cols="3" rowHeight="500">
+    <mat-grid-tile *ngFor="let item of items">
+      <app-guest-menu-item [item]="item"> </app-guest-menu-item>
+    </mat-grid-tile>
+  </mat-grid-list>
+</mat-list>
