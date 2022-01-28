@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -110,6 +111,12 @@ public class ItemController {
     public ResponseEntity<ItemValueDTO> changeItemPrice(@Valid @RequestBody ChangePriceDTO changePriceDTO) {
         LOG.info("Client requested to change item price.");
         return new ResponseEntity<>(new ItemValueDTO(itemService.changeItemPrice(changePriceDTO)), HttpStatus.OK);
+    }
+    
+    @ResponseBody
+    @GetMapping("/search")
+    public ResponseEntity<List<ItemDTO>> searchMenuItems(@RequestParam Long categoryId, @RequestParam String searchInput) {
+        return new ResponseEntity<>(itemMapper.convertAll(itemService.searchMenuItems(categoryId, searchInput)), HttpStatus.OK);
     }
 
 }

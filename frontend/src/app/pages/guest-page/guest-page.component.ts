@@ -12,30 +12,40 @@ import { CategoryService } from 'src/app/services/category/category.service';
 export class GuestPageComponent implements OnInit {
   public items: Item[] = [];
   public categories: Category[] = [];
-  public selectedCategoryId: number = 1;
+  public selectedCategoryId: number = 2;
+  public searchInput: string = '';
   constructor(
     private itemService: ItemService,
     private categoryService: CategoryService
   ) {}
 
-  fetchData = () => {
-    this.itemService.getMenuItems().subscribe((res) => {
-      this.items = res;
-    });
+  getMenuItems = () => {
+    this.itemService
+      .searchMenuItems(this.selectedCategoryId, this.searchInput)
+      .subscribe((res) => {
+        this.items = res;
+      });
   };
 
   ngOnInit(): void {
-    this.itemService.getMenuItems().subscribe((res) => {
-      this.items = res;
-      console.log(res);
-    });
+    this.itemService
+      .searchMenuItems(this.selectedCategoryId, this.searchInput)
+      .subscribe((res) => {
+        this.items = res;
+      });
     this.categoryService.getCategories().subscribe((res) => {
       this.categories = res;
-      console.log(res);
     });
   }
 
-  handleCategoryChange(id: number): void {
+  handleCategoryChange = (id: number) => {
     this.selectedCategoryId = id;
-  }
+    this.searchInput = '';
+    this.getMenuItems();
+  };
+
+  handleSearchButtonClick = (searchInput: string) => {
+    this.searchInput = searchInput;
+    this.getMenuItems();
+  };
 }

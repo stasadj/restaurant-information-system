@@ -5,6 +5,11 @@
       [onCategoryChange]="handleCategoryChange"
     ></app-category-filter
   ></mat-grid-tile>
-  <mat-grid-tile><app-item-search></app-item-search></mat-grid-tile>
+  <mat-grid-tile
+    ><app-item-search
+      [searchInput]="searchInput"
+      [onSearch]="handleSearchButtonClick"
+    ></app-item-search
+  ></mat-grid-tile>
 </mat-grid-list>
 <app-guest-menu [items]="items"></app-guest-menu>
