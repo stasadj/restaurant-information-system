@@ -91,6 +91,7 @@ export class ItemCardComponent implements OnInit {
                         //changing price only if itemId is set (Look at ChangeItemDTO and ItemValueDTO difference)
                         this.itemService.changeItemPrice(itemForSave.currentItemValue).subscribe(newValue => {
                             this.item.currentItemValue = newValue;
+                            this.onDataChanged();
                             
                         })
                     }
