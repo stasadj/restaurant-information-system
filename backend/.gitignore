@@ -65,5 +65,6 @@ target
 secrets.yml
 .gradletasknamecache
 
+
+!src/main/resources/public/static/upload-dir
 src/main/resources/public/
-!src/main/resources/public/static/upload-dir/
