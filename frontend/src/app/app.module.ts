@@ -56,6 +56,8 @@ import { ReportSearchComponent } from './report/report-search/report-search.comp
 import { CapitalizePipe } from './pipes/text/capitalize/capitalize.pipe';
 import { CapitalizeWordsPipe } from './pipes/text/capitalize-words/capitalize-words.pipe';
 import { RemoveSpecialCharsPipe } from './pipes/text/remove-special-chars/remove-special-chars.pipe';
+import { ReportItemTableComponent } from './report/report-item-table/report-item-table.component';
+import { FillItemNetincomePipe } from './pipes/table-data/fill-item-netincome/fill-item-netincome.pipe';
 
 
 @NgModule({
@@ -86,7 +88,9 @@ import { RemoveSpecialCharsPipe } from './pipes/text/remove-special-chars/remove
     ReportSearchComponent,
     CapitalizePipe,
     CapitalizeWordsPipe,
-    RemoveSpecialCharsPipe
+    RemoveSpecialCharsPipe,
+    ReportItemTableComponent,
+    FillItemNetincomePipe
   ],
   imports: [
     BrowserModule,
