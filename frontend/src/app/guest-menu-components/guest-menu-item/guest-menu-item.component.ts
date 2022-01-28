@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-guest-menu-item',
@@ -26,7 +27,13 @@ export class GuestMenuItemComponent implements OnInit {
     deleted: false,
   };
 
-  constructor() {}
+  public imgTagSrc: any;
 
-  ngOnInit(): void {}
+  constructor(private _sanitizer: DomSanitizer) {}
+
+  ngOnInit(): void {
+    this.imgTagSrc = this._sanitizer.bypassSecurityTrustResourceUrl(
+      'data:image/png;base64,' + this.item.imageBase64
+    );
+  }
 }
