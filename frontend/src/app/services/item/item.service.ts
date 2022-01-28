@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
 import { Observable } from 'rxjs';
 import { ItemValue } from 'src/app/model/ItemValue';
 import { Item } from '../../model/Item';
