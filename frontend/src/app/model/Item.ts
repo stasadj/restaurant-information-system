@@ -14,4 +14,5 @@ export interface Item {
     itemType: ItemType;
     currentItemValue: ItemValue;
     deleted: boolean;
+    imageBase64?: string;
   }

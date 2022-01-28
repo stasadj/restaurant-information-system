@@ -4,6 +4,8 @@ import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
 import { ItemService } from 'src/app/services/item/item.service';
 import { EditItemDialog } from '../edit-item-dialog/edit-item-dialog.component';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 @Component({
     selector: 'app-item-card',
@@ -29,7 +31,9 @@ export class ItemCardComponent implements OnInit {
 
     };
 
-    constructor(private itemService: ItemService, public dialog: MatDialog) { }
+    public imgTagSrc : any;
+
+    constructor(private itemService: ItemService, public dialog: MatDialog, private _sanitizer: DomSanitizer) { }
 
 
     onAddToMenu() {
@@ -55,6 +59,9 @@ export class ItemCardComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.imgTagSrc = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' 
+                 + this.item.imageBase64);
+
     }
 
     openDialog(): void {

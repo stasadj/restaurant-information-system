@@ -1,7 +1,10 @@
 package com.restaurant.backend.support;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.stream.Collectors;
 
 import com.restaurant.backend.domain.Item;
@@ -9,11 +12,22 @@ import com.restaurant.backend.dto.CategoryDTO;
 import com.restaurant.backend.dto.ItemDTO;
 import com.restaurant.backend.dto.ItemValueDTO;
 import com.restaurant.backend.dto.TagDTO;
+import com.restaurant.backend.service.storage.StorageService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import org.apache.commons.io.FileUtils;
+
+import lombok.AllArgsConstructor;
+
 @Component
+@AllArgsConstructor
 public class ItemMapper extends GenericObjectMapper<Item, ItemDTO> {
+
+    @Autowired
+    private StorageService storageService;
+
     @Override
     public ItemDTO convert(Item source) {
         ItemDTO dto = new ItemDTO();
@@ -27,6 +41,18 @@ public class ItemMapper extends GenericObjectMapper<Item, ItemDTO> {
         dto.setCategory(new CategoryDTO(source.getCategory()));
         dto.setTags(source.getTags().stream().map(TagDTO::new).collect(Collectors.toList()));
         dto.setCurrentItemValue(new ItemValueDTO(source.getItemValueAt(LocalDateTime.now())));
+
+        //converting image from file system to Base64 
+        try {
+            File imageFile = this.storageService.loadAsResource(source.getImageURL()).getFile();
+            byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+            String encodedString = Base64.getEncoder().encodeToString(fileContent);
+            dto.setImageBase64(encodedString);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return dto;
     }
 
@@ -44,6 +70,9 @@ public class ItemMapper extends GenericObjectMapper<Item, ItemDTO> {
         item.setItemValues(new ArrayList<>() {{
             add(ItemValueDTO.toDomain(dto.getCurrentItemValue()));
         }});
+
+        
+
         return item;
     }
 }

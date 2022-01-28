@@ -11,6 +11,9 @@ import com.restaurant.backend.domain.enums.ItemType;
 import com.restaurant.backend.validation.interfaces.CreateInfo;
 import com.restaurant.backend.validation.interfaces.EditInfo;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,5 +51,7 @@ public class ItemDTO {
     protected ItemType itemType;
 
     protected Boolean deleted;
+
+    protected String imageBase64;
 
 }

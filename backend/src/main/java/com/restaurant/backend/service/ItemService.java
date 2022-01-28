@@ -135,16 +135,18 @@ public class ItemService {
         initialItemValue.setItem(savedItem);
         itemValueService.create(initialItemValue);
 
-        
-        //setting unique image file name based on id from database
-        String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
-        String newFileName = "image" + savedItem.getId() + "." + fileExtension;
-        savedItem.setImageURL(newFileName);
+        String imageFileName = "";
+        if (file != null){
+            String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
+            imageFileName = "image" + savedItem.getId() + "." + fileExtension; //setting unique image file name based on id from database
+            storageService.store(file, imageFileName); //saving image to file system
+        }
+        else{
+            imageFileName = "default_image.png"; //setting default image if no image file was chosen
+        }
+
+        savedItem.setImageURL(imageFileName);
         savedItem = itemRepository.save(savedItem);
-
-        //saving image to file system here
-        storageService.store(file, newFileName);
-
         return item;
 
     }

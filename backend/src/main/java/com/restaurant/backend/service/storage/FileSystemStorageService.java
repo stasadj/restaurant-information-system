@@ -59,8 +59,6 @@ public class FileSystemStorageService implements StorageService {
                 throw new StorageException("Failed to store empty file.");
             }
 
-
-
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(newName))
                     .normalize().toAbsolutePath();

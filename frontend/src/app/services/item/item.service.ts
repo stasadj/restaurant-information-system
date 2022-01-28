@@ -41,7 +41,9 @@ export class ItemService {
     create(item: Item, file: File): Observable<Item>{
 
         const formData = new FormData();
-        formData.append("file", file, file.name);
+        if (file){
+            formData.append("file", file, file.name);
+        }
         formData.append('item', new Blob([JSON.stringify(item)], {
             type: "application/json"
         }));

@@ -103,7 +103,7 @@ public class ItemController {
     @ResponseBody
     // @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@RequestPart("item") @Valid @Validated(CreateInfo.class) ItemDTO itemDTO,
-    @RequestPart("file") MultipartFile file) {
+    @RequestPart(value="file", required=false) MultipartFile file) {
         LOG.info("Client requested to create new item.");
         return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO, file)), HttpStatus.OK);
     }
