@@ -6,6 +6,8 @@ import { ItemType } from 'src/app/model/ItemType';
 import { ItemValue } from 'src/app/model/ItemValue';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { ToastrService } from 'ngx-toastr';
+import { TagService } from 'src/app/services/tag/tag.service';
+import { Tag } from 'src/app/model/Tag';
 
 
 @Component({
@@ -16,10 +18,15 @@ export class EditItemDialog {
 
     public editItem: Item;
     public categories: Category[] = [];
+    public tags: Tag[] = []
+    public checkBoxes: { tag: Tag; select: boolean }[];
+    parentSelector: boolean = false;
+
 
     constructor(
         public dialogRef: MatDialogRef<EditItemDialog>,
         private categoryService: CategoryService,
+        private tagService: TagService,
         private toastr: ToastrService,
 
         @Inject(MAT_DIALOG_DATA) public data: Item = {
@@ -35,7 +42,25 @@ export class EditItemDialog {
             deleted: false
         }
     ) {
+
         this.editItem = JSON.parse(JSON.stringify(data)) // new object because we want to be able to compare old and new values
+        this.checkBoxes = [];
+
+        this.tagService.getTags().subscribe(res => {
+            this.tags = res;
+            this.tags.forEach(tag => {
+                let tagInItem = false;
+                for (let itemTag of this.editItem.tags){
+                    if (itemTag.id === tag.id){
+                        tagInItem = true;
+                        break;
+                    }
+                }
+                this.checkBoxes.push({ tag: tag, select: tagInItem })
+            });
+
+
+        })
     }
 
     ngOnInit(): void {
@@ -47,6 +72,7 @@ export class EditItemDialog {
     onCancelClick(): void {
         this.dialogRef.close();
     }
+
 
     onSaveClick(): void {
 
@@ -63,6 +89,7 @@ export class EditItemDialog {
                     return;
                 }
 
+
                 let newValue: ItemValue = {
                     itemId: this.editItem.id,
                     purchasePrice: this.editItem.currentItemValue.purchasePrice,
@@ -71,6 +98,10 @@ export class EditItemDialog {
                 }
                 this.editItem.currentItemValue = newValue;
             }
+
+            //getting tags
+            this.editItem.tags = this.checkBoxes.filter(cb => cb.select).map(cb => cb.tag);
+
             this.dialogRef.close(this.editItem);
         }
         else {
@@ -82,5 +113,23 @@ export class EditItemDialog {
 
     compareObjects(o1: any, o2: any): boolean {
         return o1.name === o2.name && o1.id === o2.id;
+    }
+
+    onChangeTag($event: any) {
+        const id = $event.target.value;
+        const isChecked = $event.target.checked;
+
+        this.checkBoxes = this.checkBoxes.map((d) => {
+            if (d.tag.id == id) {
+                d.select = isChecked;
+                this.parentSelector = false;
+                return d;
+            }
+            if (id == -1) {
+                d.select = this.parentSelector;
+                return d;
+            }
+            return d;
+        });
     }
 }

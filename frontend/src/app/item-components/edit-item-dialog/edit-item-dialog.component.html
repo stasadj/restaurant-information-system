@@ -37,6 +37,13 @@
     <input type="number" matInput [(ngModel)]="editItem.currentItemValue.sellingPrice">
   </mat-form-field>
 
+  <div class="mat-form-field">
+    <h4>Select tags:</h4>
+    <div *ngFor="let cb of checkBoxes">
+        {{cb.tag.name}}<input class="form-check-input" type="checkbox" [value]="cb.tag.id" [checked]="cb.select" (change)="onChangeTag($event)"/>
+    </div>  
+</div>
+
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancelClick()">Cancel</button>

@@ -31,7 +31,7 @@ export class CreateItemComponent implements OnInit {
         deleted: false
     };
 
-    public fileName: any;
+    public fileName: string = "";
     public file: any;
 
     public categories: Category[] = []

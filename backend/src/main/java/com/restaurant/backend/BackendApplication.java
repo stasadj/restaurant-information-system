@@ -22,7 +22,7 @@ public class BackendApplication {
 	@Bean
 	CommandLineRunner init(StorageService storageService) {
 		return (args) -> {
-			storageService.deleteAll(); //deleting all images not related to items in sql script
+			storageService.deleteAll(); //deleting all images not present in dev.sql
 			storageService.init();
 		};
 	}

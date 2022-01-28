@@ -28,7 +28,7 @@ export class ItemCardComponent implements OnInit {
         deleted: false
     };
 
-    @Input() onItemDeleted = () => {
+    @Input() onDataChanged = () => {
 
     };
 
@@ -59,9 +59,8 @@ export class ItemCardComponent implements OnInit {
     }
 
     onDelete() {
-        //todo add Are you sure? modal window
         this.itemService.delete(this.item).subscribe((res) => {
-            this.onItemDeleted()
+            this.onDataChanged()
             this.toastr.success('Successfully deleted item ' + this.item.name);
 
         });
@@ -86,14 +85,13 @@ export class ItemCardComponent implements OnInit {
                 this.itemService.edit(itemForSave).subscribe(savedItem => {
                     this.item = savedItem;
                     this.toastr.success('Successfully saved changes for item ' + savedItem.name);
-
+                    this.onDataChanged();
 
                     if (itemForSave.currentItemValue.itemId) {
                         //changing price only if itemId is set (Look at ChangeItemDTO and ItemValueDTO difference)
-                        console.log("changing price")
                         this.itemService.changeItemPrice(itemForSave.currentItemValue).subscribe(newValue => {
                             this.item.currentItemValue = newValue;
-                            console.log(this.item);
+                            
                         })
                     }
 
