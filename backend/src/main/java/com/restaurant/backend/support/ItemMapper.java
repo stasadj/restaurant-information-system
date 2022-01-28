@@ -15,6 +15,7 @@ import com.restaurant.backend.dto.TagDTO;
 import com.restaurant.backend.service.storage.StorageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import org.apache.commons.io.FileUtils;
@@ -44,10 +45,14 @@ public class ItemMapper extends GenericObjectMapper<Item, ItemDTO> {
 
         //converting image from file system to Base64 
         try {
-            File imageFile = this.storageService.loadAsResource(source.getImageURL()).getFile();
-            byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
-            String encodedString = Base64.getEncoder().encodeToString(fileContent);
-            dto.setImageBase64(encodedString);
+            String imageUrl = source.getImageURL() == null ? "default_image.png" : source.getImageURL();
+            Resource resource = this.storageService.loadAsResource(imageUrl);
+            if (resource != null) {
+                File imageFile = resource.getFile();
+                byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                String encodedString = Base64.getEncoder().encodeToString(fileContent);
+                dto.setImageBase64(encodedString);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
