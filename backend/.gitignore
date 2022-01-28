@@ -66,3 +66,6 @@ secrets.yml
 .gradletasknamecache
 
 src/main/resources/public/
+
+### Drivers ###
+*.exe

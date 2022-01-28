@@ -186,7 +186,11 @@
 			<version>2.4.4</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+		</dependency>
 	</dependencies>
 
 
