@@ -20,4 +20,9 @@ public class WeeklyReportResultItemDTO extends AbstractDateReportResultItemDTO {
     public LocalDate getApproximateDate() {
         return LocalDate.ofYearDay(year.getValue(), weekNumber * 7 - 1);
     }
+
+    @Override
+    public String getLabel() {
+        return year.toString().concat(" - Week ").concat(weekNumber.toString());
+    }
 }

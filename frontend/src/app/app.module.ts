@@ -34,8 +34,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { ToastrModule } from 'ngx-toastr';
+import { ChartModule } from 'angular2-chartjs';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 
@@ -47,6 +49,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { CreateItemComponent } from './item-components/create-item/create-item.component';
 import { HandleErrorInterceptor } from './interceptors/error.interceptor';
 import { BarmanPageComponent } from './pages/barman-page/barman-page.component';
+import { ChartComponent } from './report/chart/chart.component';
+import { ReportBoardComponent } from './report/report-board/report-board.component';
+import { ChartDataPipe } from './pipes/chart-data/chart-data.pipe';
+import { DateSerializePipe } from './pipes/date-serialize/date-serialize.pipe';
+import { ReportSearchComponent } from './report/report-search/report-search.component';
+import { CapitalizePipe } from './pipes/text/capitalize/capitalize.pipe';
+import { CapitalizeWordsPipe } from './pipes/text/capitalize-words/capitalize-words.pipe';
+import { RemoveSpecialCharsPipe } from './pipes/text/remove-special-chars/remove-special-chars.pipe';
+import { ReportItemTableComponent } from './report/report-item-table/report-item-table.component';
+import { FillItemNetincomePipe } from './pipes/table-data/fill-item-netincome/fill-item-netincome.pipe';
 import { GuestPageComponent } from './pages/guest-page/guest-page.component';
 import { CategoryFilterComponent } from './guest-menu-components/category-filter/category-filter.component';
 import { ItemSearchComponent } from './guest-menu-components/item-search/item-search.component';
@@ -75,6 +87,16 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
     ManagerPageComponent,
     EditItemDialog,
     CreateItemComponent,
+    ChartComponent,
+    ReportBoardComponent,
+    ChartDataPipe,
+    DateSerializePipe,
+    ReportSearchComponent,
+    CapitalizePipe,
+    CapitalizeWordsPipe,
+    RemoveSpecialCharsPipe,
+    ReportItemTableComponent,
+    FillItemNetincomePipe,
     WaiterMenuComponent,
     GuestPageComponent,
     CategoryFilterComponent,
@@ -104,7 +126,9 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
     MatProgressSpinnerModule,
     MatTableModule,
     MatSelectModule,
-    MatChipsModule,
+    ChartModule,
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   providers: [
     {
@@ -117,6 +141,8 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
       useClass: HandleErrorInterceptor,
       multi: true,
     },
+    ChartDataPipe,
+    DateSerializePipe
   ],
   bootstrap: [AppComponent],
 })

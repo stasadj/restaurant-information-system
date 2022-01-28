@@ -19,4 +19,9 @@ public class YearlyReportResultItemDTO extends AbstractDateReportResultItemDTO {
     public LocalDate getApproximateDate() {
         return LocalDate.ofYearDay(year.getValue(), 1);
     }
+
+    @Override
+    public String getLabel() {
+        return year.toString();
+    }
 }

@@ -5,4 +5,9 @@
     <mat-tab label="New item">
         <app-create-item [onItemCreated]="fetchData"></app-create-item>
     </mat-tab>
+    <mat-tab label="Reports">
+        <ng-template matTabContent>
+            <app-report-board></app-report-board>
+        </ng-template>
+    </mat-tab>
 </mat-tab-group>

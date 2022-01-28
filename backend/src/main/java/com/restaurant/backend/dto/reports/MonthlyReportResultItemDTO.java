@@ -21,4 +21,9 @@ public class MonthlyReportResultItemDTO extends AbstractDateReportResultItemDTO 
     public LocalDate getApproximateDate() {
         return LocalDate.of(year.getValue(), month, 1);
     }
+
+    @Override
+    public String getLabel() {
+        return month.toString().concat(year.toString());
+    }
 }
