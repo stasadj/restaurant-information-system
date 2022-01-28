@@ -52,4 +52,8 @@ export class ItemService {
   create(item: Item): Observable<Item> {
     return this.http.post<Item>(this.path + '/create', item);
   }
+
+  getItemsByCategory(categoryId: number): Observable<Item[]> {
+    return this.http.get<Item[]>(`${this.path}/category/${categoryId}`);
+  }
 }

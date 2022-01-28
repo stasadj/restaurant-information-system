@@ -4,6 +4,7 @@ import { MatTable } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Order } from 'src/app/model/Order';
 import { OrderItem } from 'src/app/model/OrderItem';
+import { OrderItemInfo } from 'src/app/model/OrderItemInfo';
 import { OrderItemService } from 'src/app/services/order-item/order-item.service';
 import { OrderService } from 'src/app/services/order/order.service';
 
@@ -31,13 +32,6 @@ export class TableOrderComponent implements OnInit {
     'action',
   ];
 
-  dummyMenu = [
-    { id: 1, name: 'Spaghetti carbonara', price: 1000, a: 0 },
-    { id: 2, name: 'Chicken tikka masala', price: 1200, a: 0 },
-    { id: 3, name: 'Mushroom risotto', price: 1300, a: 0 },
-    { id: 4, name: 'Peach ice tea', price: 130, a: 0 },
-  ];
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { tableId: number },
     private orderService: OrderService,
@@ -63,12 +57,7 @@ export class TableOrderComponent implements OnInit {
     this.noOrder = false;
   }
 
-  addToOrder(orderItem: {
-    id: number;
-    name: string;
-    amount: number;
-    price: number;
-  }) {
+  addToOrder(orderItem: OrderItemInfo) {
     if (!orderItem.amount) return;
     if (!this.order) this.initOrder();
     let existingItem = this.order?.orderItems.find(

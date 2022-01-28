@@ -4,15 +4,18 @@ import { Observable } from 'rxjs';
 import { Category } from 'src/app/model/Category';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoryService {
+  private readonly path = '/api/categories';
 
-    private readonly path = '/api/categories';
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) {}
-  
-    getCategories(): Observable<Category[]> {
-      return this.http.get<Category[]>(this.path);
-    }
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.path);
+  }
+
+  getDrinkCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.path}/drink`);
+  }
 }

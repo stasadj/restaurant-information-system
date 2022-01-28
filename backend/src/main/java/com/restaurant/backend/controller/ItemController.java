@@ -58,6 +58,13 @@ public class ItemController {
     }
 
     @ResponseBody
+    @GetMapping("/category/{categoryId}")
+    @PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
+    public ResponseEntity<List<ItemDTO>> getAllByCategory(@PathVariable Long categoryId) {
+        return new ResponseEntity<>(itemMapper.convertAll(itemService.getAllByCategory(categoryId)), HttpStatus.OK);
+    }
+
+    @ResponseBody
     @GetMapping("/in-menu")
     public ResponseEntity<List<ItemDTO>> getAllMenuItems() {
         LOG.info("Client requested to get all menu items.");

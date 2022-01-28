@@ -34,6 +34,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
+import { MatChipsModule } from '@angular/material/chips';
 import { ToastrModule } from 'ngx-toastr';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
@@ -52,6 +53,7 @@ import { CategoryFilterComponent } from './guest-menu-components/category-filter
 import { ItemSearchComponent } from './guest-menu-components/item-search/item-search.component';
 import { GuestMenuItemComponent } from './guest-menu-components/guest-menu-item/guest-menu-item.component';
 import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-menu.component';
+import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
 
 
 @NgModule({
@@ -118,5 +120,66 @@ import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-men
       },
     ],
     bootstrap: [AppComponent],
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    CanvasComponent,
+    TableComponent,
+    MapComponent,
+    TableOrderComponent,
+    OrderBoardComponent,
+    OrderCardComponent,
+    LoginComponent,
+    OrderNotificationsComponent,
+    WaiterPageComponent,
+    CookPageComponent,
+    BarmanPageComponent,
+    NotFoundComponent,
+    HeaderComponent,
+    ItemsComponent,
+    ItemCardComponent,
+    ManagerPageComponent,
+    EditItemDialog,
+    CreateItemComponent,
+    WaiterMenuComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DragDropModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    HttpClientModule,
+    CommonModule,
+    MatTabsModule,
+    MatSliderModule,
+    MatInputModule,
+    MatGridListModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatListModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatTableModule,
+    MatSelectModule,
+    MatChipsModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HandleErrorInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

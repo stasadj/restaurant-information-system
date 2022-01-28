@@ -62,7 +62,7 @@ public class ItemService {
     }
 
     public List<Item> getAllByCategory(Long categoryId) {
-        return itemRepository.findAllByCategory_Id(categoryId);
+        return itemRepository.findAllByCategory_IdAndInMenuTrue(categoryId);
     }
 
     public Item findOne(Long id) throws NotFoundException {
