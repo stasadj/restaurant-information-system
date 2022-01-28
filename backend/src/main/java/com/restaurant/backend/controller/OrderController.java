@@ -37,7 +37,7 @@ public class OrderController {
 		return new ResponseEntity<>(orderMapper.convertAll(orderService.findAllForWaiter(waiterId)), HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('WAITER')")
+	@PreAuthorize("hasAnyRole('BARMAN', 'WAITER')")
 	@GetMapping("/table/{tableId}")
 	public ResponseEntity<OrderDTO> getForTable(@PathVariable("tableId") Integer tableId) {
 		var o = orderService.findByTableId(tableId);
@@ -63,7 +63,7 @@ public class OrderController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('WAITER')")
+	@PreAuthorize("hasAnyRole('WAITER', 'BARMAN')")
 	@PutMapping("/edit")
 	public ResponseEntity<OrderDTO> editOrder(@AuthenticationPrincipal Staff staff, @RequestBody OrderDTO order) {
 		var data = orderMapper.convertIncludingPrice(orderService.editOrder(staff, order));

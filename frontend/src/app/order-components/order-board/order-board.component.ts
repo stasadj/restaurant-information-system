@@ -136,6 +136,7 @@ export class OrderBoardComponent implements OnInit, OnDestroy {
 
     for (let order of this.orders)
       for (let orderItem of order.orderItems) {
+        if ((orderItem.item.type === 'FOOD') === this.isBarman) continue;
         switch (orderItem.orderStatus) {
           case 'PENDING':
             addToColumn(arranged.pending, order, orderItem);

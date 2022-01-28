@@ -1,16 +1,20 @@
+.flex-container {
+  display: flex;
+  flex-wrap: nowrap;
+  position: absolute;
+  height: 90%;
+  width: 99%;
+  overflow-x: scroll;
+}
+
 .board-list {
-  height: 100%;
+  max-height: 100%;
   width: 300px;
   flex: 0 0 auto;
   margin: 5px;
 }
 
-.flex-container {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.content {
-  max-height: 650px;
-  overflow-y: scroll;
+mat-card-content {
+  overflow-y: auto;
+  max-height: calc(100% - 40px);
 }

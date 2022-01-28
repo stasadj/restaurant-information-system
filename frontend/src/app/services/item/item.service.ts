@@ -6,11 +6,11 @@ import { ItemValue } from 'src/app/model/ItemValue';
 import { Item } from '../../model/Item';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ItemService {
-
     private readonly path = '/api/item';
+
 
     constructor(private http: HttpClient) { }
 
@@ -38,10 +38,10 @@ export class ItemService {
         return this.http.post<ItemValue>(this.path + "/change-price", itemValue);
     }
 
-    create(item: Item, file: File): Observable<Item>{
+    create(item: Item, file: File): Observable<Item> {
 
         const formData = new FormData();
-        if (file){
+        if (file) {
             formData.append("file", file, file.name);
         }
         formData.append('item', new Blob([JSON.stringify(item)], {
@@ -54,10 +54,10 @@ export class ItemService {
         // headers = headers.set('Content-Type', 'multipart/form-data');
 
         return this.http.post<Item>(this.path + "/createWithFile", formData);
+    }
 
 
-
-
-
+    getItemsByCategory(categoryId: number): Observable<Item[]> {
+        return this.http.get<Item[]>(`${this.path}/category/${categoryId}`);
     }
 }

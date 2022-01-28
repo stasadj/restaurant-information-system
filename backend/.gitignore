@@ -70,3 +70,6 @@ src/main/resources/public/*
 
 src/main/resources/public/static/*
 !src/main/resources/public/static/upload-dir/
+
+### Drivers ###
+*.exe

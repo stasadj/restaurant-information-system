@@ -1,16 +1,61 @@
-<div>
-  <mat-form-field appearance="fill">
-    <mat-label>username</mat-label>
-    <input matInput [(ngModel)]="username" />
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>password</mat-label>
-    <input matInput type="password" [(ngModel)]="password" />
-  </mat-form-field>
-  <button mat-raised-button (click)="onLogin()">Login</button>
-  <mat-form-field appearance="fill">
-    <mat-label>pin</mat-label>
-    <input matInput [(ngModel)]="pin" type="number" min="0" max="9999" />
-  </mat-form-field>
-  <button mat-raised-button (click)="onPinLogin()">Pin login</button>
-</div>
+<mat-tab-group mat-stretch-tabs>
+  <mat-tab label="Staff">
+    <mat-card>
+      <mat-card-title>Pin login</mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>pin</mat-label>
+          <input
+            matInput
+            id="pin-input"
+            [(ngModel)]="pin"
+            type="number"
+            min="0"
+            max="9999"
+          />
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button
+          id="pin-login-btn"
+          mat-raised-button
+          color="accent"
+          (click)="onPinLogin()"
+        >
+          Pin login
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-tab>
+
+  <mat-tab label="Manager/admin">
+    <mat-card>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>username</mat-label>
+          <input id="username-input" matInput [(ngModel)]="username" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>password</mat-label>
+          <input
+            id="password-input"
+            matInput
+            type="password"
+            [(ngModel)]="password"
+          />
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button
+          id="login-btn"
+          mat-raised-button
+          color="accent"
+          (click)="onLogin()"
+        >
+          Login
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

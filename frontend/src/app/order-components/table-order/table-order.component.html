@@ -1,8 +1,11 @@
-<h1 mat-dialog-title>Order for Table {{ data.tableId }}</h1>
+<h1 mat-dialog-title>
+  {{ order && !order.waiterId ? "Bar order" : "Order" }} for Table
+  {{ data.tableId }}
+</h1>
 <div mat-dialog-content style="height: calc(100% - 96px)">
   <mat-tab-group>
     <mat-tab label="ORDER">
-      <h1 *ngIf="noOrder">No order at the moment</h1>
+      <h1 id="no-order-txt" *ngIf="noOrder">No order at the moment</h1>
       <div *ngIf="order">
         <table mat-table [dataSource]="order.orderItems">
           <ng-container matColumnDef="id">
@@ -48,7 +51,8 @@
                 mat-icon-button
                 *ngIf="
                   orderItem.orderStatus !== 'IN_PROGRESS' &&
-                  orderItem.orderStatus !== 'READY'
+                  orderItem.orderStatus !== 'READY' &&
+                  !isBarman
                 "
                 (click)="cancelItem(orderItem.id, orderItem.itemId)"
               >
@@ -72,37 +76,22 @@
         </mat-form-field>
       </div>
     </mat-tab>
-    <mat-tab label="MENU">
-      <h2>Dummy menu</h2>
-      <div *ngFor="let item of dummyMenu">
-        {{ item.id }} {{ item.name }} {{ item.price }}din
-        <input
-          matInput
-          style="width: 30px"
-          [(ngModel)]="item.a"
-          type="number"
-          min="0"
-          max="9999"
-        />
-        <button
-          mat-button
-          (click)="
-            addToOrder({
-              id: item.id,
-              name: item.name,
-              amount: item.a,
-              price: item.price
-            })
-          "
-        >
-          add
-        </button>
+    <mat-tab
+      label="MENU"
+      [disabled]="isBarman && order && order.id && order.waiterId"
+    >
+      <div class="menu" *ngIf="order || noOrder">
+        <app-waiter-menu
+          [isBarOrder]="isBarman || (order && !order.waiterId)"
+          (addEvent)="addToOrder($event)"
+        ></app-waiter-menu>
       </div>
     </mat-tab>
   </mat-tab-group>
 </div>
 <div mat-dialog-actions align="end">
   <button
+    id="create-btn"
     mat-raised-button
     color="primary"
     *ngIf="order && !order.id && order.orderItems.length > 0"
@@ -111,6 +100,7 @@
     Send order
   </button>
   <button
+    id="update-btn"
     mat-raised-button
     color="primary"
     *ngIf="order && order.id && edited"
@@ -119,6 +109,7 @@
     Update order
   </button>
   <button
+    id="finalize-btn"
     mat-raised-button
     color="primary"
     *ngIf="canBeFinalized"
@@ -126,7 +117,12 @@
   >
     Finalize order
   </button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data.tableId">
+  <button
+    id="close-btn"
+    mat-raised-button
+    color="primary"
+    [mat-dialog-close]="data.tableId"
+  >
     Close
   </button>
 </div>

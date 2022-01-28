@@ -86,6 +86,7 @@ public class OrderService {
 
         for (OrderItemDTO orderItem : order.getOrderItems()) {
             Item item = itemService.findOne(orderItem.getItemId());
+            if (item.getItemType() == ItemType.FOOD) continue;
             OrderItem newOrderItem = new OrderItem(orderItem.getAmount(), newOrder, OrderStatus.IN_PROGRESS, item);
             newOrderItem.setBarman((Barman) barman);
             orderItemService.save(newOrderItem);
