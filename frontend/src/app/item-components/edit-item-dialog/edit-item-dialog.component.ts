@@ -46,6 +46,7 @@ export class EditItemDialog {
         this.editItem = JSON.parse(JSON.stringify(data)) // new object because we want to be able to compare old and new values
         this.checkBoxes = [];
 
+        //fetching tags and setting checkbox values based on existing tags in item for edit
         this.tagService.getTags().subscribe(res => {
             this.tags = res;
             this.tags.forEach(tag => {
@@ -89,7 +90,7 @@ export class EditItemDialog {
                     return;
                 }
 
-
+                //creating new ItemValue if price has changed
                 let newValue: ItemValue = {
                     itemId: this.editItem.id,
                     purchasePrice: this.editItem.currentItemValue.purchasePrice,
@@ -99,9 +100,8 @@ export class EditItemDialog {
                 this.editItem.currentItemValue = newValue;
             }
 
-            //getting tags
+            //getting selected tags from checkboxes
             this.editItem.tags = this.checkBoxes.filter(cb => cb.select).map(cb => cb.tag);
-
             this.dialogRef.close(this.editItem);
         }
         else {

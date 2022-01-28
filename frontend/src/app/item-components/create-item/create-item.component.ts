@@ -38,7 +38,7 @@ export class CreateItemComponent implements OnInit {
     public tags: Tag[] = []
 
     public checkBoxes: { tag: Tag; select: boolean }[];
-    parentSelector: boolean = false;
+    public parentSelector: boolean = false;
 
     @Input() onItemCreated = () => {
 
@@ -47,6 +47,7 @@ export class CreateItemComponent implements OnInit {
     constructor(private itemService: ItemService, private categoryService: CategoryService, private tagService: TagService, private toastr: ToastrService, private fb: FormBuilder) {
         this.checkBoxes = [];
 
+        //fetching tags and initializing empty checkboxes
         this.tagService.getTags().subscribe(res => {
             this.tags = res;
             this.tags.forEach(tag => {
@@ -87,6 +88,7 @@ export class CreateItemComponent implements OnInit {
         })
     }
 
+    //method called when file upload changes
     onChange(event: any) {
         this.file = event.target.files[0];
     }
@@ -103,14 +105,14 @@ export class CreateItemComponent implements OnInit {
                 return;
             }
 
-            //getting tags
+            //getting selected tags from checkboxes
             this.newItem.tags = this.checkBoxes.filter(cb => cb.select).map(cb => cb.tag);
 
             this.itemService.create(this.newItem, this.file).subscribe((res) => {
                 this.onItemCreated();
                 this.toastr.success('Item ' + res.name + " successfully created");
 
-                //resetting form values
+                //resetting form values after submit
                 this.newItem = {
                     id: NaN,
                     name: '',
@@ -125,15 +127,10 @@ export class CreateItemComponent implements OnInit {
                 };
                 this.checkBoxes.forEach(cb => cb.select = false);
             })
-
-
-
         }
         else {
             this.toastr.error("Field inputs must not be left blank!");
         }
-
-
     }
 
     compareObjects(o1: any, o2: any): boolean {
