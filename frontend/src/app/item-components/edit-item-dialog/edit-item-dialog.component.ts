@@ -5,6 +5,7 @@ import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
 import { ItemValue } from 'src/app/model/ItemValue';
 import { CategoryService } from 'src/app/services/category/category.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class EditItemDialog {
     constructor(
         public dialogRef: MatDialogRef<EditItemDialog>,
         private categoryService: CategoryService,
+        private toastr: ToastrService,
 
         @Inject(MAT_DIALOG_DATA) public data: Item = {
             id: 0,
@@ -54,11 +56,10 @@ export class EditItemDialog {
         let oldPurchasePrice = this.data.currentItemValue.purchasePrice;
         let oldSellingPrice = this.data.currentItemValue.sellingPrice;
 
-        if (this.editItem.name && this.editItem.description && this.editItem.category && newPurchasePrice && newSellingPrice) {
+        if (this.editItem.name && this.editItem.description && this.editItem.category) {
             if (newPurchasePrice != oldPurchasePrice || newSellingPrice != oldSellingPrice) {
-                console.log("creating new item value")
                 if (newPurchasePrice <= 0 || newSellingPrice <= 0) {
-                    console.log("invalid price data!");
+                    this.toastr.error("Invalid price input!")
                     return;
                 }
 
@@ -73,7 +74,7 @@ export class EditItemDialog {
             this.dialogRef.close(this.editItem);
         }
         else {
-            console.log("missing/invalid form data!");
+            this.toastr.error("Form fields must not be blank!")
         }
 
 

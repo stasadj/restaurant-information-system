@@ -4,7 +4,8 @@ import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
 import { ItemService } from 'src/app/services/item/item.service';
 import { EditItemDialog } from '../edit-item-dialog/edit-item-dialog.component';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -31,14 +32,17 @@ export class ItemCardComponent implements OnInit {
 
     };
 
-    public imgTagSrc : any;
+    public imgTagSrc: any;
 
-    constructor(private itemService: ItemService, public dialog: MatDialog, private _sanitizer: DomSanitizer) { }
+    constructor(private itemService: ItemService, public dialog: MatDialog, private _sanitizer: DomSanitizer, private toastr: ToastrService
+    ) { }
 
 
     onAddToMenu() {
         this.itemService.addToMenu(this.item).subscribe((res) => {
             this.item = res;
+            this.toastr.success('Item ' + res.name + " added to menu");
+
         });
 
     }
@@ -46,6 +50,8 @@ export class ItemCardComponent implements OnInit {
     onRemoveFromMenu() {
         this.itemService.removeFromMenu(this.item).subscribe((res) => {
             this.item = res;
+            this.toastr.success('Item ' + res.name + " removed from menu");
+
         });
 
     }
@@ -54,13 +60,15 @@ export class ItemCardComponent implements OnInit {
         //todo add Are you sure? modal window
         this.itemService.delete(this.item).subscribe((res) => {
             this.onItemDeleted()
+            this.toastr.success('Successfully deleted item ' + this.item.name);
+
         });
 
     }
 
     ngOnInit(): void {
-        this.imgTagSrc = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' 
-                 + this.item.imageBase64);
+        this.imgTagSrc = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,'
+            + this.item.imageBase64);
 
     }
 
@@ -73,6 +81,8 @@ export class ItemCardComponent implements OnInit {
             if (itemForSave) {
                 this.itemService.edit(itemForSave).subscribe(savedItem => {
                     this.item = savedItem;
+                    this.toastr.success('Successfully saved changes for item ' + savedItem.name);
+
 
                     if (itemForSave.currentItemValue.itemId) {
                         //changing price only if itemId is set (Look at ChangeItemDTO and ItemValueDTO difference)

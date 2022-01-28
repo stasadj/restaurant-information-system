@@ -6,6 +6,7 @@ import { Item } from 'src/app/model/Item';
 import { ItemType } from 'src/app/model/ItemType';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { ItemService } from 'src/app/services/item/item.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-create-item',
@@ -16,14 +17,14 @@ export class CreateItemComponent implements OnInit {
 
     public newItem: Item = {
         id: NaN,
-        name: 'a',
-        category: { id: 1, name: "appetizer" },
-        description: 'a',
+        name: '',
+        category: { id: 0, name: "" },
+        description: '',
         imageFileName: '',
         tags: [],
         inMenu: false,
         itemType: ItemType.FOOD,
-        currentItemValue: { id: 0, purchasePrice: 10, sellingPrice: 10, fromDate: new Date() },
+        currentItemValue: { id: 0, purchasePrice: 0, sellingPrice: 0, fromDate: new Date() },
         deleted: false
     };
 
@@ -36,7 +37,7 @@ export class CreateItemComponent implements OnInit {
 
     };
 
-    constructor(private itemService: ItemService, private categoryService: CategoryService) { }
+    constructor(private itemService: ItemService, private categoryService: CategoryService, private toastr: ToastrService) { }
 
 
 
@@ -56,19 +57,20 @@ export class CreateItemComponent implements OnInit {
         let purchasePrice = this.newItem.currentItemValue.purchasePrice;
         let sellingPrice = this.newItem.currentItemValue.sellingPrice;
 
-        if (this.newItem.name && this.newItem.description && this.newItem.category && purchasePrice && sellingPrice) {
+        if (this.newItem.name && this.newItem.description && this.newItem.category) {
             if (purchasePrice <= 0 || sellingPrice <= 0) {
-                console.log("invalid price data!");
+                this.toastr.error("Invalid price input!");
                 return;
             }
 
             this.itemService.create(this.newItem, this.file).subscribe((res) => {
                 this.onItemCreated();
+                this.toastr.success('Item ' + res.name + " successfully created");
             })
 
         }
         else {
-            console.log("missing/invalid form data!");
+            this.toastr.error("Field inputs must not be left blank!");
         }
 
 
