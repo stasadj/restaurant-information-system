@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewChecked, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartComponent as AngularChartComponent } from 'angular2-chartjs';
 import { ChartData } from 'src/app/model/ChartData';
 
@@ -7,14 +7,14 @@ import { ChartData } from 'src/app/model/ChartData';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.less']
 })
-export class ChartComponent implements OnInit, AfterViewChecked {
+export class ChartComponent implements OnInit, OnChanges {
 
-  @Input() public type: string = 'line';
-  @Input() public data: ChartData = {
+  @Input() type: string = 'line';
+  @Input() data: ChartData = {
     datasets: [],
     labels: []
   };
-  @Input() public options = {
+  @Input() options = {
     responsive: true,
     maintainAspectRatio: false
   };
@@ -23,11 +23,13 @@ export class ChartComponent implements OnInit, AfterViewChecked {
   constructor() {
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.chart) {
+      this.chart.chart.update();
+    }
   }
 
-  ngAfterViewChecked(): void {
-    this.chart.chart.update()
+  ngOnInit(): void {
   }
 
 }

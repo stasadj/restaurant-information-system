@@ -1,6 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ChartData } from 'src/app/model/ChartData';
-import { ChartDataset } from 'src/app/model/ChartDataset';
+import { Component, OnInit } from '@angular/core';
 import { Report } from 'src/app/model/Report';
 import { ReportGranularity } from 'src/app/model/ReportGranularity';
 import { ReportQuery } from 'src/app/model/ReportQuery';
@@ -15,20 +13,25 @@ import { ReportService } from 'src/app/services/report/report.service';
 })
 export class ReportBoardComponent implements OnInit {
 
-  // TODO: Make this be sent to the component via a new search component
-  @Input() public query: ReportQuery = {
-    fromDate: this.dateSerilize.transform(new Date("2021-11-11")),
-    toDate: this.dateSerilize.transform(new Date("2021-12-01")),
+  query: ReportQuery = {
+    fromDate: this.dateSerilize.transform(new Date()),
+    toDate: this.dateSerilize.transform(new Date()),
     reportGranularity: ReportGranularity.DAILY,
     reportType: ReportType.PROFIT,
-  };;
+  };
   report: Report = {
     datapoints: [],
     individualItems: []
   };
 
   constructor(private reportService: ReportService, private dateSerilize: DateSerializePipe) {
+  }
+
+  updateReport() {
     if (this.query) {
+      if (this.query.reportType === ReportType.PRICE_HISTORY && this.query.itemId === undefined) {
+        return;
+      }
       this.reportService.getReport(this.query).subscribe(report => {
         this.report = report;
       })

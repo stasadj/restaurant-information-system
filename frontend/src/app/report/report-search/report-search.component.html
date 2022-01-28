@@ -1,0 +1,38 @@
+<mat-form-field appearance="fill">
+    <mat-label>Report Type</mat-label>
+    <mat-select [(ngModel)]="query.reportType" (ngModelChange)="onQueryChange()" >
+        <mat-option *ngFor="let reportType of reportTypes" [value]="reportType">
+            {{reportType}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+    <mat-label>Category</mat-label>
+    <mat-select [(ngModel)]="query.reportGranularity" (ngModelChange)="onQueryChange()" >
+        <mat-option *ngFor="let granularity of granularities" [value]="granularity">
+            {{granularity}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+    <mat-label>From Date</mat-label>
+    <input matInput [(ngModel)]="query.fromDate" type="date" [max]="query.toDate" (ngModelChange)="onQueryChange()" />
+</mat-form-field>
+<mat-form-field appearance="fill">
+    <mat-label>To Date</mat-label>
+    <input matInput [(ngModel)]="query.toDate" type="date" [min]="query.fromDate" (ngModelChange)="onQueryChange()" />
+</mat-form-field>
+<mat-form-field appearance="fill">
+    <mat-label>Item</mat-label>
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           [formControl]="itemFormControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayItemName">
+      <mat-option *ngFor="let item of filteredItems | async" [value]="item">
+        {{item.name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>

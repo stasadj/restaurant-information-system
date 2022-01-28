@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'dateSerialize'
+  name: 'DateSerialize'
 })
 export class DateSerializePipe implements PipeTransform {
 

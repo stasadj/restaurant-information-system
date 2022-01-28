@@ -34,6 +34,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ToastrModule } from 'ngx-toastr';
 import { ChartModule } from 'angular2-chartjs';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -51,72 +52,75 @@ import { ChartComponent } from './report/chart/chart.component';
 import { ReportBoardComponent } from './report/report-board/report-board.component';
 import { ChartDataPipe } from './pipes/chart-data/chart-data.pipe';
 import { DateSerializePipe } from './pipes/date-serialize/date-serialize.pipe';
+import { ReportSearchComponent } from './report/report-search/report-search.component';
 
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        CanvasComponent,
-        TableComponent,
-        MapComponent,
-        TableOrderComponent,
-        OrderBoardComponent,
-        OrderCardComponent,
-        LoginComponent,
-        OrderNotificationsComponent,
-        WaiterPageComponent,
-        CookPageComponent,
-        BarmanPageComponent,
-        NotFoundComponent,
-        HeaderComponent,
-        ItemsComponent,
-        ItemCardComponent,
-        ManagerPageComponent,
-        EditItemDialog,
-        CreateItemComponent,
-        ChartComponent,
-        ReportBoardComponent,
-        ChartDataPipe,
-        DateSerializePipe
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        DragDropModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot(),
-        HttpClientModule,
-        CommonModule,
-        MatTabsModule,
-        MatSliderModule,
-        MatInputModule,
-        MatGridListModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatListModule,
-        MatDialogModule,
-        MatProgressSpinnerModule,
-        MatTableModule,
-        MatSelectModule,
-        ChartModule
-    ],
-    providers: [
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthInterceptor,
-        multi: true,
-      },
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: HandleErrorInterceptor,
-        multi: true,
-      },
-      ChartDataPipe,
-      DateSerializePipe
-    ],
-    bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+    CanvasComponent,
+    TableComponent,
+    MapComponent,
+    TableOrderComponent,
+    OrderBoardComponent,
+    OrderCardComponent,
+    LoginComponent,
+    OrderNotificationsComponent,
+    WaiterPageComponent,
+    CookPageComponent,
+    BarmanPageComponent,
+    NotFoundComponent,
+    HeaderComponent,
+    ItemsComponent,
+    ItemCardComponent,
+    ManagerPageComponent,
+    EditItemDialog,
+    CreateItemComponent,
+    ChartComponent,
+    ReportBoardComponent,
+    ChartDataPipe,
+    DateSerializePipe,
+    ReportSearchComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DragDropModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    HttpClientModule,
+    CommonModule,
+    MatTabsModule,
+    MatSliderModule,
+    MatInputModule,
+    MatGridListModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatListModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatTableModule,
+    MatSelectModule,
+    ChartModule,
+    MatAutocompleteModule
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HandleErrorInterceptor,
+      multi: true,
+    },
+    ChartDataPipe,
+    DateSerializePipe
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
