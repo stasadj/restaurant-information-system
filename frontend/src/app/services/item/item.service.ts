@@ -47,9 +47,7 @@ export class ItemService {
       );
     }
 
-    addToMenu(item: Item): Observable<Item> {
-      return this.http.put<Item>(this.path + '/add-to-menu/' + item.id, null);
-    }
+
 
     create(item: Item, file: File): Observable<Item> {
 
