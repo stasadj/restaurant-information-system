@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.validation.Valid;
 
 import com.restaurant.backend.domain.Item;
 import com.restaurant.backend.domain.ItemValue;
