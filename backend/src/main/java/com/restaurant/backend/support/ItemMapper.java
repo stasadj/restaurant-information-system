@@ -34,7 +34,7 @@ public class ItemMapper extends GenericObjectMapper<Item, ItemDTO> {
         dto.setId(source.getId());
         dto.setName(source.getName());
         dto.setDescription(source.getDescription());
-        dto.setImageURL(source.getImageURL());
+        dto.setImageFileName(source.getImageURL());
         dto.setInMenu(source.getInMenu());
         dto.setItemType(source.getItemType());
         dto.setDeleted(source.getDeleted());
@@ -61,7 +61,7 @@ public class ItemMapper extends GenericObjectMapper<Item, ItemDTO> {
         item.setId(dto.getId());
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
-        item.setImageURL(dto.getImageURL());
+        item.setImageURL(dto.getImageFileName());
         item.setInMenu(dto.getInMenu());
         item.setItemType(dto.getItemType());
         item.setDeleted(dto.getDeleted());

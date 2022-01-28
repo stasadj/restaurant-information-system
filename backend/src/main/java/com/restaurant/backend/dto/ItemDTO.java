@@ -36,7 +36,7 @@ public class ItemDTO {
     @NotBlank(message = "Item description must not be blank.")
     protected String description;
 
-    protected String imageURL;
+    protected String imageFileName;
 
     protected List<TagDTO> tags;
 

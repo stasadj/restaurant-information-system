@@ -158,7 +158,7 @@ public class ItemService {
         Item item = findOne(changedItemDTO.getId());
         item.setName(changedItemDTO.getName());
         item.setDescription(changedItemDTO.getDescription());
-        item.setImageURL(changedItemDTO.getImageURL());
+        item.setImageURL(changedItemDTO.getImageFileName());
         item.setItemType(changedItemDTO.getItemType());
         item.setInMenu(changedItemDTO.getInMenu()); // todo maybe remove this line because we have separate methods for adding to menu
         item.setDeleted(changedItemDTO.getDeleted()); // same goes for this one

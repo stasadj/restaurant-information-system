@@ -19,7 +19,7 @@ export class CreateItemComponent implements OnInit {
         name: 'a',
         category: { id: 1, name: "appetizer" },
         description: 'a',
-        imageURL: '',
+        imageFileName: '',
         tags: [],
         inMenu: false,
         itemType: ItemType.FOOD,
@@ -53,8 +53,6 @@ export class CreateItemComponent implements OnInit {
 
     onSaveClick(): void {
 
-        console.log("here");
-
         let purchasePrice = this.newItem.currentItemValue.purchasePrice;
         let sellingPrice = this.newItem.currentItemValue.sellingPrice;
 
@@ -63,13 +61,10 @@ export class CreateItemComponent implements OnInit {
                 console.log("invalid price data!");
                 return;
             }
-            console.log("there");
 
             this.itemService.create(this.newItem, this.file).subscribe((res) => {
                 this.onItemCreated();
             })
-
-            
 
         }
         else {
