@@ -25,6 +25,14 @@ INSERT INTO item (name, category_id, description, in_menu, type, deleted, image_
   ('Peach ice tea', 4, 'Cold ice tea sweetened with honey', true, 1, false, 'image4.png'),
   ('DeletedItem', 4, 'Deleted item description', true, 1, true, 'image5.png');
 
+INSERT INTO item_tags (item_id, tags_id) VALUES 
+    (1, 2),
+    (2, 4),
+    (2, 3),
+    (3, 2),
+    (4, 1),
+    (4, 2);
+
 INSERT INTO item_values (from_date, purchase_price, selling_price, item_id) VALUES
   ('2021-11-11', 600.00, 1000.00, 1),
   ('2021-11-11', 700.00, 1200.00, 2),
