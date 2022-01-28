@@ -6,9 +6,8 @@ import { ItemType } from 'src/app/model/ItemType';
 import { ItemValue } from 'src/app/model/ItemValue';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { ToastrService } from 'ngx-toastr';
-import { TagService } from 'src/app/services/tag/tag.service';
 import { Tag } from 'src/app/model/Tag';
-
+import { TagService } from 'src/app/services/tag/tag.service';
 
 @Component({
     selector: 'edit-item-dialog',

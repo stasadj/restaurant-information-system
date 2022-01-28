@@ -13,7 +13,7 @@ export class GuestMenuItemComponent implements OnInit {
     name: '',
     category: { id: 0, name: '' },
     description: '',
-    imageURL: '',
+    imageFileName: '',
     tags: [],
     inMenu: false,
     itemType: ItemType.FOOD,
