@@ -5,39 +5,45 @@ import { Item } from '../../model/Item';
 import { ItemValue } from 'src/app/model/ItemValue';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemService {
+  private readonly path = '/api/item';
 
-    private readonly path = '/api/item';
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) {}
-  
-    getItems(): Observable<Item[]> {
-      return this.http.get<Item[]>(this.path + "/all");
-    }
+  getItems(): Observable<Item[]> {
+    return this.http.get<Item[]>(this.path + '/all');
+  }
 
-    addToMenu(item : Item): Observable<Item> {
-        return this.http.put<Item>(this.path + "/add-to-menu/" + item.id, null);
-    }
+  addToMenu(item: Item): Observable<Item> {
+    return this.http.put<Item>(this.path + '/add-to-menu/' + item.id, null);
+  }
 
-    removeFromMenu(item : Item): Observable<Item> {
-        return this.http.put<Item>(this.path + "/remove-from-menu/" + item.id, null);
-    }
+  removeFromMenu(item: Item): Observable<Item> {
+    return this.http.put<Item>(
+      this.path + '/remove-from-menu/' + item.id,
+      null
+    );
+  }
 
-    delete(item : Item) {
-        return this.http.delete(this.path + "/" + item.id);
-    }
+  delete(item: Item) {
+    return this.http.delete(this.path + '/' + item.id);
+  }
 
-    edit(item : Item) : Observable<Item>{
-        return this.http.put<Item>(this.path + "/edit", item);
-    }
+  edit(item: Item): Observable<Item> {
+    return this.http.put<Item>(this.path + '/edit', item);
+  }
 
-    changeItemPrice(itemValue : ItemValue) : Observable<ItemValue>{
-        return this.http.post<ItemValue>(this.path + "/change-price", itemValue);
-    }
+  changeItemPrice(itemValue: ItemValue): Observable<ItemValue> {
+    return this.http.post<ItemValue>(this.path + '/change-price', itemValue);
+  }
 
-    create(item : Item) : Observable<Item>{
-        return this.http.post<Item>(this.path + "/create", item);
-    }
+  create(item: Item): Observable<Item> {
+    return this.http.post<Item>(this.path + '/create', item);
+  }
+
+  getItemsByCategory(categoryId: number): Observable<Item[]> {
+    return this.http.get<Item[]>(`${this.path}/category/${categoryId}`);
+  }
 }

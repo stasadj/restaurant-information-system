@@ -35,6 +35,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 import { ToastrModule } from 'ngx-toastr';
 import { ChartModule } from 'angular2-chartjs';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -58,7 +59,7 @@ import { CapitalizeWordsPipe } from './pipes/text/capitalize-words/capitalize-wo
 import { RemoveSpecialCharsPipe } from './pipes/text/remove-special-chars/remove-special-chars.pipe';
 import { ReportItemTableComponent } from './report/report-item-table/report-item-table.component';
 import { FillItemNetincomePipe } from './pipes/table-data/fill-item-netincome/fill-item-netincome.pipe';
-
+import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { FillItemNetincomePipe } from './pipes/table-data/fill-item-netincome/fi
     CapitalizeWordsPipe,
     RemoveSpecialCharsPipe,
     ReportItemTableComponent,
-    FillItemNetincomePipe
+    FillItemNetincomePipe,
+    WaiterMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -115,7 +117,8 @@ import { FillItemNetincomePipe } from './pipes/table-data/fill-item-netincome/fi
     MatTableModule,
     MatSelectModule,
     ChartModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   providers: [
     {
@@ -133,4 +136,4 @@ import { FillItemNetincomePipe } from './pipes/table-data/fill-item-netincome/fi
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
