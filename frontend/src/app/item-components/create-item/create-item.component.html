@@ -32,9 +32,24 @@
             <input type="number" matInput [(ngModel)]="newItem.currentItemValue.sellingPrice">
         </mat-form-field>
 
+        <div class="mat-form-field">
+            <h4>Select tags:</h4>
+            <div *ngFor="let cb of checkBoxes">
+                {{cb.tag.name}}<input class="form-check-input" type="checkbox" [value]="cb.tag.id" [checked]="cb.select" (change)="onChangeTag($event)"/>
+            </div>  
+        </div>
+
+        <div class="mat-form-field">
+            <table>
+                <tr><td>File to upload:</td><td><input type="file" name="file" accept=".png, .jpg, .jpeg" [(ngModel)] = "fileName" (change)="onChange($event)"/></td></tr>
+            </table>
+        </div>
+
     </mat-card-content>
     <div mat-card-actions>
         <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
     </div>
+
+
 
 </div>

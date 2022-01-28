@@ -18,12 +18,20 @@ INSERT INTO tag (name) VALUES
   ('gluten free'),
   ('dairy free');
 
-INSERT INTO item (name, category_id, description, image_url, in_menu, type, deleted) VALUES
-  ('Spaghetti carbonara', 2, 'Traditional Italian dish served with garlic, olive oil and parsley', NULL, true, 0, false),
-  ('Chicken tikka masala', 2, 'Roasted marinated chicken in spiced curry sauce', NULL, true, 0, false),
-  ('Mushroom risotto', 2, 'Rice dish cooked with three kinds of mushroom, butter, white wine, onion and cheese', NULL, false, 0, false),
-  ('Peach ice tea', 4, 'Cold ice tea sweetened with honey', NULL, true, 1, false),
-  ('DeletedItem', 4, 'Deleted item description', NULL, true, 1, true);
+INSERT INTO item (name, category_id, description, in_menu, type, deleted, image_url) VALUES
+  ('Spaghetti carbonara', 2, 'Traditional Italian dish served with garlic, olive oil and parsley', true, 0, false, 'image1.png'),
+  ('Chicken tikka masala', 2, 'Roasted marinated chicken in spiced curry sauce', true, 0, false, 'image2.png'),
+  ('Mushroom risotto', 2, 'Rice dish cooked with three kinds of mushroom, butter, white wine, onion and cheese', false, 0, false, 'image3.png'),
+  ('Peach ice tea', 4, 'Cold ice tea sweetened with honey', true, 1, false, 'image4.png'),
+  ('DeletedItem', 4, 'Deleted item description', true, 1, true, 'default_image.png');
+
+INSERT INTO item_tags (item_id, tags_id) VALUES 
+    (1, 2),
+    (2, 4),
+    (2, 3),
+    (3, 2),
+    (4, 1),
+    (4, 2);
 
 INSERT INTO item_values (from_date, purchase_price, selling_price, item_id) VALUES
   ('2021-11-11', 600.00, 1000.00, 1),

@@ -8,10 +8,11 @@ export interface Item {
     name: string;
     category: Category;
     description: string;
-    imageURL: string;
+    imageFileName: string;
     tags: Tag[];
     inMenu: boolean;
     itemType: ItemType;
     currentItemValue: ItemValue;
     deleted: boolean;
+    imageBase64?: string;
   }

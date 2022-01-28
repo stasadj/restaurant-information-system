@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Item } from 'src/app/model/Item';
 import { ItemService } from 'src/app/services/item/item.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-items',
@@ -15,14 +16,10 @@ export class ItemsComponent implements OnInit {
 
     };
 
-    constructor(private itemService: ItemService) { }
+    constructor(private itemService: ItemService, private toastr: ToastrService,) { }
 
 
     ngOnInit(): void {
-        // console.log("here");
-        // this.itemService.getItems().subscribe((res) => {
-        //     this.items = res;
-        // });
 
     }
 

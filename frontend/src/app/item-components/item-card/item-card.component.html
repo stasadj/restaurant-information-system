@@ -6,11 +6,13 @@
         </mat-card-title>
         <mat-card-subtitle>{{item.itemType}} - {{item.category.name}} </mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-            class="meal-image-placeholder" alt="Photo of a meal">
+    <div class="image-container">
+        <img [src]=imgTagSrc alt = {{item.name}} />
+    </div>
+    
     <mat-card-content>
         <h2>{{item.description}}</h2>
-        <h3>Tags: {{item.tags}}</h3>
+        <h3>Tags: {{tagsString}}</h3>
         <h4 style="text-align: right;">Purchase price: {{item.currentItemValue.purchasePrice}},00 RSD</h4>
         <h3 style="text-align: right;">Selling price: {{item.currentItemValue.sellingPrice}},00 RSD</h3>
 

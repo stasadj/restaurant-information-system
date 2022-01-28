@@ -26,15 +26,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/item", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/item", produces = MediaType.APPLICATION_JSON_VALUE) 
 public class ItemController {
     private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 
@@ -51,7 +54,7 @@ public class ItemController {
 
     @ResponseBody
     @GetMapping("/all") 
-    //@PreAuthorize("hasRole('MANAGER')") //for testing frontend
+    @PreAuthorize("hasRole('MANAGER')") //for testing frontend
     public ResponseEntity<List<ItemDTO>> getAll() {
         LOG.info("Client requested the get all items method.");
         return new ResponseEntity<>(itemMapper.convertAll(itemService.getAll()), HttpStatus.OK);
@@ -73,7 +76,7 @@ public class ItemController {
 
     @ResponseBody
     @PutMapping("/add-to-menu/{id}")
-    //@PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> addToMenu(@PathVariable Long id) {
         LOG.info("Client requested the add item to menu.");
         return new ResponseEntity<>(itemMapper.convert(itemService.addToMenu(id)), HttpStatus.OK);
@@ -81,7 +84,7 @@ public class ItemController {
 
     @ResponseBody
     @PutMapping("/remove-from-menu/{id}")
-    //@PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> removeFromMenu(@PathVariable Long id) {
         LOG.info("Client requested the remove item from menu.");
         return new ResponseEntity<>(itemMapper.convert(itemService.removeFromMenu(id)), HttpStatus.OK);
@@ -89,7 +92,7 @@ public class ItemController {
 
     @ResponseBody
     @DeleteMapping("/{id}")
-    // @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         LOG.info("Client requested to delete item.");
         itemService.delete(id);
@@ -98,15 +101,24 @@ public class ItemController {
 
     @ResponseBody
     @PostMapping("/create")
-    // @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> create(@Validated(CreateInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to create new item.");
         return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO)), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/createWithFile", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    @ResponseBody
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<ItemDTO> create(@RequestPart("item") @Valid @Validated(CreateInfo.class) ItemDTO itemDTO,
+    @RequestPart(value="file", required=false) MultipartFile file) {
+        LOG.info("Client requested to create new item.");
+        return new ResponseEntity<>(itemMapper.convert(itemService.create(itemDTO, file)), HttpStatus.OK);
+    }
+
     @ResponseBody
     @PutMapping("/edit")
-    //@PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemDTO> editItem(@Validated(EditInfo.class) @RequestBody ItemDTO itemDTO) {
         LOG.info("Client requested to edit item.");
         return new ResponseEntity<>(itemMapper.convert(itemService.editItem(itemDTO)), HttpStatus.OK);
@@ -114,7 +126,7 @@ public class ItemController {
 
     @ResponseBody
     @PostMapping("/change-price")
-    // @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<ItemValueDTO> changeItemPrice(@Valid @RequestBody ChangePriceDTO changePriceDTO) {
         LOG.info("Client requested to change item price.");
         return new ResponseEntity<>(new ItemValueDTO(itemService.changeItemPrice(changePriceDTO)), HttpStatus.OK);
