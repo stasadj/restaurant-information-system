@@ -1,3 +1,8 @@
+package com.restaurant.backend.tests;
+
+import com.restaurant.backend.pages.LoginPage;
+import com.restaurant.backend.pages.Utilities;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -6,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 //import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.PageFactory;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
