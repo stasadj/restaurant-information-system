@@ -53,6 +53,9 @@ import { ReportBoardComponent } from './report/report-board/report-board.compone
 import { ChartDataPipe } from './pipes/chart-data/chart-data.pipe';
 import { DateSerializePipe } from './pipes/date-serialize/date-serialize.pipe';
 import { ReportSearchComponent } from './report/report-search/report-search.component';
+import { CapitalizePipe } from './pipes/text/capitalize/capitalize.pipe';
+import { CapitalizeWordsPipe } from './pipes/text/capitalize-words/capitalize-words.pipe';
+import { RemoveSpecialCharsPipe } from './pipes/text/remove-special-chars/remove-special-chars.pipe';
 
 
 @NgModule({
@@ -80,7 +83,10 @@ import { ReportSearchComponent } from './report/report-search/report-search.comp
     ReportBoardComponent,
     ChartDataPipe,
     DateSerializePipe,
-    ReportSearchComponent
+    ReportSearchComponent,
+    CapitalizePipe,
+    CapitalizeWordsPipe,
+    RemoveSpecialCharsPipe
   ],
   imports: [
     BrowserModule,

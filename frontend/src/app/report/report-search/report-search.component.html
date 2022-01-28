@@ -2,15 +2,15 @@
     <mat-label>Report Type</mat-label>
     <mat-select [(ngModel)]="query.reportType" (ngModelChange)="onQueryChange()" >
         <mat-option *ngFor="let reportType of reportTypes" [value]="reportType">
-            {{reportType}}
+            {{reportType | removeSpecialChars | lowercase | capitalizeWords}}
         </mat-option>
     </mat-select>
 </mat-form-field>
 <mat-form-field appearance="fill">
-    <mat-label>Category</mat-label>
+    <mat-label>Granularity</mat-label>
     <mat-select [(ngModel)]="query.reportGranularity" (ngModelChange)="onQueryChange()" >
         <mat-option *ngFor="let granularity of granularities" [value]="granularity">
-            {{granularity}}
+            {{granularity| lowercase | capitalizeWords}}
         </mat-option>
     </mat-select>
 </mat-form-field>
