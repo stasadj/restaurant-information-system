@@ -29,7 +29,7 @@ export class StaffFormComponent implements OnInit {
 
   @Output() createEvent = new EventEmitter<Staff>();
 
-  constructor(private capitalizeWordsPipe: CapitalizeWordsPipe, private staffService: StaffService, private dialogRef: MatDialogRef<StaffFormComponent>, private toastr: ToastrService) {
+  constructor(private staffService: StaffService, private dialogRef: MatDialogRef<StaffFormComponent>, private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
