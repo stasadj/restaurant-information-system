@@ -3,10 +3,15 @@
   <div><b>Email:</b> {{ staff.email }}</div>
   <div><b>Phone number:</b> {{ staff.phoneNumber }}</div>
   <div>
-    <b>Current monthly wage:</b>
-    {{ staff.monthlyWage | currency: "EUR":"symbol" }}
+    <b>Current monthly wage: </b>
+    <span id="current-wage">{{
+      staff.monthlyWage | currency: "EUR":"symbol"
+    }}</span>
   </div>
-  <div><b>Average:</b> {{ getAverage() | currency: "EUR":"symbol" }}</div>
+  <div>
+    <b>Average: </b>
+    <span id="average">{{ getAverage() | currency: "EUR":"symbol" }}</span>
+  </div>
   <table
     border="1"
     matSort
@@ -26,5 +31,12 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close color="primary">Close</button>
+  <button
+    id="staff-profile-close"
+    mat-raised-button
+    mat-dialog-close
+    color="primary"
+  >
+    Close
+  </button>
 </mat-dialog-actions>
