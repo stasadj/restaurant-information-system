@@ -39,7 +39,6 @@ public class Utilities {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.presenceOfNestedElementLocatedBy(parent, childLocator));
     }
 
-
     public static WebElement presenceWait(WebDriver driver, By locator, int wait) {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.presenceOfElementLocated(locator));
     }
@@ -71,14 +70,4 @@ public class Utilities {
             return false;
         }
     }
-
-    public static List<WebElement> waitNumbOfElementsMoreThan(WebDriver driver, By locator, int wait, int number) {
-        return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBeMoreThan(locator, number));
-    }
-
-    public static List<WebElement> waitNumbOfElementsLessThan(WebDriver driver, By locator, int wait, int number) {
-        return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBeLessThan(locator, number));
-    }
-
-    
 }
