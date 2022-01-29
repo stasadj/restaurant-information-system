@@ -3,6 +3,7 @@ package com.restaurant.backend.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.restaurant.backend.pages.EditItemDialogPage;
 import com.restaurant.backend.pages.ItemsPage;
 import com.restaurant.backend.pages.LoginPage;
 import com.restaurant.backend.pages.ManagerPage;
@@ -26,6 +27,7 @@ public class ItemsTest {
     private NewItemPage newItemPage;
     private LoginPage loginPage;
     private ManagerPage managerPage;
+    private EditItemDialogPage editItemDialogPage;
 
 
     @BeforeAll
@@ -40,11 +42,12 @@ public class ItemsTest {
         itemsPage = PageFactory.initElements(chromeDriver, ItemsPage.class);
         newItemPage = PageFactory.initElements(chromeDriver, NewItemPage.class);
         managerPage = PageFactory.initElements(chromeDriver, ManagerPage.class);
+        editItemDialogPage = PageFactory.initElements(chromeDriver, EditItemDialogPage.class);
 
     }
 
     @Test
-    public void test() {
+    public void itemsManagementTest() throws InterruptedException {
 
         //login
         chromeDriver.navigate().to("http://localhost:4200/login");
@@ -75,6 +78,40 @@ public class ItemsTest {
         //checking if data on last card matches new data
         assertTrue(itemsPage.lastItemTitleHasText("Quattro pizaa"));
 
+        //adding created item to menu
+        itemsPage.lastItemAddToMenuClick(); 
+
+        //checking if remove from menu button appeared
+        assertTrue(itemsPage.removeFromMenuButtonOnLastItemDisplayed());
+
+        //removing from menu
+        itemsPage.clickRemoveFromMenuButtonOnLastItem();
+
+        //checking if add to menu button reappeared
+        assertTrue(itemsPage.addToMenuButtonOnLastItemDisplayed());
+
+        //editing created item
+        itemsPage.lastItemEditClick(); 
+
+        // checking if edit dialog opened up
+        assertTrue(itemsPage.editItemDialogIsPresent());
+
+        // changing name field, and cancelling
+        editItemDialogPage.setNameInput("Some disposable name");
+        editItemDialogPage.cancelButtonClick();
+
+        //check if changes are disposed 
+        assertTrue(itemsPage.lastItemTitleHasText("Quattro pizaa"));
+
+        //editing created item again, and saving
+        itemsPage.lastItemEditClick(); 
+
+        editItemDialogPage.setNameInput("Quattro formaggi pizza");
+        editItemDialogPage.saveButtonClick();
+
+        //check if changes are saved 
+        assertTrue(itemsPage.lastItemTitleHasText("Quattro formaggi pizza"));
+
         //deleting created item
         itemsPage.lastItemDeleteClick();
 
@@ -88,6 +125,6 @@ public class ItemsTest {
 
     @AfterAll
     public void closeSelenium() {
-        chromeDriver.quit();
+        // chromeDriver.quit();
     }
 }

@@ -9,18 +9,18 @@
 
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput  [(ngModel)]="editItem.name">
+    <input id="item_name" matInput  [(ngModel)]="editItem.name">
   </mat-form-field>
 
 
   <mat-form-field>
     <mat-label>Description</mat-label>
-    <textarea matInput [(ngModel)]="editItem.description"></textarea>
+    <textarea id="item_description" matInput [(ngModel)]="editItem.description"></textarea>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field id="categories_container">
     <mat-label>Category</mat-label>
-    <mat-select [compareWith]="compareObjects" [(ngModel)]="editItem.category"> 
+    <mat-select [compareWith]="compareObjects" [(ngModel)]="editItem.category" id="item_category"> 
       <mat-option *ngFor="let category of categories" [value]="category">
         {{category.name}}
       </mat-option>
@@ -29,15 +29,15 @@
 
   <mat-form-field>
     <mat-label>Purchase price</mat-label>
-    <input type="number" matInput [(ngModel)]="editItem.currentItemValue.purchasePrice">
+    <input type="number" matInput [(ngModel)]="editItem.currentItemValue.purchasePrice" id="item_purchase_price">
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Selling price</mat-label>
-    <input type="number" matInput [(ngModel)]="editItem.currentItemValue.sellingPrice">
+    <input type="number" matInput [(ngModel)]="editItem.currentItemValue.sellingPrice" id="item_selling_price">
   </mat-form-field>
 
-  <div class="mat-form-field">
+  <div class="mat-form-field" id="checkboxes_container">
     <h4>Select tags:</h4>
     <div *ngFor="let cb of checkBoxes">
         {{cb.tag.name}}<input class="form-check-input" type="checkbox" [value]="cb.tag.id" [checked]="cb.select" (change)="onChangeTag($event)"/>
@@ -46,6 +46,6 @@
 
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onCancelClick()">Cancel</button>
-  <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+  <button mat-button id="cancel_button" (click)="onCancelClick()">Cancel</button>
+  <button mat-button id="save_item_button" (click)="onSaveClick()" cdkFocusInitial>Save</button>
 </div>
