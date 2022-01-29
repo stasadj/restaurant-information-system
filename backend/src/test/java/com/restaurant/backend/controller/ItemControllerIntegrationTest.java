@@ -232,6 +232,4 @@ public final class ItemControllerIntegrationTest {
     }       
 
 
-    //TODO: add more change price tests
-
 }
