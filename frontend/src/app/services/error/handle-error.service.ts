@@ -9,6 +9,8 @@ export class HandleErrorService {
   constructor(private toastr: ToastrService) {}
 
   handleError(errorResponse: HttpErrorResponse) {
-    this.toastr.error(errorResponse.error.message);
+    if (errorResponse.status === 500)
+      this.toastr.error('Internal server error');
+    else this.toastr.error(errorResponse.error.message);
   }
 }
