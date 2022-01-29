@@ -74,6 +74,7 @@ import { StaffFormComponent } from './staff/staff-form/staff-form.component';
 import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.component';
 import { ManageTagsComponent } from './manage-tags/manage-tags.component';
 import { ManageCategoriesComponent } from './manage-categories/manage-categories.component';
+import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 
 @NgModule({
   declarations: [
@@ -120,6 +121,7 @@ import { ManageCategoriesComponent } from './manage-categories/manage-categories
     ItemSortComponent,
     ManageTagsComponent,
     ManageCategoriesComponent,
+    AdminPageComponent,
   ],
   imports: [
     BrowserModule,

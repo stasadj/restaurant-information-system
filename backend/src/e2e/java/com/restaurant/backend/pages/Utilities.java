@@ -39,21 +39,16 @@ public class Utilities {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.presenceOfNestedElementLocatedBy(parent, childLocator));
     }
 
-
     public static WebElement presenceWait(WebDriver driver, By locator, int wait) {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 
-    public static WebElement clickableWait(WebDriver driver, WebElement element, int wait) {
-        return new WebDriverWait(driver, wait).until(ExpectedConditions.elementToBeClickable(element));
+    public static boolean invisibilityWait(WebDriver driver, By locator, int wait) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
-    public static boolean isPresent(WebDriver driver, By locator) {
-        try {
-            return driver.findElement(locator).isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+    public static WebElement clickableWait(WebDriver driver, WebElement element, int wait) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.elementToBeClickable(element));
     }
 
     public static List<WebElement> waitNumbOfElementsMoreThan(WebDriver driver, By locator, int wait, int number) {
@@ -64,5 +59,15 @@ public class Utilities {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBeLessThan(locator, number));
     }
 
-    
+    public static List<WebElement> waitNumbOfElements(WebDriver driver, By locator, int wait, int number) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBe(locator, number));
+    }
+
+    public static boolean isPresent(WebDriver driver, By locator) {
+        try {
+            return driver.findElement(locator).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 }

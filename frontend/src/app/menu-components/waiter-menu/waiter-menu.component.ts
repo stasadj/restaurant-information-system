@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Category } from 'src/app/model/Category';
 import { Item } from 'src/app/model/Item';
 import { OrderItemInfo } from 'src/app/model/OrderItemInfo';
@@ -20,10 +21,12 @@ export class WaiterMenuComponent implements OnInit {
   selectedItem?: Item;
   displayedColumns: string[] = ['name', 'price'];
   amount: number = 0;
+  imgTagSrc: any;
 
   constructor(
     private categoryService: CategoryService,
-    private itemService: ItemService
+    private itemService: ItemService,
+    private _sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +49,13 @@ export class WaiterMenuComponent implements OnInit {
       .subscribe((d) => {
         this.menuItems = d;
       });
+  }
+
+  onSelectItem(item: Item) {
+    this.selectedItem = item;
+    this.imgTagSrc = this._sanitizer.bypassSecurityTrustResourceUrl(
+      'data:image/png;base64,' + this.selectedItem.imageBase64
+    );
   }
 
   onAdd() {
