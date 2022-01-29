@@ -27,6 +27,7 @@ export class ManagerPageComponent implements OnInit {
         });
         this.tagsService.getTags().subscribe((res) => {
             this.tags = res;
+            this.tagCheckBoxes = [];
             this.tags.forEach(tag => {
                 this.tagCheckBoxes.push({ tag: tag, select: false })
             });
