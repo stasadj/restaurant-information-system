@@ -49,10 +49,7 @@ public class ItemsTest {
         loginPage.loginWithCredentials("morgan", "test");
         assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
 
-
     }
-
-    
 
     @Test
     @Order(1)
@@ -102,8 +99,6 @@ public class ItemsTest {
         // checking if add to menu button reappeared
         assertTrue(itemsPage.lastItemAddToMenuButtonDisplayed());
 
-       
-
     }
 
     @Test
@@ -112,27 +107,27 @@ public class ItemsTest {
 
         chromeDriver.navigate().refresh();
 
-         // editing created item
-         itemsPage.lastItemEditClick();
+        // editing created item
+        itemsPage.lastItemEditClick();
 
-         // checking if edit dialog opened up
-         assertTrue(itemsPage.editItemDialogIsPresent());
- 
-         // changing name field, and cancelling
-         editItemDialogPage.setNameInput("Some disposable name");
-         editItemDialogPage.cancelButtonClick();
- 
-         // check if changes are disposed
-         assertTrue(itemsPage.lastItemTitleHasText("Quattro pizaa"));
- 
-         // editing created item again, and saving
-         itemsPage.lastItemEditClick();
- 
-         editItemDialogPage.setNameInput("Quattro formaggi pizza");
-         editItemDialogPage.saveButtonClick();
- 
-         // check if changes are saved
-         assertTrue(itemsPage.lastItemTitleHasText("Quattro formaggi pizza"));
+        // checking if edit dialog opened up
+        assertTrue(itemsPage.editItemDialogIsPresent());
+
+        // changing name field, and cancelling
+        editItemDialogPage.setNameInput("Some disposable name");
+        editItemDialogPage.cancelButtonClick();
+
+        // check if changes are disposed
+        assertTrue(itemsPage.lastItemTitleHasText("Quattro pizaa"));
+
+        // editing created item again, and saving
+        itemsPage.lastItemEditClick();
+
+        editItemDialogPage.setNameInput("Quattro formaggi pizza");
+        editItemDialogPage.saveButtonClick();
+
+        // check if changes are saved
+        assertTrue(itemsPage.lastItemTitleHasText("Quattro formaggi pizza"));
     }
 
     @Test
@@ -156,6 +151,6 @@ public class ItemsTest {
 
     @AfterAll
     public void closeSelenium() {
-        // chromeDriver.quit();
+        chromeDriver.quit();
     }
 }

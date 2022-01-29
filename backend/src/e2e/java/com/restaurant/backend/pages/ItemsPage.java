@@ -43,7 +43,7 @@ public class ItemsPage extends ManagerPage {
     public boolean lastItemTitleHasText(String text) {
 
         try{
-            By locator = By.xpath("//mat-card-title[contains(text(), '" + text +"')]");
+            By locator = By.xpath("//mat-card-title[contains(text(), '" + text + "')]");
             List<WebElement> els = Utilities.visibilityWait(driver, locator, 10);
             return els.get(0).getText().equals(text);
         }
