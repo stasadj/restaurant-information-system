@@ -25,7 +25,11 @@ export class ManageTagsComponent implements OnInit {
     ngOnInit(): void {}
 
     onSaveClick(): void{
+        if (!this.newTag.name){
+            this.toastr.error("Tag name must not be blank");
+        }
         if (this.tags.filter(tag => tag.name === this.newTag.name).length === 0){
+            
             this.tagService.create(this.newTag).subscribe(res => {
                 this.toastr.success("Successfully saved tag " + res.name);
                 this.onTagCreated();
