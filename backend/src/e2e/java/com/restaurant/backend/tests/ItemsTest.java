@@ -12,16 +12,19 @@ import com.restaurant.backend.pages.Utilities;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
 public class ItemsTest {
     private WebDriver chromeDriver;
-    //private WebDriver edgeDriver;
 
     private ItemsPage itemsPage;
     private NewItemPage newItemPage;
@@ -29,14 +32,11 @@ public class ItemsTest {
     private ManagerPage managerPage;
     private EditItemDialogPage editItemDialogPage;
 
-
     @BeforeAll
     public void setupSelenium() {
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-        //System.setProperty("webdriver.edge.driver", "drivers/msedgedriver.exe");
 
         chromeDriver = new ChromeDriver();
-        //edgeDriver = new EdgeDriver();
 
         loginPage = PageFactory.initElements(chromeDriver, LoginPage.class);
         itemsPage = PageFactory.initElements(chromeDriver, ItemsPage.class);
@@ -47,15 +47,20 @@ public class ItemsTest {
     }
 
     @Test
-    public void itemsManagementTest() throws InterruptedException {
-
+    @Order(1)
+    public void login() {
         //login
         chromeDriver.navigate().to("http://localhost:4200/login");
         assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
         loginPage.loginWithCredentials("morgan", "test");
         assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
+    }
 
-        //saving starting number of cards
+    @Test
+    @Order(2)
+    public void itemsCreationTest() throws InterruptedException {
+
+        // saving starting number of cards
         int numberOfItemCards = itemsPage.getNumberOfItems();
 
         // create new item
@@ -68,60 +73,92 @@ public class ItemsTest {
         newItemPage.selectCheckBoxes();
         newItemPage.saveButtonClick();
 
-        //go to items tab
+        // go to items tab
         managerPage.itemsTabClick();
 
-        //checking if number of cards incremented
+        // checking if number of cards incremented
         int numberOfItemsAfterAdd = itemsPage.getItemCountAfterCreate(numberOfItemCards);
         assertEquals(numberOfItemCards + 1, numberOfItemsAfterAdd);
 
-        //checking if data on last card matches new data
+        // checking if data on last card matches new data
         assertTrue(itemsPage.lastItemTitleHasText("Quattro pizaa"));
-
-        //adding created item to menu
-        itemsPage.lastItemAddToMenuClick(); 
-
-        //checking if remove from menu button appeared
-        assertTrue(itemsPage.removeFromMenuButtonOnLastItemDisplayed());
-
-        //removing from menu
-        itemsPage.clickRemoveFromMenuButtonOnLastItem();
-
-        //checking if add to menu button reappeared
-        assertTrue(itemsPage.addToMenuButtonOnLastItemDisplayed());
-
-        //editing created item
-        itemsPage.lastItemEditClick(); 
-
-        // checking if edit dialog opened up
-        assertTrue(itemsPage.editItemDialogIsPresent());
-
-        // changing name field, and cancelling
-        editItemDialogPage.setNameInput("Some disposable name");
-        editItemDialogPage.cancelButtonClick();
-
-        //check if changes are disposed 
-        assertTrue(itemsPage.lastItemTitleHasText("Quattro pizaa"));
-
-        //editing created item again, and saving
-        itemsPage.lastItemEditClick(); 
-
-        editItemDialogPage.setNameInput("Quattro formaggi pizza");
-        editItemDialogPage.saveButtonClick();
-
-        //check if changes are saved 
-        assertTrue(itemsPage.lastItemTitleHasText("Quattro formaggi pizza"));
-
-        //deleting created item
-        itemsPage.lastItemDeleteClick();
-
-        //checking if number of cards decremented
-        int numberOfItemsAfterDelete = itemsPage.getItemCountAfterDelete(numberOfItemsAfterAdd);
-        assertEquals(numberOfItemsAfterAdd - 1, numberOfItemsAfterDelete);
-
 
     }
 
+    @Test
+    @Order(3)
+    public void itemsMenuAddRemoveTest() throws InterruptedException {
+
+        // login
+        chromeDriver.navigate().to("http://localhost:4200/login");
+        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
+        loginPage.loginWithCredentials("morgan", "test");
+        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
+
+        // adding created item to menu
+        itemsPage.lastItemAddToMenuButtonClick();
+
+        // checking if remove from menu button appeared
+        assertTrue(itemsPage.lastItemRemoveFromMenuButtonDisplayed());
+
+        // removing from menu
+        itemsPage.lastItemRemoveFromMenuClick();
+
+        // checking if add to menu button reappeared
+        assertTrue(itemsPage.lastItemAddToMenuButtonDisplayed());
+
+       
+
+    }
+
+    @Test
+    @Order(4)
+    public void itemsEdit() throws InterruptedException {
+
+         // editing created item
+         itemsPage.lastItemEditClick();
+
+         // checking if edit dialog opened up
+         assertTrue(itemsPage.editItemDialogIsPresent());
+ 
+         // changing name field, and cancelling
+         editItemDialogPage.setNameInput("Some disposable name");
+         editItemDialogPage.cancelButtonClick();
+ 
+         // check if changes are disposed
+         assertTrue(itemsPage.lastItemTitleHasText("Quattro pizaa"));
+ 
+         // editing created item again, and saving
+         itemsPage.lastItemEditClick();
+ 
+         editItemDialogPage.setNameInput("Quattro formaggi pizza");
+         editItemDialogPage.saveButtonClick();
+ 
+         // check if changes are saved
+         assertTrue(itemsPage.lastItemTitleHasText("Quattro formaggi pizza"));
+    }
+
+    @Test
+    @Order(5)
+    public void itemsDeleteTest() throws InterruptedException {
+
+        // login
+        chromeDriver.navigate().to("http://localhost:4200/login");
+        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
+        loginPage.loginWithCredentials("morgan", "test");
+        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
+
+        // saving starting number of cards
+        int numberOfItemCards = itemsPage.getNumberOfItems();
+
+        // deleting created item
+        itemsPage.lastItemDeleteClick();
+
+        // checking if number of cards decremented
+        int numberOfItemsAfterDelete = itemsPage.getItemCountAfterDelete(numberOfItemCards);
+        assertEquals(numberOfItemCards - 1, numberOfItemsAfterDelete);
+
+    }
 
     @AfterAll
     public void closeSelenium() {

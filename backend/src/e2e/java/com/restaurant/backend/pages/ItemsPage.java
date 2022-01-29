@@ -1,15 +1,13 @@
 package com.restaurant.backend.pages;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BooleanSupplier;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ItemsPage extends ManagerPage{
+public class ItemsPage extends ManagerPage {
     private WebDriver driver;
 
     @FindBy(className = "item-card")
@@ -33,74 +31,74 @@ public class ItemsPage extends ManagerPage{
     @FindBy(xpath = "//*[@id='mat-dialog-0']")
     private WebElement editDialog;
 
-
     public ItemsPage(WebDriver driver) {
         this.driver = driver;
     }
 
-
-    public int getNumberOfItems(){
+    public int getNumberOfItems() {
         return Utilities.visibilityWait(driver, By.className("item-card"), 10).size();
     }
 
     public boolean lastItemTitleHasText(String text) {
-		return Utilities.textWait(driver, this.itemCardsTitles.get(this.itemCardsTitles.size()-1), text, 10);
 
-	}
-
-    public void lastItemAddToMenuClick(){
-        Utilities.clickableWait(driver, this.addToMenuButtons.get(this.addToMenuButtons.size()-1), 10).click();
-
-   }
-
-   public void lastItemEditClick(){
-        Utilities.clickableWait(driver, this.editButtons.get(this.editButtons.size()-1), 10).click();
-
-}
-
-    public void lastItemDeleteClick(){
-        this.deleteButtons = driver.findElements(By.className("delete-button"));
-        Utilities.clickableWait(driver, this.deleteButtons.get(this.deleteButtons.size()-1), 10).click();
+        By locator = By.className("mat-card-title");
+        this.itemCardsTitles = Utilities.visibilityWait(driver, locator , 10);
+        return Utilities.textWait(driver, this.itemCardsTitles.get(this.itemCardsTitles.size()-1), text, 10);
 
     }
 
-    
-    public int getItemCountAfterCreate(int numberOfItemsBeforeAdd){
-        return Utilities.waitNumbOfElementsMoreThan(driver, By.className("item-card"), 10, numberOfItemsBeforeAdd).size();
+    public void lastItemAddToMenuButtonClick() {
+        this.addToMenuButtons = Utilities.visibilityWait(driver, By.className("add-to-menu-button"), 5);
+        Utilities.clickableWait(driver, this.addToMenuButtons.get(this.addToMenuButtons.size() - 1), 10).click();
 
     }
 
-    public int getItemCountAfterDelete(int numberOfItemsBeforeDelete){
-        return Utilities.waitNumbOfElementsLessThan(driver, By.className("item-card"), 10, numberOfItemsBeforeDelete).size();
-
-    }
-
-    public boolean editItemDialogIsPresent(){
-        return Utilities.visibilityWait(driver, editDialog, 5).isDisplayed();
-
-    }
-
-    public boolean removeFromMenuButtonOnLastItemDisplayed(){
+    public boolean lastItemRemoveFromMenuButtonDisplayed() {
         By childLocator = By.className("remove-from-menu-button");
-		return Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size()-1), childLocator, 10).isDisplayed();
+        return Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size() - 1), childLocator, 10)
+                .isDisplayed();
     }
 
-    public boolean addToMenuButtonOnLastItemDisplayed() {
+    public boolean lastItemAddToMenuButtonDisplayed() {
         By childLocator = By.className("add-to-menu-button");
-		return Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size()-1), childLocator, 10).isDisplayed();
+        return Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size() - 1), childLocator, 10)
+                .isDisplayed();
     }
 
-    
-    public void clickRemoveFromMenuButtonOnLastItem(){
+    public void lastItemRemoveFromMenuClick() {
         By childLocator = By.className("remove-from-menu-button");
-		Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size()-1), childLocator, 10).click();
+        Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size() - 1), childLocator, 10).click();
     }
 
+    public void lastItemEditClick() {
+        Utilities.clickableWait(driver, this.editButtons.get(this.editButtons.size() - 1), 10).click();
 
+    }
 
+    public boolean editItemDialogIsPresent() {
+        return Utilities.visibilityWait(driver, editDialog, 10).isDisplayed();
 
+    }
 
-    
+    public void lastItemDeleteClick() {
+        By childLocator = By.className("delete-button");
+        this.itemCards = Utilities.visibilityWait(driver, By.className("item-card"), 5);
+        Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size() - 1), childLocator, 10).click();
+
+    }
+
+    public int getItemCountAfterCreate(int numberOfItemsBeforeAdd) {
+        return Utilities.waitNumbOfElementsMoreThan(driver, By.className("item-card"), 10, numberOfItemsBeforeAdd)
+                .size();
+
+    }
+
+    public int getItemCountAfterDelete(int numberOfItemsBeforeDelete) {
+        return Utilities.waitNumbOfElementsLessThan(driver, By.className("item-card"), 10, numberOfItemsBeforeDelete)
+                .size();
+
+    }
+
 
 
 }
