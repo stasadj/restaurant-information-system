@@ -44,8 +44,24 @@ public class Utilities {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 
+    public static boolean invisibilityWait(WebDriver driver, By locator, int wait) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
     public static WebElement clickableWait(WebDriver driver, WebElement element, int wait) {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    public static List<WebElement> waitNumbOfElementsMoreThan(WebDriver driver, By locator, int wait, int number) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBeMoreThan(locator, number));
+    }
+
+    public static List<WebElement> waitNumbOfElementsLessThan(WebDriver driver, By locator, int wait, int number) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBeLessThan(locator, number));
+    }
+
+    public static List<WebElement> waitNumbOfElements(WebDriver driver, By locator, int wait, int number) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBe(locator, number));
     }
 
     public static boolean isPresent(WebDriver driver, By locator) {
