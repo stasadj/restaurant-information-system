@@ -1,3 +1,3 @@
 <app-report-search [query]="query" (queryChangedEvent)="updateReport()"></app-report-search>
 <app-chart [data]="report | TransformReportToChart"></app-chart>
-<app-report-item-table [data]="report.individualItems | fillItemDatapointNetIncome"></app-report-item-table>
+<app-report-item-table [data]="report.individualItems | addTotalEntryToTable | fillItemDatapointNetIncome"></app-report-item-table>
