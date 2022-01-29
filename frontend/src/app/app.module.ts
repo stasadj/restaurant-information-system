@@ -72,6 +72,8 @@ import { StaffCardComponent } from './staff/staff-card/staff-card.component';
 import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
 import { StaffFormComponent } from './staff/staff-form/staff-form.component';
 import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.component';
+import { ManageTagsComponent } from './manage-tags/manage-tags.component';
+import { ManageCategoriesComponent } from './manage-categories/manage-categories.component';
 import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 import { TagsViewPipe } from './pipes/tags-view/tags-view.pipe';
 
@@ -118,6 +120,8 @@ import { TagsViewPipe } from './pipes/tags-view/tags-view.pipe';
     StaffBoardComponent,
     StaffFormComponent,
     ItemSortComponent,
+    ManageTagsComponent,
+    ManageCategoriesComponent,
     AdminPageComponent,
     TagsViewPipe,
   ],
