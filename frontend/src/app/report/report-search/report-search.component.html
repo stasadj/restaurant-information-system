@@ -8,7 +8,7 @@
 </mat-form-field>
 <mat-form-field appearance="fill">
     <mat-label>Granularity</mat-label>
-    <mat-select [(ngModel)]="query.reportGranularity" (ngModelChange)="onQueryChange()" >
+    <mat-select [(ngModel)]="query.reportGranularity" (ngModelChange)="onQueryChange()" id="granularity_input" >
         <mat-option *ngFor="let granularity of granularities" [value]="granularity">
             {{granularity| lowercase | capitalizeWords}}
         </mat-option>
