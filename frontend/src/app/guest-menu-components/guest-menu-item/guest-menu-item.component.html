@@ -17,7 +17,8 @@
       }}</mat-chip>
     </mat-chip-list>
     <h3 style="text-align: right">
-      Price: {{ item.currentItemValue.sellingPrice }},00 RSD
+      Price:
+      {{ item.currentItemValue.sellingPrice | currency: "RSD":"code" }}
     </h3>
   </mat-card-content>
 </mat-card>

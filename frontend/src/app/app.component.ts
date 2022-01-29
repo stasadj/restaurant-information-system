@@ -9,5 +9,5 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'frontend';
 
-  constructor(public router: Router) {}
+  constructor() {}
 }

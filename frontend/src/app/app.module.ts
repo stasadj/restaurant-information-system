@@ -65,6 +65,8 @@ import { ItemSearchComponent } from './guest-menu-components/item-search/item-se
 import { GuestMenuItemComponent } from './guest-menu-components/guest-menu-item/guest-menu-item.component';
 import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-menu.component';
 import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
+import { UserProfileComponent } from './staff/user-profile/user-profile.component';
+import { MatSortModule } from '@angular/material/sort';
 import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-entry.pipe';
 
 @NgModule({
@@ -104,6 +106,7 @@ import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-
     ItemSearchComponent,
     GuestMenuItemComponent,
     GuestMenuComponent,
+    UserProfileComponent,
     AddTotalEntryPipe,
   ],
   imports: [
@@ -130,7 +133,8 @@ import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-
     MatSelectModule,
     ChartModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSortModule,
   ],
   providers: [
     {
@@ -144,7 +148,7 @@ import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-
       multi: true,
     },
     ChartDataPipe,
-    DateSerializePipe
+    DateSerializePipe,
   ],
   bootstrap: [AppComponent],
 })
