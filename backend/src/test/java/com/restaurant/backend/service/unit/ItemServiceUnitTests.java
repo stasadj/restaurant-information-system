@@ -1,20 +1,7 @@
 
 package com.restaurant.backend.service.unit;
 
-import static com.restaurant.backend.constants.ItemServiceTestConstants.CATEGORY_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.EXISTENT_ITEM;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.NEW_ITEM_VALUE;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.NEW_ITEM_VALUE_DTO;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_CATEGORY_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_ITEM_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.NONEXISTENT_TAG_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.TAG1_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.TAG2_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_CATEGORY;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_ITEM;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_ITEM_ID;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG1;
-import static com.restaurant.backend.constants.ItemServiceTestConstants.VALID_TAG2;
+import static com.restaurant.backend.constants.ItemServiceTestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

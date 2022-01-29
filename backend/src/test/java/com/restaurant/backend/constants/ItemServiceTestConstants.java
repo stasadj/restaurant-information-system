@@ -46,6 +46,8 @@ public final class ItemServiceTestConstants {
 
     public static final ChangePriceDTO NEW_ITEM_VALUE_DTO = new ChangePriceDTO(BigDecimal.valueOf(1000.5),
             BigDecimal.valueOf(1500.5), LocalDateTime.now().plusMonths(2), VALID_ITEM_ID);
+    public static final ChangePriceDTO INVALID_ITEM_VALUE_DTO = new ChangePriceDTO(BigDecimal.valueOf(1000.5),
+            BigDecimal.valueOf(1500.5), LocalDateTime.now().minusMonths(2), VALID_ITEM_ID);
     public static final ItemValue NEW_ITEM_VALUE = new ItemValue(null, NEW_ITEM_VALUE_DTO.getPurchasePrice(),
             NEW_ITEM_VALUE_DTO.getSellingPrice(), NEW_ITEM_VALUE_DTO.getFromDate(), VALID_ITEM);
 
