@@ -19,7 +19,7 @@ mvn clean install
 mvn --projects backend spring-boot:run
 ```
 ### Pokretanje e2e testova
-Za e2e testove, potrebno je pokrenuti prvo podici frontend sa sledecim komandama iz root direktorijuma
+Za e2e testove, potrebno je prvo podici frontend sa sledecim komandama iz root direktorijuma
 ```
 cd frontend
 npm i
