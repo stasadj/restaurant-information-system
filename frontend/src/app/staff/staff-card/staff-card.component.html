@@ -1,1 +1,8 @@
-<p>staff-card works!</p>
+<mat-card *ngIf="staff">
+    <div align="center">
+        <mat-card-content>
+            <h2>{{staff.firstName}} {{staff.lastName}}</h2>
+            <button mat-stroked-button (click)="viewProfile(staff.id)">View profile</button>
+        </mat-card-content>
+    </div>
+</mat-card>

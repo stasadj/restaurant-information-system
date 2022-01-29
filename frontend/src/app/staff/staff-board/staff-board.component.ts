@@ -13,17 +13,12 @@ export class StaffBoardComponent implements OnInit {
 
   staffMembers: Staff[] = [];
 
-  constructor(private staffService: StaffService, public dialog: MatDialog) { }
+  constructor(private staffService: StaffService) { }
 
   ngOnInit(): void {
     this.staffService.getAllStaff().subscribe(staffMembers => {
       this.staffMembers = staffMembers;
     });
-  }
-
-  viewProfile(id: number) {
-    let dialog = this.dialog.open(UserProfileComponent, { width: '50%', height: '60%' });
-    dialog.componentInstance.staffId = id;
   }
 
 }
