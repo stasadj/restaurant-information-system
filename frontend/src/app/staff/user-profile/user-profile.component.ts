@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { formatDate } from '@angular/common';
 import { Sort } from '@angular/material/sort';
 import { Staff } from 'src/app/model/Staff';
 import { StaffPaymentItem } from 'src/app/model/StaffPaymentItem';
@@ -29,10 +28,6 @@ export class UserProfileComponent implements OnInit {
       this.staffPaymentItems.reduce((prev, curr) => prev + curr.amount, 0) /
       this.staffPaymentItems.length
     );
-  }
-
-  getDate(date: Date): string {
-    return formatDate(date, 'dd.MM.yyyy', 'en-US');
   }
 
   constructor(private staffService: StaffService) {}
