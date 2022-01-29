@@ -57,6 +57,7 @@ public class ReportTest {
         int numberOfItems = reportPage.getNumberOfItems();
         assertEquals(1, numberOfItems); // Only total
 
+        reportPage.selectYearlyGranularity();
         reportPage.inputFromDateStr(LocalDate.of(2021, 10, 1));
         assertNotEquals(numberOfItems, reportPage.getReportItemCountMoreThan(numberOfItems));
 
