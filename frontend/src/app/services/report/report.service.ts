@@ -5,7 +5,6 @@ import { ChartData } from 'src/app/model/ChartData';
 import { ChartDataset } from 'src/app/model/ChartDataset';
 import { Report } from 'src/app/model/Report';
 import { ReportQuery } from 'src/app/model/ReportQuery';
-import { ChartDataPipe } from 'src/app/pipes/chart-data/chart-data.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class ReportService {
 
   private readonly path = '/api/report';
 
-  constructor(private http: HttpClient, private chartPipe: ChartDataPipe) { }
+  constructor(private http: HttpClient) { }
 
   getReport(query: ReportQuery): Observable<Report> {
     let params = new HttpParams();

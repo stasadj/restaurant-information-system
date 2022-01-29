@@ -62,10 +62,25 @@
             </mat-error>
         </mat-form-field>
 
+        <mat-form-field *ngIf="isCreating && roleControl">
+            <mat-label>Role</mat-label>
+            <input type="text" placeholder="Pick role" aria-label="Role" matInput [value]="staff.role" [formControl]="roleControl"
+                [matAutocomplete]="auto" />
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let role of roles" [value]="role">
+                    {{role | capitalizeWords}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="roleControl.hasError('required')">
+                Role is required
+            </mat-error>
+        </mat-form-field>
+
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-        <button mat-raised-button (click)="editStaff()" color="primary">Save</button>
+        <button *ngIf="isCreating" mat-raised-button (click)="createStaff()" color="primary">Create</button>
+        <button *ngIf="!isCreating" mat-raised-button (click)="editStaff()" color="primary">Save</button>
         <button mat-raised-button mat-dialog-close color="warn">Close</button>
     </mat-dialog-actions>
 </div>

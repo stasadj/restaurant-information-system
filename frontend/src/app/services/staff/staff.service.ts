@@ -45,4 +45,8 @@ export class StaffService {
   changePin(currentPin: number, newPin: number): Observable<Staff> {
     return this.http.put<Staff>(`${this.path}/change-pin`, { currentPin, newPin });
   }
+
+  createStaff(staff: Staff): Observable<Staff> {
+    return this.http.post<Staff>(`${this.path}/create`, staff);
+  }
 }

@@ -1,3 +1,4 @@
 <div class="cards">
+    <button *ngIf="isAdmin" mat-stroked-button (click)="createStaff()">Create new staff</button>
     <app-staff-card class="card" *ngFor="let staff of staffMembers" [staff]="staff" (deleteEvent)="removeStaffMember(staff)"></app-staff-card>
 </div>
