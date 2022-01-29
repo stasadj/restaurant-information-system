@@ -67,6 +67,8 @@ import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-men
 import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
 import { UserProfileComponent } from './staff/user-profile/user-profile.component';
 
+import { MatSortModule } from '@angular/material/sort';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -130,7 +132,8 @@ import { UserProfileComponent } from './staff/user-profile/user-profile.componen
     MatSelectModule,
     ChartModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSortModule,
   ],
   providers: [
     {
@@ -144,7 +147,7 @@ import { UserProfileComponent } from './staff/user-profile/user-profile.componen
       multi: true,
     },
     ChartDataPipe,
-    DateSerializePipe
+    DateSerializePipe,
   ],
   bootstrap: [AppComponent],
 })

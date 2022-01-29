@@ -4,6 +4,22 @@
   <div><b>Phone number:</b> {{ staff.phoneNumber }}</div>
   <div><b>Current monthly wage:</b> {{ staff.monthlyWage }} EUR</div>
   <div><b>Average:</b> {{ getAverage() }} EUR</div>
+  <table
+    border="1"
+    matSort
+    (matSortChange)="sortData($event)"
+    class="mat-elevation-z8"
+  >
+    <tr>
+      <th mat-sort-header="date">Date</th>
+      <th mat-sort-header="amount">Amount</th>
+    </tr>
+
+    <tr *ngFor="let item of sortedData">
+      <td>{{ getDate(item.dateTime) }}</td>
+      <td>{{ item.amount }} EUR</td>
+    </tr>
+  </table>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
