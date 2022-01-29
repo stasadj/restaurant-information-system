@@ -41,7 +41,7 @@ public class StaffController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'COOK', 'BARMAN')")
     public ResponseEntity<StaffDTO> getById(@PathVariable Long id) {
         return new ResponseEntity<>(staffMapper.convert(staffService.findOne(id)), HttpStatus.OK);
     }

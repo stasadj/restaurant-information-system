@@ -1,11 +1,9 @@
-<h2 mat-dialog-title>User Waiter</h2>
+<h2 mat-dialog-title>{{ staff.firstName }} {{ staff.lastName }}</h2>
 <mat-dialog-content class="mat-typography">
-  <h3>Develop across all platforms</h3>
-  <p>
-    Learn one way to build applications with Angular and reuse your code and
-    abilities to build
-  </p></mat-dialog-content
->
+  <div><b>Email:</b> {{ staff.email }}</div>
+  <div><b>Phone number:</b> {{ staff.phoneNumber }}</div>
+  <div><b>Current monthly wage:</b> {{ staff.monthlyWage }} EUR</div>
+</mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-raised-button mat-dialog-close color="primary">Close</button>
