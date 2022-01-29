@@ -12,15 +12,21 @@ export class StaffService {
 
   constructor(private http: HttpClient) {}
 
-  getStaffMemberById(): Observable<Staff> {
-    return this.http.get<Staff>(
-      `${this.path}/${localStorage.getItem('userId')}`
+  getAllStaff(): Observable<Staff[]> {
+    return this.http.get<Staff[]>(
+      `${this.path}/all`
     );
   }
 
-  getStaffPaymentItems(): Observable<StaffPaymentItem[]> {
+  getStaffMemberById(id?: number): Observable<Staff> {
+    return this.http.get<Staff>(
+      `${this.path}/${id ?? localStorage.getItem('userId')}`
+    );
+  }
+
+  getStaffPaymentItems(id?: number): Observable<StaffPaymentItem[]> {
     return this.http.get<StaffPaymentItem[]>(
-      `${this.path}/payment/${localStorage.getItem('userId')}`
+      `${this.path}/payment/${id ?? localStorage.getItem('userId')}`
     );
   }
 }

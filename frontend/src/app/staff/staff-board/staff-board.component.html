@@ -1,0 +1,10 @@
+<div class="cards">
+    <mat-card class="card" *ngFor="let staff of staffMembers">
+        <div align="center">
+            <mat-card-content>
+                <h2>{{staff.firstName}} {{staff.lastName}}</h2>
+                <button mat-stroked-button (click)="viewProfile(staff.id)">View profile</button>
+            </mat-card-content>
+        </div>
+    </mat-card>
+</div>
