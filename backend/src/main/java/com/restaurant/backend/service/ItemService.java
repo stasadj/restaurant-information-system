@@ -119,6 +119,9 @@ public class ItemService {
 	}
 
 	public Item create(@Validated(CreateInfo.class) ItemDTO itemDTO, MultipartFile file) {
+
+        DTOValidator.validate(itemDTO, CreateInfo.class);
+
 		Item item = itemMapper.convertToDomain(itemDTO);
 		item.setId(null);
 		item.setDeleted(false); // initially false
