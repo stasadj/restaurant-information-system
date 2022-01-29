@@ -134,8 +134,8 @@ public class ItemController {
     
     @ResponseBody
     @GetMapping("/search")
-    public ResponseEntity<List<ItemDTO>> searchMenuItems(@RequestParam Long categoryId, @RequestParam String searchInput) {
-        return new ResponseEntity<>(itemMapper.convertAll(itemService.searchMenuItems(categoryId, searchInput)), HttpStatus.OK);
+    public ResponseEntity<List<ItemDTO>> searchMenuItems(@RequestParam Long categoryId, @RequestParam String searchInput, @RequestParam Integer sortCriteria) {
+        return new ResponseEntity<>(itemMapper.convertAll(itemService.searchMenuItems(categoryId, searchInput, sortCriteria)), HttpStatus.OK);
     }
 
 }
