@@ -8,13 +8,13 @@
 - Albert Makan SW-29/2018
 - Anastasija Đurić SW-48/2018
 - Dina Petrov SW-52/2018
-- Stefan Krnajski SW-XX/2018
+- Stefan Krnajski SW-69/2018
 
 ## Pokretanje:
 
 ### Pokretanje aplikacije
-Za pokretanje celokupne aplikacije, potrebno je pozicionirati se u root direktorijum, i izvršiti komandu
+Za pokretanje celokupne aplikacije, potrebno je pozicionirati se u root direktorijum, i izvršiti sledece dve komande
 ```
-mvn install
+mvn clean install
+mvn --projects backend spring-boot:run
 ```
-### Pokretanje testova
