@@ -66,8 +66,8 @@ import { GuestMenuItemComponent } from './guest-menu-components/guest-menu-item/
 import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-menu.component';
 import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
 import { UserProfileComponent } from './staff/user-profile/user-profile.component';
-
 import { MatSortModule } from '@angular/material/sort';
+import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-entry.pipe';
 
 @NgModule({
   declarations: [
@@ -107,6 +107,7 @@ import { MatSortModule } from '@angular/material/sort';
     GuestMenuItemComponent,
     GuestMenuComponent,
     UserProfileComponent,
+    AddTotalEntryPipe,
   ],
   imports: [
     BrowserModule,
