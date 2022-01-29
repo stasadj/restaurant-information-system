@@ -72,6 +72,8 @@ import { StaffCardComponent } from './staff/staff-card/staff-card.component';
 import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
 import { StaffFormComponent } from './staff/staff-form/staff-form.component';
 import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.component';
+import { ManageTagsComponent } from './manage-tags/manage-tags.component';
+import { ManageCategoriesComponent } from './manage-categories/manage-categories.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +118,8 @@ import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.c
     StaffBoardComponent,
     StaffFormComponent,
     ItemSortComponent,
+    ManageTagsComponent,
+    ManageCategoriesComponent,
   ],
   imports: [
     BrowserModule,

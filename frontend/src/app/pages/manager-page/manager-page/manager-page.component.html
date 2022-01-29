@@ -5,6 +5,16 @@
     <mat-tab label="New item">
         <app-create-item [onItemCreated]="fetchData"></app-create-item>
     </mat-tab>
+    <mat-tab label="Tags">
+        <ng-template matTabContent>
+            <app-manage-tags [onTagCreated]="fetchData" [tags]="tags" ></app-manage-tags>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="Categories">
+        <ng-template matTabContent>
+            <app-manage-categories></app-manage-categories>
+        </ng-template>
+    </mat-tab>
     <mat-tab label="Reports">
         <ng-template matTabContent>
             <app-report-board></app-report-board>
@@ -15,4 +25,5 @@
             <app-staff-board></app-staff-board>
         </ng-template>
     </mat-tab>
+
 </mat-tab-group>
