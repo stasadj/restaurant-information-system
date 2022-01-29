@@ -6,7 +6,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.Objects;
 
 public class RoomsCanvas {
     private final WebDriver driver;
@@ -17,6 +16,9 @@ public class RoomsCanvas {
     @FindBy(id = "add-table-btn")
     private WebElement addTableButton;
 
+    @FindBy(tagName = "app-canvas")
+    private WebElement canvas;
+
     @FindBy(id = "room-input")
     private WebElement pinInput;
 
@@ -26,9 +28,10 @@ public class RoomsCanvas {
 
     public void dragDropLastTable(int xOffset, int yOffset) {
         Actions act = new Actions(driver);
-        act.clickAndHold(tables.get(tables.size()-1)).moveByOffset(xOffset, yOffset).release().build().perform();
-
-
+        act.clickAndHold(tables.get(tables.size()-1)).pause(1000)
+                .moveToElement(canvas, xOffset, yOffset)
+                .release()
+                .build().perform();
     }
 
     public void addTableButtonClick() {

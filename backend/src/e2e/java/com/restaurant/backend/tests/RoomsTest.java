@@ -43,6 +43,6 @@ public class RoomsTest {
 
     @AfterAll
     public void closeSelenium() {
-//        driver.quit();
+        driver.quit();
     }
 }
