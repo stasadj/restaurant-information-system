@@ -5,4 +5,5 @@ export interface Staff {
   email: string;
   phoneNumber: string;
   monthlyWage: number;
+  pin?: number;
 }

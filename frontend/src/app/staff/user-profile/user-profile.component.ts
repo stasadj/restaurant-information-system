@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { Staff } from 'src/app/model/Staff';
 import { StaffPaymentItem } from 'src/app/model/StaffPaymentItem';
@@ -10,6 +10,8 @@ import { StaffService } from 'src/app/services/staff/staff.service';
   styleUrls: ['./user-profile.component.less'],
 })
 export class UserProfileComponent implements OnInit {
+  @Input() staffId?: number = undefined;
+
   staff: Staff = {
     id: 0,
     firstName: '',
@@ -33,11 +35,11 @@ export class UserProfileComponent implements OnInit {
   constructor(private staffService: StaffService) {}
 
   ngOnInit(): void {
-    this.staffService.getStaffMemberById().subscribe((res) => {
+    this.staffService.getStaffMemberById(this.staffId).subscribe((res) => {
       this.staff = res;
     });
 
-    this.staffService.getStaffPaymentItems().subscribe((res) => {
+    this.staffService.getStaffPaymentItems(this.staffId).subscribe((res) => {
       this.staffPaymentItems = res;
       this.sortedData = res.slice();
       console.log(res);

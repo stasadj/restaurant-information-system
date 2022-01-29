@@ -68,6 +68,9 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
 import { UserProfileComponent } from './staff/user-profile/user-profile.component';
 import { MatSortModule } from '@angular/material/sort';
 import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-entry.pipe';
+import { StaffCardComponent } from './staff/staff-card/staff-card.component';
+import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
+import { StaffFormComponent } from './staff/staff-form/staff-form.component';
 import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.component';
 
 @NgModule({
@@ -109,6 +112,9 @@ import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.c
     GuestMenuComponent,
     UserProfileComponent,
     AddTotalEntryPipe,
+    StaffCardComponent,
+    StaffBoardComponent,
+    StaffFormComponent,
     ItemSortComponent,
   ],
   imports: [
