@@ -12,7 +12,8 @@
     
     <mat-card-content>
         <h2>{{item.description}}</h2>
-        <h3>Tags: {{tagsString}}</h3>
+        <h3>Tags: {{item.tags | tagsView}}</h3>
+
         <h4 style="text-align: right;">Purchase price: {{item.currentItemValue.purchasePrice | currency:'RSD'}}</h4>
         <h3 style="text-align: right;">Selling price: {{item.currentItemValue.sellingPrice | currency:'RSD'}}</h3>
 

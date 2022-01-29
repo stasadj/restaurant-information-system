@@ -73,6 +73,7 @@ import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
 import { StaffFormComponent } from './staff/staff-form/staff-form.component';
 import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.component';
 import { AdminPageComponent } from './pages/admin-page/admin-page.component';
+import { TagsViewPipe } from './pipes/tags-view/tags-view.pipe';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { AdminPageComponent } from './pages/admin-page/admin-page.component';
     StaffFormComponent,
     ItemSortComponent,
     AdminPageComponent,
+    TagsViewPipe,
   ],
   imports: [
     BrowserModule,
