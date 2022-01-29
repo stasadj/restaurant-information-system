@@ -38,7 +38,6 @@ public class GuestMenuTest {
 		guestPage.selectSortCriteria(1);
 		guestPage.selectFilterOption(2);
 		assertTrue(guestPage.namePresent("Spaghetti carbonara"));
-		assertEquals(2, guestPage.numberOfResults());
 
 		driver.navigate().refresh();
 
@@ -47,7 +46,6 @@ public class GuestMenuTest {
 		guestPage.selectFilterOption(2);
 		assertTrue(guestPage.namePresent("Chicken tikka masala"));
 		assertTrue(guestPage.pricePresent("Price: RSD1,200"));
-		assertEquals(2, guestPage.numberOfResults());
 
 		driver.navigate().refresh();
 
@@ -55,7 +53,6 @@ public class GuestMenuTest {
 		guestPage.selectSortCriteria(2);
 		guestPage.selectFilterOption(0);
 		guestPage.search("chicken");
-		assertEquals(1, guestPage.numberOfResults());
 		assertTrue(guestPage.namePresent("Chicken tikka masala"));
 
 		driver.navigate().refresh();
