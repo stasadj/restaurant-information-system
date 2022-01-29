@@ -10,7 +10,7 @@ import { StaffPaymentItem } from 'src/app/model/StaffPaymentItem';
 export class StaffService {
   private readonly path = '/api/staff';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllStaff(): Observable<Staff[]> {
     return this.http.get<Staff[]>(
@@ -28,5 +28,17 @@ export class StaffService {
     return this.http.get<StaffPaymentItem[]>(
       `${this.path}/payment/${id ?? localStorage.getItem('userId')}`
     );
+  }
+
+  updateStaff(staff: Staff): Observable<Staff> {
+    return this.http.put<Staff>(`${this.path}/edit`, staff);
+  }
+  
+  changeSalary(staffId: number, monthlyWage: number): Observable<Staff> {
+    return this.http.put<Staff>(`${this.path}/change-salary`, { staffId, monthlyWage });
+  }
+  
+  changePin(currentPin: number, newPin: number): Observable<Staff> {
+    return this.http.put<Staff>(`${this.path}/change-pin`, { currentPin, newPin });
   }
 }

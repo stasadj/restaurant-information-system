@@ -70,6 +70,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-entry.pipe';
 import { StaffCardComponent } from './staff/staff-card/staff-card.component';
 import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
+import { StaffFormComponent } from './staff/staff-form/staff-form.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
     AddTotalEntryPipe,
     StaffCardComponent,
     StaffBoardComponent,
+    StaffFormComponent,
   ],
   imports: [
     BrowserModule,

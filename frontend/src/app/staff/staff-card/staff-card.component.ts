@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Staff } from 'src/app/model/Staff';
+import { StaffFormComponent } from '../staff-form/staff-form.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 
 @Component({
@@ -20,6 +21,11 @@ export class StaffCardComponent implements OnInit {
   viewProfile(id: number) {
     let dialog = this.dialog.open(UserProfileComponent, { width: '50%', height: '60%' });
     dialog.componentInstance.staffId = id;
+  }
+
+  editProfile(staff: Staff) {
+    let dialog = this.dialog.open(StaffFormComponent, { width: '50%', height: '60%' });
+    dialog.componentInstance.setStaff(staff);
   }
 
 }
