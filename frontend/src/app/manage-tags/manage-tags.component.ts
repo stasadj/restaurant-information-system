@@ -27,6 +27,7 @@ export class ManageTagsComponent implements OnInit {
     onSaveClick(): void{
         if (!this.newTag.name){
             this.toastr.error("Tag name must not be blank");
+            return;
         }
         if (this.tags.filter(tag => tag.name === this.newTag.name).length === 0){
             
