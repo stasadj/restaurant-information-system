@@ -5,6 +5,9 @@ import com.restaurant.backend.domain.Staff;
 import com.restaurant.backend.dto.requests.ChangePasswordDTO;
 import com.restaurant.backend.repository.PasswordUserRepository;
 import com.restaurant.backend.repository.StaffRepository;
+
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,18 +20,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 @Service
 public class JWTUserDetailsService implements UserDetailsService {
 
+	private final EntityManager entityManager;
     private final PasswordUserRepository passwordUserRepository;
     private final StaffRepository staffRepository;
 
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
 
-    public JWTUserDetailsService(PasswordUserRepository passwordUserRepository, StaffRepository staffRepository) {
+    public JWTUserDetailsService(PasswordUserRepository passwordUserRepository, StaffRepository staffRepository, EntityManager entityManager) {
         this.passwordUserRepository = passwordUserRepository;
         this.staffRepository = staffRepository;
+        this.entityManager = entityManager;
     }
 
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
@@ -41,7 +48,11 @@ public class JWTUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Session session = entityManager.unwrap(Session.class);
+		Filter filter = session.enableFilter("deletedItemFilter");
+        filter.setParameter("isDeleted", false);
         Optional<PasswordUser> maybeUser = passwordUserRepository.findByUsername(username);
+		session.disableFilter("deletedItemFilter");
         if (maybeUser.isPresent()) {
             return maybeUser.get();
         } else {
@@ -50,7 +61,11 @@ public class JWTUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByPin(int pin) throws UsernameNotFoundException {
+		Session session = entityManager.unwrap(Session.class);
+		Filter filter = session.enableFilter("deletedItemFilter");
+        filter.setParameter("isDeleted", false);
         Optional<Staff> maybeUser = staffRepository.findByPin(pin);
+        session.disableFilter("deletedItemFilter");
         if (maybeUser.isPresent()) {
             return maybeUser.get();
         } else {

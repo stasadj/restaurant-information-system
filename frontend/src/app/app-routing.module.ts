@@ -7,6 +7,7 @@ import { ManagerPageComponent } from './pages/manager-page/manager-page/manager-
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { WaiterPageComponent } from './pages/waiter-page/waiter-page.component';
 import { GuestPageComponent } from './pages/guest-page/guest-page.component';
+import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'manager',
     component: ManagerPageComponent,
+  },
+  {
+    path: 'admin',
+    component: AdminPageComponent,
   },
   {
     path: 'guest',

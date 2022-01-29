@@ -72,6 +72,7 @@ import { StaffCardComponent } from './staff/staff-card/staff-card.component';
 import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
 import { StaffFormComponent } from './staff/staff-form/staff-form.component';
 import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.component';
+import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +117,7 @@ import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.c
     StaffBoardComponent,
     StaffFormComponent,
     ItemSortComponent,
+    AdminPageComponent,
   ],
   imports: [
     BrowserModule,
