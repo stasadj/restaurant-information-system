@@ -3,7 +3,7 @@
         <app-items [items]=items [onDataChanged]="fetchData"></app-items>
     </mat-tab>
     <mat-tab label="New item">
-        <app-create-item [onItemCreated]="fetchData"></app-create-item>
+        <app-create-item [onItemCreated]="fetchData" [tags]="tags" [categories]="categories" [checkBoxes]="tagCheckBoxes"></app-create-item>
     </mat-tab>
     <mat-tab label="Tags">
         <ng-template matTabContent>

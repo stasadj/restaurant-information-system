@@ -17,6 +17,8 @@ export class ManagerPageComponent implements OnInit {
     public tags: Tag[] = [];
     public categories: Category[] = [];
 
+    public tagCheckBoxes: { tag: Tag; select: boolean }[] = [];
+
     constructor(private itemService: ItemService, private tagsService: TagService, private categoryService: CategoryService) { }
 
     fetchData = () => {
@@ -25,6 +27,9 @@ export class ManagerPageComponent implements OnInit {
         });
         this.tagsService.getTags().subscribe((res) => {
             this.tags = res;
+            this.tags.forEach(tag => {
+                this.tagCheckBoxes.push({ tag: tag, select: false })
+            });
         });
         this.categoryService.getCategories().subscribe((res) => {
             this.categories = res;
