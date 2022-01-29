@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <div mat-card-avatar></div>
-    <mat-card-title>
+    <mat-card-title class="item-name">
       {{ item.name }}
     </mat-card-title>
     <mat-card-subtitle
@@ -19,7 +19,7 @@
         >{{ tag.name }}</mat-chip
       >
     </mat-chip-list>
-    <h3 style="text-align: right">
+    <h3 style="text-align: right" class="item-price">
       Price:
       {{ item.currentItemValue.sellingPrice | currency: "RSD":"code" }}
     </h3>

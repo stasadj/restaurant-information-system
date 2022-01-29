@@ -1,5 +1,6 @@
 <mat-chip-list>
   <mat-chip
+    id="0"
     color="accent"
     [selected]="selectedCategoryId == 0"
     (click)="onCategoryChange(0); selectedCategoryId = 0"
@@ -10,6 +11,7 @@
     color="accent"
     [selected]="category.id == selectedCategoryId"
     (click)="onCategoryChange(category.id); selectedCategoryId = category.id"
+    [id]="category.id"
     >{{ category.name }}</mat-chip
   >
 </mat-chip-list>
