@@ -28,6 +28,9 @@ public class LoginPage {
 
     @FindBy(xpath = "//*[@id='mat-tab-label-0-1']")
     private WebElement managerTab;
+  
+    @FindBy(id = "logout-btn")
+	  private WebElement logoutButton;
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -88,4 +91,8 @@ public class LoginPage {
         Utilities.visibilityWait(driver, By.xpath("//mat-spinner"), 2);
         Utilities.invisibilityWait(driver, By.xpath("//mat-spinner"), 10);
     }
+  
+    public void logout() {
+		    Utilities.clickableWait(driver, this.logoutButton, 10).click();
+	  }
 }

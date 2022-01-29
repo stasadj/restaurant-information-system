@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-
 public class Utilities {
     public static boolean urlWait(WebDriver driver, String url, int wait) {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.urlToBe(url));
@@ -70,4 +69,8 @@ public class Utilities {
             return false;
         }
     }
+  
+  public static WebElement visibilityWaitByLocator(WebDriver driver, By locator, int wait) {
+		return new WebDriverWait(driver, wait).until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
 }

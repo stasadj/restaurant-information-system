@@ -2,12 +2,18 @@
 <mat-form-field appearance="standard">
   <mat-label>Search menu items</mat-label>
   <input
+    id="search-input"
     matInput
     name="search"
     placeholder="Ex. Pizza"
     [(ngModel)]="searchInput"
   />
 </mat-form-field>
-<button mat-flat-button color="primary" (click)="onSearch(searchInput)">
+<button
+  id="search-button"
+  mat-flat-button
+  color="primary"
+  (click)="onSearch(searchInput)"
+>
   Search
 </button>
