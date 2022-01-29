@@ -38,51 +38,51 @@ public class StaffController {
 	}
 
 	@GetMapping("/all")
-	@PreAuthorize("hasRole('MANAGER')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
 	public ResponseEntity<List<StaffDTO>> getAll() {
 		return new ResponseEntity<>(staffMapper.convertAll(staffService.getAll()), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'COOK', 'BARMAN')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'COOK', 'BARMAN', 'ADMIN')")
 	public ResponseEntity<StaffDTO> getById(@PathVariable Long id) {
 		return new ResponseEntity<>(staffMapper.convert(staffService.findOne(id)), HttpStatus.OK);
 	}
 
 	@PostMapping("/create")
-	@PreAuthorize("hasRole('MANAGER')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<StaffDTO> create(@Validated(CreateInfo.class) @RequestBody StaffDTO staffDTO) {
 		return new ResponseEntity<>(staffMapper.convert(staffService.create(staffMapper.convertToDomain(staffDTO))),
 				HttpStatus.OK);
 	}
 
 	@PutMapping("/edit")
-	@PreAuthorize("hasRole('MANAGER')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
 	public ResponseEntity<StaffDTO> edit(@Validated(EditInfo.class) @RequestBody UserDTO userDTO) {
 		return new ResponseEntity<>(staffMapper.convert(staffService.update(userDTO)), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('MANAGER')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		staffService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PutMapping("/change-salary")
-	@PreAuthorize("hasRole('MANAGER')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
 	public ResponseEntity<StaffDTO> setSalary(@Valid @RequestBody SetSalaryDTO dto) {
 		return new ResponseEntity<>(staffMapper.convert(staffService.changeSalary(dto)), HttpStatus.OK);
 	}
 
 	@PutMapping("/change-pin")
-	@PreAuthorize("hasRole('MANAGER')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
 	public ResponseEntity<StaffDTO> changePin(@Valid @RequestBody ChangePinDTO changePinDTO) {
 		return new ResponseEntity<>(staffMapper.convert(staffService.changePin(changePinDTO)), HttpStatus.OK);
 	}
 
 	@GetMapping("/payment/{id}")
-	@PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'COOK', 'BARMAN')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'WAITER', 'COOK', 'BARMAN', 'ADMIN')")
 	public ResponseEntity<List<StaffPaymentItemDTO>> getStaffPayment(@PathVariable Long id) {
 		return new ResponseEntity<>(staffPaymentItemMapper.convertAll(staffService.getStaffPaymentItems(id)),
 				HttpStatus.OK);
