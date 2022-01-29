@@ -1,5 +1,11 @@
 <mat-chip-list>
   <mat-chip
+    color="accent"
+    [selected]="selectedCategoryId == 0"
+    (click)="onCategoryChange(0); selectedCategoryId = 0"
+    >all</mat-chip
+  >
+  <mat-chip
     *ngFor="let category of categories"
     color="accent"
     [selected]="category.id == selectedCategoryId"
