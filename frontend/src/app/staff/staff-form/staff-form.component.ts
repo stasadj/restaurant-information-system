@@ -40,10 +40,10 @@ export class StaffFormComponent implements OnInit {
             if (this.oldPin && this.staff && this.staff.pin && this.oldPin !== this.staff.pin) {
               this.staffService.changePin(this.oldPin, this.staff.pin).subscribe(staff => {
                 this.staff = staff;
-                this.successfulEditClose();
+                this._successfulEditClose();
               });
             } else {
-              this.successfulEditClose();
+              this._successfulEditClose();
             }
           });
         }
@@ -51,7 +51,7 @@ export class StaffFormComponent implements OnInit {
     }
   }
 
-  private successfulEditClose() {
+  private _successfulEditClose() {
     this.toastr.success('Successfuly edited user.');
     this._closeDialog();
   }

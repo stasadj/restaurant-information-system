@@ -21,4 +21,8 @@ export class StaffBoardComponent implements OnInit {
     });
   }
 
+  removeStaffMember(staff: Staff) {
+    this.staffMembers.splice(this.staffMembers.indexOf(staff), 1);
+  }
+
 }

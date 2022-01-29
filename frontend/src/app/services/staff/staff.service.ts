@@ -24,6 +24,10 @@ export class StaffService {
     );
   }
 
+  deleteStaff(id?: number): void {
+    this.http.delete(`${this.path}/${id}`).subscribe();
+  }
+
   getStaffPaymentItems(id?: number): Observable<StaffPaymentItem[]> {
     return this.http.get<StaffPaymentItem[]>(
       `${this.path}/payment/${id ?? localStorage.getItem('userId')}`
@@ -33,11 +37,11 @@ export class StaffService {
   updateStaff(staff: Staff): Observable<Staff> {
     return this.http.put<Staff>(`${this.path}/edit`, staff);
   }
-  
+
   changeSalary(staffId: number, monthlyWage: number): Observable<Staff> {
     return this.http.put<Staff>(`${this.path}/change-salary`, { staffId, monthlyWage });
   }
-  
+
   changePin(currentPin: number, newPin: number): Observable<Staff> {
     return this.http.put<Staff>(`${this.path}/change-pin`, { currentPin, newPin });
   }
