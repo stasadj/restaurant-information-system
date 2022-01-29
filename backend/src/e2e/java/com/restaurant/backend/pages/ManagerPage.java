@@ -14,12 +14,19 @@ public class ManagerPage {
     @FindBy(xpath = "//*[@id='mat-tab-label-1-1']")
     private WebElement newItemTab;
 
+    @FindBy(xpath = "//*[@id='mat-tab-label-1-3']")
+    private WebElement reportTab;
+
     public void itemsTabClick(){
         this.itemsTab.click();
     }
 
     public void newItemTabClick(){
         this.newItemTab.click();
+    }
+
+    public void reportTabClick(){
+        this.reportTab.click();
     }
     
 }
