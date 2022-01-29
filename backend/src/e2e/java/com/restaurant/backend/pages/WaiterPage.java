@@ -9,15 +9,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class WaiterPage {
-    private WebDriver driver;
+    private final WebDriver driver;
 
-    @FindBy(xpath = "//*[@class='table-in-restaurant']")
+    @FindBy(className = "table-in-restaurant")
     private List<WebElement> tables;
 
     @FindBy(className = "notification")
     private List<WebElement> notifications;
-
-
 
     public WaiterPage(WebDriver driver) {
         this.driver = driver;
@@ -35,5 +33,19 @@ public class WaiterPage {
                 return true;
             }
         return false;
+    }
+
+    public boolean waitAppearedNotification(String tableId, int prevNumber) {
+        List<WebElement> notifications = Utilities.waitNumbOfElementsMoreThan(driver,
+                By.className("notification"), 10, prevNumber);
+        return Utilities.textWait(driver, notifications.get(notifications.size()-1).findElement(By.className("mat-line")), "Table "+tableId, 10);
+    }
+
+    public int getNumberOfNotifications() {
+        return notifications.size();
+    }
+
+    public void clickLastNotification() {
+        notifications.get(notifications.size()-1).click();
     }
 }

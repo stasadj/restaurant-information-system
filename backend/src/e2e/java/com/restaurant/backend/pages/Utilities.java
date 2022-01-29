@@ -51,6 +51,10 @@ public class Utilities {
         return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBeLessThan(locator, number));
     }
 
+    public static List<WebElement> waitNumbOfElements(WebDriver driver, By locator, int wait, int number) {
+        return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBe(locator, number));
+    }
+
     public static boolean isPresent(WebDriver driver, By locator) {
         try {
             return driver.findElement(locator).isDisplayed();

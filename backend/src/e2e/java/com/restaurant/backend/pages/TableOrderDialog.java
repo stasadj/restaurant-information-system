@@ -6,15 +6,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.Objects;
 
 public class TableOrderDialog {
-    private WebDriver driver;
+    private final WebDriver driver;
 
     @FindBy(id = "close-btn")
     private WebElement closeButton;
-
-    @FindBy(xpath = "//*[@id='order-items-table']/tbody/tr")
-    private List<WebElement> orderItems;
 
     @FindBy(xpath = "//*[@id='order-menu-tabs']//*[@role='tab'][1]")
     private WebElement orderTab;
@@ -43,14 +41,14 @@ public class TableOrderDialog {
     @FindBy(id = "finalize-btn")
     private WebElement finalizeButton;
 
+    @FindBy(xpath = "//*[@id='order-items-table']/tbody/tr[last()]")
+    private WebElement lastOrderItem;
+
+    @FindBy(xpath = "//*[@id='order-items-table']/tbody/tr[last()]/td[5]")
+    private WebElement lastOrderItemStatus;
+
     public TableOrderDialog(WebDriver driver) {
         this.driver = driver;
-    }
-
-    public List<WebElement> getOrderItems() {
-        Utilities.visibilityWait(driver, By.xpath("//*[@id='order-items-table']"), 5);
-        System.out.println(orderItems.get(0).findElement(By.className("mat-column-status")).getText());
-        return orderItems;
     }
 
     public void orderTabClick() {
@@ -65,24 +63,29 @@ public class TableOrderDialog {
         Utilities.presenceWait(driver, By.id("no-order-txt"), 5);
     }
 
+    public void waitOrderItemsTable() {
+        Utilities.presenceWait(driver, By.id("order-items-table"), 5);
+    }
+
     public boolean clickCategory(int i) {
         List<WebElement> categoryList =
         Utilities.waitNumbOfElementsMoreThan(driver, By.xpath("//*[@id='category-select']/mat-list-option"), 5, 0);
         if (categoryList.size() > i) {
+            Utilities.clickableWait(driver, categoryList.get(i), 3);
             categoryList.get(i).click();
             return true;
         }
         return false;
     }
 
-    public boolean clickItem(int i) {
+    public String clickItem(int i) {
         List<WebElement> itemList =
-                Utilities.waitNumbOfElementsMoreThan(driver, By.xpath("//*[@id='items-table']/tbody/tr"), 5, 0);
+                Utilities.waitNumbOfElementsMoreThan(driver, By.xpath("//*[@id='items-table']/tbody/tr"), 10, 0);
         if (itemList.size() > i) {
             itemList.get(i).click();
-            return true;
+            return itemList.get(i).findElement(By.className("mat-column-name")).getText();
         }
-        return false;
+        return null;
     }
 
     public void clickPlus(int times) {
@@ -97,5 +100,38 @@ public class TableOrderDialog {
 
     public void clickAdd() {
         Utilities.clickableWait(driver, addButton, 3).click();
+    }
+
+    public boolean isAdded(String itemName, int amount) {
+        Utilities.textWait(driver, lastOrderItem.findElement(By.className("mat-column-name")), itemName, 3);
+        List<WebElement> orderItems =
+                Utilities.waitNumbOfElementsMoreThan(driver, By.xpath("//*[@id='order-items-table']/tbody/tr"), 5, 0);
+        for (WebElement el : orderItems) {
+            if (Objects.equals(el.findElement(By.className("mat-column-name")).getText(), itemName)
+                    && Integer.parseInt(el.findElement(By.className("mat-column-amount")).getText())>=amount) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCreated() {
+        return Utilities.textWait(driver, lastOrderItemStatus, "PENDING", 10);
+    }
+
+    public void clickCreate() {
+        Utilities.clickableWait(driver, createButton, 3).click();
+    }
+
+    public void clickUpdate() {
+        Utilities.clickableWait(driver, updateButton, 3).click();
+    }
+
+    public void clickFinalize() {
+        Utilities.clickableWait(driver, finalizeButton, 3).click();
+    }
+
+    public void clickClose() {
+        Utilities.clickableWait(driver, closeButton, 3).click();
     }
 }

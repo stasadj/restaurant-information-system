@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage {
-    private WebDriver driver;
+    private final WebDriver driver;
 
     @FindBy(id = "username-input")
     private WebElement usernameInput;
