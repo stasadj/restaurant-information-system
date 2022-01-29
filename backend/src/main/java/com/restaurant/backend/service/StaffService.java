@@ -10,8 +10,12 @@ import com.restaurant.backend.exception.NotFoundException;
 import com.restaurant.backend.repository.StaffPaymentItemRepository;
 import com.restaurant.backend.repository.StaffRepository;
 import lombok.AllArgsConstructor;
+
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +24,22 @@ import java.util.Optional;
 @Transactional
 @AllArgsConstructor
 public class StaffService {
+	private final EntityManager entityManager;
 	private final StaffRepository staffRepository;
 	private final StaffPaymentItemRepository staffPaymentItemRepository;
 
 	public List<Staff> getAll() {
+		// Retrieves undeleted staff
+		Session session = entityManager.unwrap(Session.class);
+		Filter filter = session.enableFilter("deletedItemFilter");
+		filter.setParameter("isDeleted", false);
+		List<Staff> staff = staffRepository.findAll();
+		session.disableFilter("deletedItemFilter");
+		return staff;
+	}
+
+	public List<Staff> getAllPlusDeleted() {
+		// Retrieves all staff, deleted included
 		return staffRepository.findAll();
 	}
 
@@ -52,7 +68,8 @@ public class StaffService {
 
 	public void delete(Long id) throws NotFoundException {
 		Staff staff = findOne(id);
-		staffRepository.delete(staff);
+		staff.setDeleted(true);
+		staffRepository.save(staff);
 	}
 
 	public Staff changePin(ChangePinDTO changePinDTO) throws NotFoundException, BadRequestException {
