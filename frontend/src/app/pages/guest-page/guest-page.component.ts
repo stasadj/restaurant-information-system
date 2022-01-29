@@ -12,8 +12,9 @@ import { CategoryService } from 'src/app/services/category/category.service';
 export class GuestPageComponent implements OnInit {
   public items: Item[] = [];
   public categories: Category[] = [];
-  public selectedCategoryId: number = 2;
+  public selectedCategoryId: number = 0;
   public searchInput: string = '';
+  public sortCriteria: number = 0;
   constructor(
     private itemService: ItemService,
     private categoryService: CategoryService
@@ -21,7 +22,11 @@ export class GuestPageComponent implements OnInit {
 
   getMenuItems = () => {
     this.itemService
-      .searchMenuItems(this.selectedCategoryId, this.searchInput)
+      .searchMenuItems(
+        this.selectedCategoryId,
+        this.searchInput,
+        this.sortCriteria
+      )
       .subscribe((res) => {
         this.items = res;
       });
@@ -29,7 +34,11 @@ export class GuestPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.itemService
-      .searchMenuItems(this.selectedCategoryId, this.searchInput)
+      .searchMenuItems(
+        this.selectedCategoryId,
+        this.searchInput,
+        this.sortCriteria
+      )
       .subscribe((res) => {
         this.items = res;
       });
@@ -46,6 +55,11 @@ export class GuestPageComponent implements OnInit {
 
   handleSearchButtonClick = (searchInput: string) => {
     this.searchInput = searchInput;
+    this.getMenuItems();
+  };
+
+  handleSortCriteriaChange = (sortCriteria: number) => {
+    this.sortCriteria = sortCriteria;
     this.getMenuItems();
   };
 }

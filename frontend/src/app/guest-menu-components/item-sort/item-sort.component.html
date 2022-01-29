@@ -1,0 +1,10 @@
+<mat-form-field appearance="standard">
+  <mat-label>Sort by:</mat-label>
+  <mat-select (selectionChange)="onSortCriteriaChange($event.value)">
+    <mat-option value="0">None</mat-option>
+    <mat-option value="1">Name &#8593;</mat-option>
+    <mat-option value="2">Name &#8595;</mat-option>
+    <mat-option value="3">Price &#8593;</mat-option>
+    <mat-option value="4">Price &#8595;</mat-option>
+  </mat-select>
+</mat-form-field>

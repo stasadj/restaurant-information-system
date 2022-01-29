@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ItemSearchComponent implements OnInit {
   @Input() searchInput: string = '';
   @Input() onSearch: Function = () => {};
+  @Input() onSortCriteriaChange: Function = () => {};
 
   constructor() {}
 
