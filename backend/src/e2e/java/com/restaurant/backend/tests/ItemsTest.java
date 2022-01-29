@@ -44,6 +44,12 @@ public class ItemsTest {
         managerPage = PageFactory.initElements(chromeDriver, ManagerPage.class);
         editItemDialogPage = PageFactory.initElements(chromeDriver, EditItemDialogPage.class);
 
+        chromeDriver.navigate().to("http://localhost:4200/login");
+        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
+        loginPage.loginWithCredentials("morgan", "test");
+        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
+
+
     }
 
     
@@ -52,14 +58,9 @@ public class ItemsTest {
     @Order(1)
     public void itemsCreationTest() throws InterruptedException {
 
-        // login
-        chromeDriver.navigate().to("http://localhost:4200/login");
-        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
-        loginPage.loginWithCredentials("morgan", "test");
-        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
-
         // saving starting number of cards
         int numberOfItemCards = itemsPage.getNumberOfItems();
+        System.out.println("Number of items in beginning: " + numberOfItemCards);
 
         // create new item
         managerPage.newItemTabClick();
@@ -76,6 +77,7 @@ public class ItemsTest {
 
         // checking if number of cards incremented
         int numberOfItemsAfterAdd = itemsPage.getItemCountAfterCreate(numberOfItemCards);
+        System.out.println("Number of items after create: " + numberOfItemsAfterAdd);
         assertEquals(numberOfItemCards + 1, numberOfItemsAfterAdd);
 
         // checking if data on last card matches new data
@@ -87,12 +89,7 @@ public class ItemsTest {
     @Order(2)
     public void itemsMenuAddRemoveTest() throws InterruptedException {
 
-        // login
-        chromeDriver.navigate().to("http://localhost:4200/login");
-        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
-        loginPage.loginWithCredentials("morgan", "test");
-        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
-
+        chromeDriver.navigate().refresh();
         // adding created item to menu
         itemsPage.lastItemAddToMenuButtonClick();
 
@@ -113,11 +110,7 @@ public class ItemsTest {
     @Order(3)
     public void itemsEdit() throws InterruptedException {
 
-        // login
-        chromeDriver.navigate().to("http://localhost:4200/login");
-        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
-        loginPage.loginWithCredentials("morgan", "test");
-        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
+        chromeDriver.navigate().refresh();
 
          // editing created item
          itemsPage.lastItemEditClick();
@@ -146,11 +139,7 @@ public class ItemsTest {
     @Order(4)
     public void itemsDeleteTest() throws InterruptedException {
 
-        // login
-        chromeDriver.navigate().to("http://localhost:4200/login");
-        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
-        loginPage.loginWithCredentials("morgan", "test");
-        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
+        chromeDriver.navigate().refresh();
 
         // saving starting number of cards
         int numberOfItemCards = itemsPage.getNumberOfItems();
@@ -160,12 +149,13 @@ public class ItemsTest {
 
         // checking if number of cards decremented
         int numberOfItemsAfterDelete = itemsPage.getItemCountAfterDelete(numberOfItemCards);
+        System.out.println("Number of items after delete: " + numberOfItemsAfterDelete);
         assertEquals(numberOfItemCards - 1, numberOfItemsAfterDelete);
 
     }
 
     @AfterAll
     public void closeSelenium() {
-        chromeDriver.quit();
+        // chromeDriver.quit();
     }
 }

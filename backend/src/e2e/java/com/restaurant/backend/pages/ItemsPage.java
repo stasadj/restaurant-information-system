@@ -3,6 +3,7 @@ package com.restaurant.backend.pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -41,9 +42,16 @@ public class ItemsPage extends ManagerPage {
 
     public boolean lastItemTitleHasText(String text) {
 
-        By locator = By.xpath("//mat-card-title[contains(text(), '" + text +"')]");
-        List<WebElement> els = Utilities.visibilityWait(driver, locator, 10);
-        return els.get(0).getText().equals(text);
+        try{
+            By locator = By.xpath("//mat-card-title[contains(text(), '" + text +"')]");
+            List<WebElement> els = Utilities.visibilityWait(driver, locator, 10);
+            return els.get(0).getText().equals(text);
+        }
+        catch(StaleElementReferenceException ex){
+            System.out.println("Stale ref ex caught");
+            this.driver.navigate().refresh();
+            return lastItemTitleHasText(text);
+        }
 
     }
 
