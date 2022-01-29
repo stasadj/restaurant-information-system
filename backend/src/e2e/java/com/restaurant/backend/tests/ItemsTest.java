@@ -46,19 +46,17 @@ public class ItemsTest {
 
     }
 
+    
+
     @Test
     @Order(1)
-    public void login() {
-        //login
+    public void itemsCreationTest() throws InterruptedException {
+
+        // login
         chromeDriver.navigate().to("http://localhost:4200/login");
         assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
         loginPage.loginWithCredentials("morgan", "test");
         assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
-    }
-
-    @Test
-    @Order(2)
-    public void itemsCreationTest() throws InterruptedException {
 
         // saving starting number of cards
         int numberOfItemCards = itemsPage.getNumberOfItems();
@@ -86,7 +84,7 @@ public class ItemsTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     public void itemsMenuAddRemoveTest() throws InterruptedException {
 
         // login
@@ -112,8 +110,14 @@ public class ItemsTest {
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     public void itemsEdit() throws InterruptedException {
+
+        // login
+        chromeDriver.navigate().to("http://localhost:4200/login");
+        assertEquals("http://localhost:4200/login", chromeDriver.getCurrentUrl());
+        loginPage.loginWithCredentials("morgan", "test");
+        assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/manager", 5));
 
          // editing created item
          itemsPage.lastItemEditClick();
@@ -139,7 +143,7 @@ public class ItemsTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     public void itemsDeleteTest() throws InterruptedException {
 
         // login

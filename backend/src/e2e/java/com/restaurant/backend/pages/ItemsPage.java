@@ -71,7 +71,9 @@ public class ItemsPage extends ManagerPage {
     }
 
     public void lastItemEditClick() {
-        Utilities.clickableWait(driver, this.editButtons.get(this.editButtons.size() - 1), 10).click();
+        By childLocator = By.className("edit-button");
+        this.itemCards = Utilities.visibilityWait(driver, By.className("item-card"), 5);
+        Utilities.childPresenceWait(driver, this.itemCards.get(this.itemCards.size() - 1), childLocator, 10).click();
 
     }
 
