@@ -120,6 +120,7 @@ public class OrderTest {
 
     @AfterAll
     public void closeSelenium() {
-        //chromeDriver.quit();
+        waitersDriver.quit();
+        cooksDriver.quit();
     }
 }
