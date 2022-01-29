@@ -119,6 +119,9 @@ public class ItemService {
 	}
 
 	public Item create(@Validated(CreateInfo.class) ItemDTO itemDTO, MultipartFile file) {
+
+        DTOValidator.validate(itemDTO, CreateInfo.class);
+
 		Item item = itemMapper.convertToDomain(itemDTO);
 		item.setId(null);
 		item.setDeleted(false); // initially false
@@ -175,6 +178,9 @@ public class ItemService {
 	}
 
 	public ItemValue changeItemPrice(ChangePriceDTO dto) throws NotFoundException {
+
+        DTOValidator.validate(dto); 
+
 		Item item = findOne(dto.getItemId());
 		ItemValue currentValue = item.getItemValueAt(LocalDateTime.now());
 

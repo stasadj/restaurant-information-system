@@ -63,7 +63,7 @@ public class ReportServiceUnitTests {
             new Item(1L, "Some name", category, "Some description", "", null, true, itemValues, ItemType.FOOD, false)
         );
         when(itemService.findOne(anyLong())).thenReturn(items.get(0));
-        when(itemService.getAll()).thenReturn(items);
+        when(itemService.getAllPlusDeleted()).thenReturn(items);
 
         List<OrderRecord> orderRecords = List.of(
             new OrderRecord(1L, ORDER_DATE_ONE.atStartOfDay(), 1, itemValue),

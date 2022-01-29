@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-//import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.PageFactory;
 
 
@@ -18,17 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LoginTest {
     private WebDriver chromeDriver;
-    //private WebDriver edgeDriver;
 
     private LoginPage loginPage;
 
     @BeforeAll
     public void setupSelenium() {
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-        //System.setProperty("webdriver.edge.driver", "drivers/msedgedriver.exe");
 
         chromeDriver = new ChromeDriver();
-        //edgeDriver = new EdgeDriver();
 
         chromeDriver.manage().window().maximize();
 
@@ -54,6 +50,7 @@ public class LoginTest {
         loginPage.setPinInput("1234");
         loginPage.pinLoginButtonClick();
         assertTrue(Utilities.urlWait(chromeDriver, "http://localhost:4200/waiter", 5));
+        loginPage.waitWebSocketConnection();
     }
 
     @AfterAll

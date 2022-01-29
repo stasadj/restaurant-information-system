@@ -4,18 +4,18 @@
     <mat-card-content class="content">
         <mat-form-field>
             <mat-label>Name</mat-label>
-            <input matInput [(ngModel)]="newItem.name">
+            <input id="item_name" matInput [(ngModel)]="newItem.name">
         </mat-form-field>
 
 
         <mat-form-field>
             <mat-label>Description</mat-label>
-            <textarea matInput [(ngModel)]="newItem.description"></textarea>
+            <textarea id="item_description" matInput [(ngModel)]="newItem.description"></textarea>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field id="categories_container">
             <mat-label>Category</mat-label>
-            <mat-select [compareWith]="compareObjects" [(ngModel)]="newItem.category">
+            <mat-select [compareWith]="compareObjects" [(ngModel)]="newItem.category" id="item_category">
                 <mat-option *ngFor="let category of categories" [value]="category">
                     {{category.name}}
                 </mat-option>
@@ -24,15 +24,15 @@
 
         <mat-form-field>
             <mat-label>Purchase price</mat-label>
-            <input type="number" matInput [(ngModel)]="newItem.currentItemValue.purchasePrice">
+            <input type="number" matInput [(ngModel)]="newItem.currentItemValue.purchasePrice" id="item_purchase_price">
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Selling price</mat-label>
-            <input type="number" matInput [(ngModel)]="newItem.currentItemValue.sellingPrice">
+            <input type="number" matInput [(ngModel)]="newItem.currentItemValue.sellingPrice" id="item_selling_price">
         </mat-form-field>
 
-        <div class="mat-form-field">
+        <div class="mat-form-field" id="checkboxes_container">
             <h4>Select tags:</h4>
             <div *ngFor="let cb of checkBoxes">
                 {{cb.tag.name}}<input class="form-check-input" type="checkbox" [value]="cb.tag.id" [checked]="cb.select" (change)="onChangeTag($event)"/>
@@ -47,7 +47,7 @@
 
     </mat-card-content>
     <div mat-card-actions>
-        <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+        <button id="save_item_button" mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
     </div>
 
 

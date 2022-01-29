@@ -119,7 +119,7 @@ public class FileSystemStorageService implements StorageService {
         for (File f : files) {
             boolean delete = true;
             for (int i = 1; i < 6; i++){
-                if (f.getName().startsWith("image" + i)){
+                if (f.getName().startsWith("image" + i + ".")){
                     delete = false;
                 }
             }

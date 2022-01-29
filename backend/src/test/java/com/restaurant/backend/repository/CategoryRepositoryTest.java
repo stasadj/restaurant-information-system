@@ -30,7 +30,7 @@ public class CategoryRepositoryTest {
     public void testTimesUsed(long categoryId, int times) {
         int result = categoryRepository.timesUsed(categoryId);
         assertEquals(times, result);
-    }
+    } 
 
     private static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
