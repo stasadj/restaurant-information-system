@@ -55,6 +55,6 @@ public class LoginTest {
 
     @AfterAll
     public void closeSelenium() {
-        //chromeDriver.quit();
+        chromeDriver.quit();
     }
 }
