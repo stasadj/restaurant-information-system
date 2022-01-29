@@ -162,6 +162,6 @@ public class ItemsTest {
 
     @AfterAll
     public void closeSelenium() {
-        // chromeDriver.quit();
+        chromeDriver.quit();
     }
 }

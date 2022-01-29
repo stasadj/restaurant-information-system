@@ -41,9 +41,9 @@ public class ItemsPage extends ManagerPage {
 
     public boolean lastItemTitleHasText(String text) {
 
-        By locator = By.className("mat-card-title");
-        this.itemCardsTitles = Utilities.visibilityWait(driver, locator , 10);
-        return Utilities.textWait(driver, this.itemCardsTitles.get(this.itemCardsTitles.size()-1), text, 10);
+        By locator = By.xpath("//mat-card-title[contains(text(), '" + text +"')]");
+        List<WebElement> els = Utilities.visibilityWait(driver, locator, 10);
+        return els.get(0).getText().equals(text);
 
     }
 
