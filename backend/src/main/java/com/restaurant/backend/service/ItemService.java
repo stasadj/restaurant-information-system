@@ -185,6 +185,9 @@ public class ItemService {
 
     
     public List<Item> searchMenuItems(Long categoryId, String searchInput) {
+    	if (categoryId == 0) {
+    		return this.getAllMenuItems();
+    	}
         return itemRepository.searchMenuItems(categoryId, searchInput);
     }
 }

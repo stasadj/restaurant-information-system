@@ -12,7 +12,7 @@ import { CategoryService } from 'src/app/services/category/category.service';
 export class GuestPageComponent implements OnInit {
   public items: Item[] = [];
   public categories: Category[] = [];
-  public selectedCategoryId: number = 2;
+  public selectedCategoryId: number = 0;
   public searchInput: string = '';
   constructor(
     private itemService: ItemService,
