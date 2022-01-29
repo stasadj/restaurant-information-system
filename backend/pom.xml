@@ -222,7 +222,7 @@
 						<configuration>
 							<tasks>
 								<delete>
-									<fileset dir="src/main/resources/public" />
+									<fileset dir="src/main/resources/public/build" />
 								</delete>
 							</tasks>
 						</configuration>
@@ -245,7 +245,7 @@
                                 <resource>
                                     <directory>${project.parent.basedir}/frontend/dist/frontend</directory>
 									<includes>
-										<include>static/</include>
+										<include>build/</include>
 										<include>index.html</include>
 									</includes>
                                 </resource>
@@ -269,6 +269,25 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>add-test-source</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/e2e/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

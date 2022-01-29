@@ -96,7 +96,7 @@ public class ReportService {
         try {
             switch (query.getReportType()) {
                 case PROFIT:
-                    List<Item> allItems = (itemId == null) ? itemService.getAll() : new ArrayList<>() {{
+                    List<Item> allItems = (itemId == null) ? itemService.getAllPlusDeleted() : new ArrayList<>() {{
                         add(itemService.findOne(itemId));
                     }};
 

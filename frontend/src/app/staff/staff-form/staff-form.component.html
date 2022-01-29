@@ -1,0 +1,86 @@
+<div *ngIf="staff">
+    <h2 mat-dialog-title>{{ staff.firstName }} {{ staff.lastName }}</h2>
+    <mat-dialog-content class="mat-typography">
+
+        <mat-form-field *ngIf="firstNameControl">
+            <mat-label>First Name</mat-label>
+            <input matInput [value]="staff.firstName" [formControl]="firstNameControl" />
+            <mat-error *ngIf="firstNameControl.hasError('required')">
+                First Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="lastNameControl">
+            <mat-label>Last Name</mat-label>
+            <input matInput [value]="staff.lastName" [formControl]="lastNameControl" />
+            <mat-error *ngIf="lastNameControl.hasError('required')">
+                Last Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="emailControl">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput [value]="staff.email" [formControl]="emailControl" />
+            <mat-error *ngIf="emailControl.hasError('required')">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="emailControl.hasError('email')">
+                Email is invalid
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="phoneNumberControl">
+            <mat-label>Phone number</mat-label>
+            <input matInput [value]="staff.phoneNumber" [formControl]="phoneNumberControl" />
+            <mat-error *ngIf="phoneNumberControl.hasError('required')">
+                Phone number is required
+            </mat-error>
+            <mat-error *ngIf="phoneNumberControl.hasError('pattern')">
+                Phone number must be numeric with spaces and an optional '+XXX' at start.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="monthlyWageControl">
+            <mat-label>Monthly Wage</mat-label>
+            <input type="number" matInput [value]="staff.monthlyWage" [formControl]="monthlyWageControl" />
+            <mat-error *ngIf="monthlyWageControl.hasError('required')">
+                Monthly wage is required
+            </mat-error>
+            <mat-error *ngIf="monthlyWageControl.hasError('min')">
+                Wage needs to be a non-negative number
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="pinControl">
+            <mat-label>Pin</mat-label>
+            <input type="number" matInput [value]="staff.pin" [formControl]="pinControl" />
+            <mat-error *ngIf="pinControl.hasError('required')">
+                Pin is required
+            </mat-error>
+            <mat-error *ngIf="pinControl.hasError('pattern')">
+                Pin needs to be a 4 digit number
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isCreating && roleControl">
+            <mat-label>Role</mat-label>
+            <input type="text" placeholder="Pick role" aria-label="Role" matInput [value]="staff.role" [formControl]="roleControl"
+                [matAutocomplete]="auto" />
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let role of roles" [value]="role">
+                    {{role | capitalizeWords}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="roleControl.hasError('required')">
+                Role is required
+            </mat-error>
+        </mat-form-field>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button *ngIf="isCreating" mat-raised-button (click)="createStaff()" color="primary">Create</button>
+        <button *ngIf="!isCreating" mat-raised-button (click)="editStaff()" color="primary">Save</button>
+        <button mat-raised-button mat-dialog-close color="warn">Close</button>
+    </mat-dialog-actions>
+</div>

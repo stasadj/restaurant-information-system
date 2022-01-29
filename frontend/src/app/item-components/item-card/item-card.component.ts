@@ -34,7 +34,6 @@ export class ItemCardComponent implements OnInit {
 
     public imgTagSrc: any;
 
-    public tagsString: string = ""
 
     constructor(private itemService: ItemService, public dialog: MatDialog, private _sanitizer: DomSanitizer, private toastr: ToastrService
     ) { }
@@ -71,7 +70,6 @@ export class ItemCardComponent implements OnInit {
         this.imgTagSrc = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,'
             + this.item.imageBase64);
 
-        this.tagsString = this.item.tags.map(tag => tag.name).join(", ")
 
     }
 

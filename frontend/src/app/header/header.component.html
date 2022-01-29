@@ -1,3 +1,22 @@
 <div>
-  <button id="logout-btn" mat-raised-button (click)="onLogout()">Logout</button>
+  <button
+    id="logout-btn"
+    mat-raised-button
+    (click)="onLogout()"
+    *ngIf="router.url != '/guest' && router.url != '/login'"
+  >
+    Logout
+  </button>
+  <button
+    id="user-profile"
+    mat-raised-button
+    *ngIf="
+      router.url == '/waiter' ||
+      router.url == '/cook' ||
+      router.url == '/barman'
+    "
+    (click)="onProfile()"
+  >
+    Profile
+  </button>
 </div>

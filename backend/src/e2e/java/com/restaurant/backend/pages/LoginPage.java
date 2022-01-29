@@ -1,9 +1,12 @@
+package com.restaurant.backend.pages;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage {
-    private WebDriver driver;
+    private final WebDriver driver;
 
     @FindBy(id = "username-input")
     private WebElement usernameInput;
@@ -25,6 +28,9 @@ public class LoginPage {
 
     @FindBy(xpath = "//*[@id='mat-tab-label-0-1']")
     private WebElement managerTab;
+  
+    @FindBy(id = "logout-btn")
+	  private WebElement logoutButton;
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -80,4 +86,13 @@ public class LoginPage {
     public boolean errorMessagePresent(String text) {
         return false;
     }
+
+    public void waitWebSocketConnection() {
+        Utilities.visibilityWait(driver, By.xpath("//mat-spinner"), 2);
+        Utilities.invisibilityWait(driver, By.xpath("//mat-spinner"), 10);
+    }
+  
+    public void logout() {
+		    Utilities.clickableWait(driver, this.logoutButton, 10).click();
+	  }
 }

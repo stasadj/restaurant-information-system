@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{ staff.firstName }} {{ staff.lastName }}</h2>
+<mat-dialog-content class="mat-typography">
+  <div><b>Email:</b> {{ staff.email }}</div>
+  <div><b>Phone number:</b> {{ staff.phoneNumber }}</div>
+  <div>
+    <b>Current monthly wage: </b>
+    <span id="current-wage">{{
+      staff.monthlyWage | currency: "EUR":"symbol"
+    }}</span>
+  </div>
+  <div>
+    <b>Average: </b>
+    <span id="average">{{ getAverage() | currency: "EUR":"symbol" }}</span>
+  </div>
+  <table
+    border="1"
+    matSort
+    (matSortChange)="sortData($event)"
+    class="mat-elevation-z8"
+  >
+    <tr>
+      <th mat-sort-header="date">Date</th>
+      <th mat-sort-header="amount">Amount</th>
+    </tr>
+
+    <tr *ngFor="let item of sortedData">
+      <td>{{ item.dateTime | date: "dd.MM.yyyy." }}</td>
+      <td>{{ item.amount | currency: "EUR":"symbol" }}</td>
+    </tr>
+  </table>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    id="staff-profile-close"
+    mat-raised-button
+    mat-dialog-close
+    color="primary"
+  >
+    Close
+  </button>
+</mat-dialog-actions>

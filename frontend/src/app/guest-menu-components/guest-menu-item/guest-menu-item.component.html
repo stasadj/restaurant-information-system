@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <div mat-card-avatar></div>
-    <mat-card-title>
+    <mat-card-title class="item-name">
       {{ item.name }}
     </mat-card-title>
     <mat-card-subtitle
@@ -12,12 +12,16 @@
   <mat-card-content>
     <p>{{ item.description }}</p>
     <mat-chip-list>
-      <mat-chip *ngFor="let tag of item.tags" color="warn">{{
-        tag.name
-      }}</mat-chip>
+      <mat-chip
+        *ngFor="let tag of item.tags"
+        class="mat-raised-button"
+        style="background-color: #ffd740"
+        >{{ tag.name }}</mat-chip
+      >
     </mat-chip-list>
-    <h3 style="text-align: right">
-      Price: {{ item.currentItemValue.sellingPrice }},00 RSD
+    <h3 style="text-align: right" class="item-price">
+      Price:
+      {{ item.currentItemValue.sellingPrice | currency: "RSD":"code" }}
     </h3>
   </mat-card-content>
 </mat-card>

@@ -65,6 +65,17 @@ import { ItemSearchComponent } from './guest-menu-components/item-search/item-se
 import { GuestMenuItemComponent } from './guest-menu-components/guest-menu-item/guest-menu-item.component';
 import { GuestMenuComponent } from './guest-menu-components/guest-menu/guest-menu.component';
 import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.component';
+import { UserProfileComponent } from './staff/user-profile/user-profile.component';
+import { MatSortModule } from '@angular/material/sort';
+import { AddTotalEntryPipe } from './pipes/table-data/add-total-entry/add-total-entry.pipe';
+import { StaffCardComponent } from './staff/staff-card/staff-card.component';
+import { StaffBoardComponent } from './staff/staff-board/staff-board.component';
+import { StaffFormComponent } from './staff/staff-form/staff-form.component';
+import { ItemSortComponent } from './guest-menu-components/item-sort/item-sort.component';
+import { ManageTagsComponent } from './manage-tags/manage-tags.component';
+import { ManageCategoriesComponent } from './manage-categories/manage-categories.component';
+import { AdminPageComponent } from './pages/admin-page/admin-page.component';
+import { TagsViewPipe } from './pipes/tags-view/tags-view.pipe';
 
 @NgModule({
   declarations: [
@@ -103,6 +114,16 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
     ItemSearchComponent,
     GuestMenuItemComponent,
     GuestMenuComponent,
+    UserProfileComponent,
+    AddTotalEntryPipe,
+    StaffCardComponent,
+    StaffBoardComponent,
+    StaffFormComponent,
+    ItemSortComponent,
+    ManageTagsComponent,
+    ManageCategoriesComponent,
+    AdminPageComponent,
+    TagsViewPipe,
   ],
   imports: [
     BrowserModule,
@@ -128,7 +149,8 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
     MatSelectModule,
     ChartModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSortModule,
   ],
   providers: [
     {
@@ -142,7 +164,7 @@ import { WaiterMenuComponent } from './menu-components/waiter-menu/waiter-menu.c
       multi: true,
     },
     ChartDataPipe,
-    DateSerializePipe
+    DateSerializePipe,
   ],
   bootstrap: [AppComponent],
 })

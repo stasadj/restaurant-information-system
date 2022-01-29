@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/frontend/static",
+            "outputPath": "dist/frontend/build",
             "index": {
               "input": "src/index.html",
               "output": "../index.html"
@@ -32,7 +32,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "less",
-            "deployUrl": "/static/",
+            "deployUrl": "/build/",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.less"],
             "scripts": []

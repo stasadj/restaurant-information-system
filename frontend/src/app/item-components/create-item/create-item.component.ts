@@ -34,10 +34,10 @@ export class CreateItemComponent implements OnInit {
     public fileName: string = "";
     public file: any;
 
-    public categories: Category[] = []
-    public tags: Tag[] = []
+    @Input() categories: Category[] = []
+    @Input() tags: Tag[] = []
 
-    public checkBoxes: { tag: Tag; select: boolean }[];
+    @Input() checkBoxes: { tag: Tag; select: boolean }[] = [];
     public parentSelector: boolean = false;
 
     @Input() onItemCreated = () => {
@@ -45,16 +45,6 @@ export class CreateItemComponent implements OnInit {
     };
 
     constructor(private itemService: ItemService, private categoryService: CategoryService, private tagService: TagService, private toastr: ToastrService, private fb: FormBuilder) {
-        this.checkBoxes = [];
-
-        //fetching tags and initializing empty checkboxes
-        this.tagService.getTags().subscribe(res => {
-            this.tags = res;
-            this.tags.forEach(tag => {
-                this.checkBoxes.push({ tag: tag, select: false })
-            });
-        })
-
 
     }
 
@@ -79,13 +69,7 @@ export class CreateItemComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.categoryService.getCategories().subscribe(res => {
-            this.categories = res;
-        })
 
-        this.tagService.getTags().subscribe(res => {
-            this.tags = res;
-        })
     }
 
     //method called when file upload changes
