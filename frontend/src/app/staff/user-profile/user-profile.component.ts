@@ -20,6 +20,13 @@ export class UserProfileComponent implements OnInit {
 
   staffPaymentItems: StaffPaymentItem[] = [];
 
+  getAverage(): number {
+    return (
+      this.staffPaymentItems.reduce((prev, curr) => prev + curr.amount, 0) /
+      this.staffPaymentItems.length
+    );
+  }
+
   constructor(private staffService: StaffService) {}
 
   ngOnInit(): void {
